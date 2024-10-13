@@ -1,11 +1,10 @@
 "use client"
 
 import { Quiz } from '@/types/types';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const QuizPage = () => {
-    const router = useRouter();
     const { quizId } = useParams();
     const [quiz, setQuiz] = useState<Quiz>(); 
     const [loading, setLoading] = useState(true); 

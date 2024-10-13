@@ -41,7 +41,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
                 
                 <span className={`inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white ${badgeColor} rounded-full my-5`}>
                     <BookOpenIcon className="mr-1" size={16} /> {/* Icône BookOpen */}
-                    {course.lessons.length} leçon{course.lessons.length > 1 ? 's' : ''}
+                    {course.lessons.length} chapitre{course.lessons.length > 1 ? 's' : ''}
                 </span>
 
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
