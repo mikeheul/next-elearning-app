@@ -138,7 +138,7 @@ const CreateQuizPage = ({ params }: { params: { courseId: string } }) => {
                                     >
                                         Retirer
                                     </button>
-                                    <label className="ml-2 text-sm">
+                                    <label className="ml-2 text-sm dark:text-white">
                                         <input
                                             type="radio"
                                             name={`correctAnswer-${questionIndex}`}

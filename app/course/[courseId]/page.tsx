@@ -122,32 +122,28 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                     {course.description}
                 </p>
 
-                <div className="flex gap-2">
-                    <div className="mb-8">
-                        <button
-                            onClick={() => router.push(`/admin/lesson/${course.id}`)}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                            Ajouter une leçon
-                        </button>
-                    </div>
-
-                    <div className="mb-4">
-                        <button
-                            onClick={() => router.push(`/admin/${course.id}/quiz`)} // Use router to navigate
-                            className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                        >
-                            <span>Ajouter un Quiz</span>
-                        </button>
-                    </div>
+                <div className="flex gap-2 mb-8">
+                    <button
+                        onClick={() => router.push(`/admin/lesson/${course.id}`)}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        Ajouter un chapitre
+                    </button>
+                    <button
+                        onClick={() => router.push(`/admin/${course.id}/quiz`)} // Use router to navigate
+                        className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    >
+                        <span>Ajouter un Quiz</span>
+                    </button>
                 </div>
 
+                {/* Section des Leçons */}
                 <div className="flex items-center my-5">
                     <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mr-2">
-                        Leçons
+                        Chapitres
                     </h2>
                     <div className="inline-flex items-center px-3 py-1 text-sm font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                        {course.lessons.length} leçon{course.lessons.length !== 1 ? 's' : ''}
+                        {course.lessons.length} chapitre{course.lessons.length !== 1 ? 's' : ''}
                     </div>
                 </div>
 
@@ -159,38 +155,40 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                     <SortableContext items={course.lessons} strategy={verticalListSortingStrategy}>
                         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                             {course.lessons.length > 0 ? (
-                                course.lessons.map((lesson) => ( // Supprimez les accolades autour de la map
+                                course.lessons.map((lesson) => (
                                     <SortableLesson key={lesson.id} lesson={lesson} />
                                 ))
                             ) : (
-                                <p className='dark:text-white'>Aucune leçon pour ce cours</p>
+                                <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
                             )}
                         </div>
                     </SortableContext>
                 </DndContext>
                 
-                <h2 className="my-5 text-2xl font-semibold text-gray-800 dark:text-gray-200 mr-2">
-                    Quizzes
-                </h2>
-                {course.quizzes.length > 0 ? (
-                    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                        {course.quizzes.map((quiz: { id: string; title: string; }) => (
-                            <div key={quiz.id} className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
-                                <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{quiz.title}</h4>
-                                <button
-                                    onClick={() => handleQuizClick(quiz.id)}
-                                    className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                                >
-                                    Démarrer le Quiz
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p className='dark:text-white'>Aucun quiz disponible pour ce cours.</p>
-                )}
+                {/* Section des Quizzes */}
+                <div className="my-8 bg-slate-200 dark:bg-slate-800 p-6 rounded-md">
+                    <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-5">
+                        Quizzes
+                    </h2>
+                    {course.quizzes.length > 0 ? (
+                        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                            {course.quizzes.map((quiz: { id: string; title: string; }) => (
+                                <div key={quiz.id} className="bg-white dark:bg-gray-700 shadow-md rounded-lg p-4">
+                                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{quiz.title}</h4>
+                                    <button
+                                        onClick={() => handleQuizClick(quiz.id)}
+                                        className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                                    >
+                                        Démarrer le Quiz
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className='dark:text-white'>Aucun quiz disponible pour ce cours.</p>
+                    )}
+                </div>
             </div>
-
         </div>
     );
 }

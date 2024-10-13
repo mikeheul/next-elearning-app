@@ -35,7 +35,7 @@ const QuizPage = () => {
     if (!quiz) return <p>Quiz introuvable</p>;
 
     return (
-        <div className="p-6">
+        <div className="p-6 dark:text-white">
             <h1 className="text-2xl font-bold">{quiz.title}</h1>
             <p>{quiz.description}</p>
             <div className="mt-4">

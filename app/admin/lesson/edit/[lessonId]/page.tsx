@@ -50,17 +50,17 @@ export default function EditLesson() {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-6">
             <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg w-full p-8">
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Éditer la leçon</h1>
+                <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Éditer le chapitre</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-6">
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Titre de la leçon
+                            Titre du chapitre
                         </label>
                         <input
                             id="title"
                             type="text"
                             className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-                            placeholder="Titre de la leçon"
+                            placeholder="Titre du chapitre"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
@@ -68,7 +68,7 @@ export default function EditLesson() {
 
                     <div className="mb-6">
                         <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Contenu de la leçon
+                            Contenu du chapitre
                         </label>
                         <MarkdownEditor content={content} setContent={setContent} />
                     </div>

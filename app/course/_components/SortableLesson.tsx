@@ -37,7 +37,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
                     {lesson.title}
                 </h3>
                 <a href={`/lesson/${lesson.id}`} className="text-blue-600 hover:underline dark:text-blue-400">
-                    Voir la leçon →
+                    Voir le chapitre →
                 </a>
             </div>
 
