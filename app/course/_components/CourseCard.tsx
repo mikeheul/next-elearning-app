@@ -1,7 +1,7 @@
 "use client";
 
 import { Course } from "@/types/types";
-import { BookOpenIcon, Clock10Icon } from "lucide-react";
+import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon } from "lucide-react";
 
 interface CourseCardProps {
     course: Course;
@@ -28,12 +28,22 @@ const CourseCard = ({ course }: CourseCardProps) => {
     return (
         <div
             key={course.id}
-            className="flex flex-col justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800"
+            className="relative flex flex-col justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800"
         >
             <div>
                 <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
                     {course.title}
                 </h2>
+
+                {/* Affichage de l'icône publique ou privée */}
+                <div className="absolute right-3 top-3">
+                    {course.isPublic ? (
+                        <UnlockIcon className="text-green-500" size={20} /> // Icône de cours public
+                    ) : (
+                        <LockIcon className="text-red-500" size={20} /> // Icône de cours privé
+                    )}
+                </div>
+
                 <p className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs">
                     <Clock10Icon size={15} /> 
                     <span>Dernière mise à jour : {formattedDate}</span>

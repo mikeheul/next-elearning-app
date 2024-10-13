@@ -18,11 +18,11 @@ export async function POST(req: Request) {
 
         // Création du cours avec Prisma
         const course = await db.course.create({
-        data: {
-            title,
-            description,
-            userId
-        },
+            data: {
+                title,
+                description,
+                userId
+            },
         });
 
         // Réponse de succès avec le cours créé
@@ -44,12 +44,15 @@ export async function POST(req: Request) {
 export async function GET() {
     try {
         const courses = await db.course.findMany({
+            where: {
+                isPublic: true,
+            },
             orderBy: {
                 createdAt: 'desc',
             },
             include: {
                 lessons: true
-            }
+            },
         });
 
         return NextResponse.json(courses);

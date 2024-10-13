@@ -7,6 +7,8 @@ model Course {
     
     lessons         Lesson[]
     quizzes         Quiz[]
+
+    isPublic        Boolean     @default(true)
     
     userId          String                                
     createdAt       DateTime     @default(now())          
