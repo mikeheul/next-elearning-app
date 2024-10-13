@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import Link from "next/link";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,11 +26,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-700`}
       >
-        {children}
+        <header className="flex gap-3 justify-between items-center px-8 py-6 bg-slate-600 dark:bg-slate-800">
+          <Link href='/course' className="text-white">Cours</Link>
+          <ThemeSwitcher />
+        </header>
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -1,0 +1,62 @@
+"use client";
+
+import { Course } from "@/types/types";
+import { BookOpenIcon, Clock10Icon } from "lucide-react";
+
+interface CourseCardProps {
+    course: Course;
+}
+
+const getBadgeColor = (count: number) => {
+    if (count === 0) return 'bg-gray-400';
+    if (count < 4) return 'bg-yellow-500';
+    if (count < 5) return 'bg-green-500';
+    return 'bg-blue-500';
+};
+
+
+const CourseCard = ({ course }: CourseCardProps) => {
+    
+    const badgeColor = getBadgeColor(course.lessons.length);
+    
+    const formattedDate = new Date(course.updatedAt).toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+
+    return (
+        <div
+            key={course.id}
+            className="flex flex-col justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800"
+        >
+            <div>
+                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+                    {course.title}
+                </h2>
+                <p className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs">
+                    <Clock10Icon size={15} /> 
+                    <span>Dernière mise à jour : {formattedDate}</span>
+                </p>
+                
+                <span className={`inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white ${badgeColor} rounded-full my-5`}>
+                    <BookOpenIcon className="mr-1" size={16} /> {/* Icône BookOpen */}
+                    {course.lessons.length} leçon{course.lessons.length > 1 ? 's' : ''}
+                </span>
+
+                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                    {course.description}
+                </p>
+
+            </div>
+            <a 
+                href={`/course/${course.id}`} 
+                className="inline-block text-blue-600 hover:underline dark:text-blue-400"
+            >
+                Voir le cours →
+            </a>
+        </div>
+    );
+};
+
+export default CourseCard;
