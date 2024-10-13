@@ -47,7 +47,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8"> {/* Couleurs de fond */}
             <div className="mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{lesson.title}</h1> {/* Couleurs de texte */}
+                <h1 className="text-md text-gray-900 dark:text-yellow-500 mb-6"><a className="font-bold" href={`/course/${lesson.courseId}`}>{lesson.course.title}</a> / {lesson.title}</h1>
                 <div
                     className="prose prose-md text-gray-800 dark:text-gray-200" // Met le texte en fonction du thème
                     dangerouslySetInnerHTML={{ __html: lessonContent }} // Affiche le contenu de la leçon en HTML

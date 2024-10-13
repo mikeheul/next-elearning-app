@@ -4,6 +4,7 @@ export interface Lesson {
     content: string;
     order: number; 
     courseId: string;
+    course: Course;
 }
 
 export interface Course {

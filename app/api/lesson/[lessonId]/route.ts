@@ -9,6 +9,9 @@ export async function GET(req: Request, { params }: { params: { lessonId: string
             where: {
                 id: lessonId,
             },
+            include: {
+                course: true
+            }
         });
 
         if (!lesson) {
