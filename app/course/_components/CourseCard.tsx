@@ -56,7 +56,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
                     {course.quizzes && course.quizzes.length > 0 && (
                         <span className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-gray-500 dark:text-gray-400 rounded-full">
                             <ClipboardListIcon className="mr-1" size={16} />
-                            {course.quizzes.length} quiz{course.quizzes.length > 1 ? 's' : ''}
+                            {course.quizzes.length} quiz{course.quizzes.length > 1 ? 'zes' : ''}
                         </span>
                     )}
                 </div>
