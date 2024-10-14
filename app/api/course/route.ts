@@ -51,7 +51,8 @@ export async function GET() {
                 createdAt: 'desc',
             },
             include: {
-                lessons: true
+                lessons: true,
+                quizzes: true
             },
         });
 

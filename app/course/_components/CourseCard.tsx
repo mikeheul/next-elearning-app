@@ -1,7 +1,7 @@
 "use client";
 
 import { Course } from "@/types/types";
-import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon } from "lucide-react";
+import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon, ClipboardListIcon } from "lucide-react";
 
 interface CourseCardProps {
     course: Course;
@@ -14,9 +14,7 @@ const getBadgeColor = (count: number) => {
     return 'bg-blue-500';
 };
 
-
 const CourseCard = ({ course }: CourseCardProps) => {
-    
     const badgeColor = getBadgeColor(course.lessons.length);
     
     const formattedDate = new Date(course.updatedAt).toLocaleDateString('fr-FR', {
@@ -48,15 +46,24 @@ const CourseCard = ({ course }: CourseCardProps) => {
                     <span>Dernière mise à jour : {formattedDate}</span>
                 </p>
                 
-                <span className={`inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white ${badgeColor} rounded-full my-5`}>
-                    <BookOpenIcon className="mr-1" size={16} /> {/* Icône BookOpen */}
-                    {course.lessons.length} chapitre{course.lessons.length > 1 ? 's' : ''}
-                </span>
+                <div className="flex gap-4 my-5">
+                    <span className={`inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white ${badgeColor} rounded-full`}>
+                        <BookOpenIcon className="mr-1" size={16} /> {/* Icône BookOpen */}
+                        {course.lessons.length} chapitre{course.lessons.length > 1 ? 's' : ''}
+                    </span>
+
+                    {/* Affichage du nombre de quizz */}
+                    {course.quizzes && course.quizzes.length > 0 && (
+                        <span className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-gray-500 dark:text-gray-400 rounded-full">
+                            <ClipboardListIcon className="mr-1" size={16} />
+                            {course.quizzes.length} quiz{course.quizzes.length > 1 ? 's' : ''}
+                        </span>
+                    )}
+                </div>
 
                 <p className="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
                     {course.description}
                 </p>
-
             </div>
             <a 
                 href={`/course/${course.id}`} 
