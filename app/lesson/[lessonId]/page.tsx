@@ -76,7 +76,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const lessonContent = marked(lesson.content);
 
     return (
-        <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 dark:bg-gray-900 p-8">
+        <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
             {/* Mobile Header */}
             <div className="md:hidden flex justify-between items-center mb-4">
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Chapitres</h2>
