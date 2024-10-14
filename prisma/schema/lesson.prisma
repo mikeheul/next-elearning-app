@@ -4,7 +4,7 @@ model Lesson {
     content   String
     
     courseId  String   @db.ObjectId
-    course    Course   @relation(fields: [courseId], references: [id])
+    course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
     order     Int?
 }

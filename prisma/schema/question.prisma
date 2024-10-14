@@ -1,7 +1,9 @@
 model Question {
     id                      String   @id @default(auto()) @map("_id") @db.ObjectId
+    
     quizId                  String   @db.ObjectId
-    quiz                    Quiz     @relation(fields: [quizId], references: [id])
+    quiz                    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+    
     question                String
     answerSelectionType     String 
     answers                 String[]  

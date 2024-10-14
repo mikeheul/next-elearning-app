@@ -27,4 +27,8 @@ export interface Quiz {
 export interface Question {
     id: string;
     question: string;
+    quizId: string;
+    answerSelectionType: string;
+    answers: string[];
+    correctAnswer: string;
 }

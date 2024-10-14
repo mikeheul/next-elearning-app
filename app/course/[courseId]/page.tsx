@@ -9,6 +9,7 @@ import {
     PointerSensor,
     useSensor,
     useSensors,
+    DragEndEvent,
 } from '@dnd-kit/core';
 import {
     arrayMove,
@@ -62,10 +63,10 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
     );
 
     // Handling drag and drop for lessons
-    const handleDragEnd = async (event: any) => {
+    const handleDragEnd = async (event: DragEndEvent) => {
         const { active, over } = event;
 
-        if (active.id !== over.id) {
+        if (over && active.id !== over.id) {
             const oldIndex = course!.lessons.findIndex((lesson) => lesson.id === active.id);
             const newIndex = course!.lessons.findIndex((lesson) => lesson.id === over.id);
 

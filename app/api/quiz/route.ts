@@ -1,4 +1,5 @@
 import { db } from '@/lib/db';
+import { Question } from '@/types/types';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
                 connect: { id: courseId },
             },
             questions: {
-                create: questions.map((q: any) => ({
+                create: questions.map((q: Question) => ({
                     question: q.question,
                     answerSelectionType: "multiple", // Spécifiez le type de sélection
                     answers: q.answers,
