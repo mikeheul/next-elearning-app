@@ -54,7 +54,7 @@ const QuizPage = () => {
                 <div className="space-y-8">
                     {quiz.questions.map((question: any, questionIndex: number) => (
                         <div key={questionIndex} className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
-                            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">{`Question ${questionIndex + 1}: ${question.question}`}</h2>
+                            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">{`Question ${questionIndex + 1} : ${question.question}`}</h2>
                             <ul className="space-y-4">
                                 {question.answers.map((answer: string, answerIndex: number) => (
                                     <li key={answerIndex} className="flex items-center">
