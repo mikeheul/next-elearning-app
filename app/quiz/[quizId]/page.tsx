@@ -45,7 +45,7 @@ const QuizPage = () => {
         <div className="min-h-screen py-8 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Quiz Header */}
-                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 mb-6">
+                <div className="bg-white dark:bg-gray-700 shadow-lg rounded-lg p-6 mb-6">
                     <h1 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">{quiz.title}</h1>
                     <p className="text-gray-700 dark:text-gray-300">{quiz.description}</p>
                 </div>
