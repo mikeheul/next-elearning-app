@@ -92,6 +92,10 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
         router.push(`/quiz/${quizId}`); // Redirect to the selected quiz page
     };
 
+    const handleDownload = async () => {
+        console.log("Download zip !")
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen bg-slate-50 dark:bg-gray-900">
@@ -118,6 +122,13 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                 <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-8">
                     {course.title}
                 </h1>
+
+                <button
+                    onClick={handleDownload}
+                    className="mb-8 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                    Télécharger le cours en zip
+                </button>
                 
                 <p className="text-gray-700 dark:text-gray-300 text-lg mb-8">
                     {course.description}
