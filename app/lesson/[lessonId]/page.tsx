@@ -88,7 +88,6 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 </button>
             </div>
 
-            {/* Barre latérale à gauche (responsive) */}
             <aside
                 className={`fixed md:relative z-40 w-64 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 md:mr-8 transition-transform duration-300 transform ${
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
