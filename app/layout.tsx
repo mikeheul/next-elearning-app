@@ -31,7 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-700`}
       >
         <header className="flex gap-3 justify-between items-center px-8 py-6 bg-slate-600 dark:bg-slate-800">
-          <Link href='/course' className="text-white">Cours</Link>
+          <Link href='/course' className="text-white text-lg font-semibold">Cours</Link>
           <ThemeSwitcher />
         </header>
         <main>

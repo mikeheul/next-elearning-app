@@ -54,7 +54,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
                     {course.lessons.length} chapitre{course.lessons.length > 1 ? 's' : ''}
                 </span>
 
-                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                <p className="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
                     {course.description}
                 </p>
 

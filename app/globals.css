@@ -7,6 +7,14 @@
     max-width: none;
 }
 
+.prose th {
+    padding: 1rem;
+    background: #e2e8f0;
+}
+.prose td {
+    padding: 1rem;
+}
+
 .prose h1,
 .prose h2,
 .prose h3,
@@ -52,6 +60,10 @@
 
 .dark .prose code {
     color: #FBBF24;
+}
+
+.dark .prose th {
+    background: #475569;
 }
 
 @media(max-width:768px) {

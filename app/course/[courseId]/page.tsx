@@ -139,8 +139,8 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                 </div>
 
                 {/* Section des Leçons */}
-                <div className="flex items-center my-5">
-                    <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mr-2">
+                <div className="flex gap-5 items-center my-5">
+                    <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
                         Chapitres
                     </h2>
                     <div className="inline-flex items-center px-3 py-1 text-sm font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">

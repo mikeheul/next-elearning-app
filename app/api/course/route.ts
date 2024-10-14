@@ -44,9 +44,9 @@ export async function POST(req: Request) {
 export async function GET() {
     try {
         const courses = await db.course.findMany({
-            where: {
-                isPublic: true,
-            },
+            // where: {
+            //     isPublic: true,
+            // },
             orderBy: {
                 createdAt: 'desc',
             },

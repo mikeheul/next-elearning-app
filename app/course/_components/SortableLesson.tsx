@@ -32,7 +32,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
             className="relative flex justify-between bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300"
         >
             <div className='flex flex-col justify-between'>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 py-5 pr-8">
                     {lesson.title}
                 </h3>
 
