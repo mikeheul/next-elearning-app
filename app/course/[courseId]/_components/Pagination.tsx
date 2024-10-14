@@ -12,17 +12,17 @@ export default function Pagination({ currentPage, totalPages, paginate }: Pagina
     }
 
     return (
-        <nav className="flex justify-center mt-8">
+        <nav className="flex justify-center my-8">
             <ul className="inline-flex -space-x-px">
                 {/* Bouton Précédent */}
                 <li>
                     <button
                         onClick={() => paginate(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className={`px-3 py-2 leading-tight border rounded-l-lg ${
+                        className={`px-3 py-2 leading-tight rounded-l-lg ${
                             currentPage === 1
-                                ? 'text-gray-400 cursor-not-allowed border-gray-300'
-                                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700'
+                                ? 'text-gray-400 cursor-not-allowed'
+                                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                         } bg-white dark:bg-gray-800`}
                     >
                         Précédent
@@ -34,10 +34,10 @@ export default function Pagination({ currentPage, totalPages, paginate }: Pagina
                     <li key={number}>
                         <button
                             onClick={() => paginate(number)}
-                            className={`px-3 py-2 leading-tight border ${
+                            className={`px-3 py-2 leading-tight ${
                                 currentPage === number
-                                    ? 'text-white bg-blue-600 border-blue-600'
-                                    : 'text-gray-700 border-gray-300 hover:bg-gray-200 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700'
+                                    ? 'text-white bg-blue-600 border-blue-600 dark:border-none dark:bg-cyan-700 dark:border-cyan-700'
+                                    : 'text-gray-700 border-gray-300 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700'
                             } dark:bg-gray-800`}
                         >
                             {number}
@@ -50,10 +50,10 @@ export default function Pagination({ currentPage, totalPages, paginate }: Pagina
                     <button
                         onClick={() => paginate(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className={`px-3 py-2 leading-tight border rounded-r-lg ${
+                        className={`px-3 py-2 leading-tight rounded-r-lg ${
                             currentPage === totalPages
-                                ? 'text-gray-400 cursor-not-allowed border-gray-300'
-                                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700'
+                                ? 'text-gray-400 cursor-not-allowed'
+                                : 'text-gray-700 hover:bg-gray-200 dark:text-gray-200  dark:hover:bg-gray-700'
                         } bg-white dark:bg-gray-800`}
                     >
                         Suivant
