@@ -138,7 +138,7 @@ const CreateQuizPage = ({ params }: { params: { courseId: string } }) => {
                                     >
                                         Retirer
                                     </button>
-                                    <label className="ml-2 text-sm dark:text-white">
+                                    <label className="ml-2 text-sm dark:text-white flex items-center">
                                         <input
                                             type="radio"
                                             name={`correctAnswer-${questionIndex}`}
@@ -148,8 +148,12 @@ const CreateQuizPage = ({ params }: { params: { courseId: string } }) => {
                                                 newQuestions[questionIndex].correctAnswerIndex = answerIndex;
                                                 setQuestions(newQuestions);
                                             }}
+                                            className="hidden peer"
                                         />
-                                        Bonne réponse
+                                        <div className="flex items-center justify-center w-5 h-5 border-2 border-gray-300 rounded-full cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-600 transition-colors duration-200">
+                                            <div className="hidden peer-checked:block w-3 h-3 bg-white rounded-full" />
+                                        </div>
+                                        <span className="ml-2 text-gray-700 dark:text-gray-300">Bonne réponse</span>
                                     </label>
                                 </div>
                             ))}

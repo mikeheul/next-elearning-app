@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Course } from '@/types/types';
 import CourseCard from './_components/CourseCard';
-import ReactPaginate from 'react-paginate';
 import Pagination from './[courseId]/_components/Pagination';
+
+export const dynamic = 'force-dynamic'
 
 export default function CourseList() {
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [coursesPerPage] = useState(6); 
     const router = useRouter();
 
