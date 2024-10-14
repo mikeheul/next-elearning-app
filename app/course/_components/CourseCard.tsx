@@ -28,7 +28,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
     return (
         <div
             key={course.id}
-            className="relative flex flex-col justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800"
+            className="relative flex flex-col justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800 hover:dark:bg-slate-700"
         >
             <div>
                 <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
