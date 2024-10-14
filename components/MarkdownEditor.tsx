@@ -18,7 +18,7 @@ interface EditorChangeEvent {
 }
 
 export default function MarkdownEditor({ content, setContent }: MarkdownEditorProps) {
-    const handleEditorChange = ({ html, text }: EditorChangeEvent) => {
+    const handleEditorChange = ({ text }: EditorChangeEvent) => {
         setContent(text);
     };
 

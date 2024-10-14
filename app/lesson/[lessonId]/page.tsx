@@ -9,7 +9,7 @@ import { Menu } from "lucide-react"; // Import the Menu icon for mobile
 export default function LessonPage({ params }: { params: { lessonId: string } }) {
     const initialLessonId = params.lessonId;
     const [lesson, setLesson] = useState<Lesson | null>(null);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [lessons, setLessons] = useState<Lesson[]>([]); // Liste des leçons du cours
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Toggle pour la barre latérale sur mobile
     const router = useRouter();
@@ -31,7 +31,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 console.error("Erreur lors de la récupération de la leçon :", error);
                 router.push("/404");
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         }
 
@@ -53,7 +53,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     }, [initialLessonId, router, lessons.length]);
 
     const handleLessonClick = async (lessonId: string) => {
-        setLoading(true);
+        // setLoading(true);
         try {
             const response = await fetch(`/api/lesson/${lessonId}`);
             if (response.ok) {
@@ -65,7 +65,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         } catch (error) {
             console.error("Erreur lors du chargement de la nouvelle leçon :", error);
         } finally {
-            setLoading(false);
+            // setLoading(false);
         }
     };
 

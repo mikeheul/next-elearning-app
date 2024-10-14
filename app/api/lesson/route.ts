@@ -38,6 +38,10 @@ export async function POST(req: Request) {
             },
         });
 
+        if(!lesson) {
+            console.log('Error')
+        }
+
         // Fichier HTML de la leçon
         const lessonHtml = `
         <!DOCTYPE html>

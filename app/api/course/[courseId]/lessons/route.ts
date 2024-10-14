@@ -2,7 +2,7 @@ import { db } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
 export async function PUT(req: Request, { params }: { params: { courseId: string } }) {
-    const courseId = params.courseId;
+    // const courseId = params.courseId;
 
     try {
         // Récupérer le corps de la requête
