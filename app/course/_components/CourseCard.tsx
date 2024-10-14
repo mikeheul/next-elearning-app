@@ -8,9 +8,9 @@ interface CourseCardProps {
 }
 
 const getBadgeColor = (count: number) => {
-    if (count === 0) return 'bg-gray-400';
-    if (count < 4) return 'bg-yellow-500';
-    if (count < 5) return 'bg-green-500';
+    if (count === 0) return 'bg-gray-500';
+    if (count < 4) return 'bg-yellow-600';
+    if (count < 5) return 'bg-green-700';
     return 'bg-blue-500';
 };
 
