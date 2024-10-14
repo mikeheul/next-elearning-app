@@ -1,7 +1,7 @@
 import { db } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
-export async function PUT(req: Request, { params }: { params: { courseId: string } }) {
+export async function PUT(req: Request) {
     // const courseId = params.courseId;
 
     try {
