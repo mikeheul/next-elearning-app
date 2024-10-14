@@ -1,20 +1,19 @@
 "use client";
 
+import { Lesson } from '@/types/types';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { EditIcon, GripVerticalIcon } from 'lucide-react';
-
-interface Lesson {
-    id: string;
-    title: string;
-    courseId: string;
-}
+import { EditIcon, GripVerticalIcon, Trash2Icon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface SortableLessonProps {
     lesson: Lesson;
 }
 
 const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
+
+    const router = useRouter();
+
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
         id: lesson.id,
     });
@@ -36,20 +35,31 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
                     {lesson.title}
                 </h3>
+
                 <a href={`/lesson/${lesson.id}`} className="text-blue-600 hover:underline dark:text-blue-400">
                     Voir le chapitre →
                 </a>
             </div>
 
             <div className="flex items-center space-x-4">
-                <button
-                    onClick={() => {
-                        window.location.href = `/admin/lesson/edit/${lesson.id}`;
-                    }}
-                    className="absolute text-xs top-3 right-3 flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg shadow-md"
-                >
-                    <EditIcon className="" size={15} />
-                </button>
+                <div className='flex gap-2 absolute top-3 right-3'>
+                    <button
+                        onClick={() => {
+                            router.push(`/admin/lesson/delete/${lesson.id}`);
+                        }}
+                        className="flex items-center bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg shadow-md"
+                    >
+                        <Trash2Icon className="" size={15} />
+                    </button>
+                    <button
+                        onClick={() => {
+                            router.push(`/admin/lesson/edit/${lesson.id}`);
+                        }}
+                        className="flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg shadow-md"
+                    >
+                        <EditIcon className="" size={15} />
+                    </button>
+                </div>
 
                 <div className="cursor-grab">
                     <GripVerticalIcon className="text-gray-600 dark:text-gray-600" size={24} />

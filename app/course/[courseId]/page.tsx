@@ -19,6 +19,7 @@ import SortableLesson from '../_components/SortableLesson';
 import { Loader } from 'lucide-react'; // Import a loading icon from lucide-react
 
 export default function CourseDetail({ params }: { params: { courseId: string } }) {
+
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
