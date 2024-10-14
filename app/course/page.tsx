@@ -4,10 +4,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Course } from '@/types/types';
 import CourseCard from './_components/CourseCard';
+import ReactPaginate from 'react-paginate';
+import Pagination from './[courseId]/_components/Pagination';
 
 export default function CourseList() {
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [coursesPerPage] = useState(6); 
     const router = useRouter();
 
     useEffect(() => {
@@ -33,6 +37,17 @@ export default function CourseList() {
         fetchCourses();
     }, []);
 
+    // Calcul des cours à afficher pour la page actuelle
+    const indexOfLastCourse = currentPage * coursesPerPage;
+    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+    const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
+
+    // Calcul du nombre total de pages
+    const totalPages = Math.ceil(courses.length / coursesPerPage);
+
+    // Fonction pour changer de page
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
     if (loading) {
         return <p className="text-center text-gray-500 mt-5">Chargement...</p>;
     }
@@ -55,16 +70,22 @@ export default function CourseList() {
                 </div>
 
                 <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                    {courses.length === 0 ? (
+                    {currentCourses.length === 0 ? (
                         <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
                             Aucun cours disponible.
                         </p>
                     ) : (
-                        courses.map((course) => (
+                        currentCourses.map((course) => (
                             <CourseCard key={course.id} course={course} />
                         ))
                     )}
                 </div>
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    paginate={paginate}
+                />
             </div>
         </div>
     );
