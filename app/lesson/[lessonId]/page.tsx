@@ -92,7 +92,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 className={`fixed md:relative z-40 w-64 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 md:mr-8 transition-transform duration-300 transform ${
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
                 }`}
-                style={{ top: 0, left: 0, height: "100vh" }} // Position fixe en plein écran pour mobile
+                style={{ top: 0, left: 0, height: "100vh" }} 
             >
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Chapitres</h2>
                 <ul className="space-y-2">
@@ -101,7 +101,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                             <button
                                 onClick={() => {
                                     handleLessonClick(l.id);
-                                    setIsSidebarOpen(false); // Fermer le menu sur mobile après un clic
+                                    setIsSidebarOpen(false); 
                                 }}
                                 className={`block w-full text-left px-4 py-2 rounded-lg ${
                                     l.id === lesson.id
