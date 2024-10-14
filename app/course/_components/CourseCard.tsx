@@ -36,7 +36,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
                 </h2>
 
                 {/* Affichage de l'icône publique ou privée */}
-                <div className="absolute right-3 top-3">
+                <div className="absolute right-4 top-4">
                     {course.isPublic ? (
                         <UnlockIcon className="text-green-500" size={20} /> // Icône de cours public
                     ) : (
