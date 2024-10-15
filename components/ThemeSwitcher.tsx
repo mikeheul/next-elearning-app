@@ -28,7 +28,7 @@ const ThemeSwitcher = () => {
             aria-label="Switch theme" // Ajout d'une étiquette pour l'accessibilité
         >
             {theme === 'light' ? (
-                <Moon className="w-6 h-6 text-gray-100" /> // Icône de la lune
+                <Moon className="w-6 h-6 text-gray-400" /> // Icône de la lune
             ) : (
                 <Sun className="w-6 h-6 text-yellow-500" /> // Icône du soleil
             )}

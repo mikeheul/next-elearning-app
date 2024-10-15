@@ -13,7 +13,7 @@ export default function Navbar() {
     const toggleDarkMode = () => setDarkMode(!darkMode);
 
     return (
-        <nav className={`bg-white dark:bg-gray-800 shadow-md w-full z-10 py-5`}>
+        <nav className={`bg-slate-200 dark:bg-gray-800 shadow-md w-full z-10 py-5`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
