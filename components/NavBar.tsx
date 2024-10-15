@@ -1,16 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { MenuIcon, XIcon, SunIcon, MoonIcon } from "lucide-react"; // ou lucide-react pour les icônes
+import { MenuIcon, XIcon } from "lucide-react"; // ou lucide-react pour les icônes
 import Link from 'next/link';
 import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
-    const [darkMode, setDarkMode] = useState(false); // Mode sombre/clair
 
     const toggleMenu = () => setIsOpen(!isOpen);
-    const toggleDarkMode = () => setDarkMode(!darkMode);
 
     return (
         <nav className={`bg-slate-200 dark:bg-gray-800 shadow-md w-full z-10 py-5`}>

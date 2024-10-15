@@ -70,7 +70,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     };
 
     if (!lesson) {
-        return <p className="text-center text-gray-400 mt-5">Leçon non trouvée.</p>;
+        return <p className="text-center text-gray-400 mt-5">...</p>;
     }
 
     const lessonContent = marked(lesson.content);
