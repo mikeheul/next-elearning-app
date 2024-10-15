@@ -13,6 +13,8 @@ export default function CourseList() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [coursesPerPage] = useState(6); 
+    const [searchTerm, setSearchTerm] = useState('');
+
     const router = useRouter();
 
     useEffect(() => {
@@ -38,13 +40,17 @@ export default function CourseList() {
         fetchCourses();
     }, []);
 
+    const filteredCourses = courses.filter(course =>
+        course.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     // Calcul des cours à afficher pour la page actuelle
     const indexOfLastCourse = currentPage * coursesPerPage;
     const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-    const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
+    const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
 
     // Calcul du nombre total de pages
-    const totalPages = Math.ceil(courses.length / coursesPerPage);
+    const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
 
     // Fonction pour changer de page
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -59,6 +65,20 @@ export default function CourseList() {
                 <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-8">
                     Cours
                 </h1>
+
+                {/* Barre de recherche */}
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Rechercher un cours..."
+                        className={`border rounded-lg px-4 py-2 w-full 
+                            ${loading ? 'border-gray-300' : 'border-gray-600'} 
+                            ${loading ? 'bg-white text-gray-900' : 'bg-gray-800 text-gray-200'} 
+                            focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)} // Met à jour l'état de recherche
+                    />
+                </div>
 
                 {/* Bouton pour ajouter un nouveau cours */}
                 <div className="mb-8">
