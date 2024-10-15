@@ -75,7 +75,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         if (lesson) {
             const { scrollY, innerHeight } = window; // Position de scroll actuelle et hauteur de la fenêtre
             const totalHeight = document.documentElement.scrollHeight; // Hauteur totale de la page
-            const progress = (scrollY / (totalHeight - innerHeight)) * 100; // Calcul de la progression
+            const progress = (scrollY / (totalHeight - innerHeight)) * 101; // Calcul de la progression
 
             const currentLessonId = lesson?.id;
             if (currentLessonId) {
@@ -92,7 +92,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     }));
                 }
 
-                console.log(chapterProgress)
+                console.log(progress)
 
                 // Calculer le pourcentage total du cours
                 const totalChapters = lessons.length;
