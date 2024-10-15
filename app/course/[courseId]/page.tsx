@@ -142,7 +142,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                     {/* Bouton pour accéder à la première leçon */}
                     <button
                             onClick={goToFirstLesson}
-                            className="bg-emerald-700 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                            className="bg-emerald-700 text-white px-4 py-2 rounded-lg hover:bg-emerald-800 transition-colors"
                         >
                             Accéder au cours
                     </button>
