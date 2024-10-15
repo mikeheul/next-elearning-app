@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
 import { Lesson } from "@/types/types";
-import { Menu } from "lucide-react"; // Import the Menu icon for mobile
+import { Menu, PanelsTopLeftIcon } from "lucide-react"; // Import the Menu icon for mobile
 
 export default function LessonPage({ params }: { params: { lessonId: string } }) {
     const initialLessonId = params.lessonId;
@@ -84,7 +84,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     className="text-gray-900 dark:text-white"
                 >
-                    <Menu className="h-6 w-6" />
+                    <PanelsTopLeftIcon className="h-6 w-6" />
                 </button>
             </div>
 
