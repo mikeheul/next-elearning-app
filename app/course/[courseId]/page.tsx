@@ -198,7 +198,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                 {/* Section des Quizzes */}
                 <div className="my-8 bg-slate-200 dark:bg-slate-800 p-6 rounded-md">
                     <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-5">
-                        Quizzes
+                        Quizz
                     </h2>
                     {course.quizzes.length > 0 ? (
                         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
