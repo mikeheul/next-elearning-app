@@ -44,18 +44,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-
-      {/* Appel à l'action */}
-      <footer className="row-start-3 flex flex-col items-center gap-4 mt-12">
-        <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-100">
-          Prêt à plonger ?
-        </h2>
-        <Link href="/course">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg transition duration-300">
-            Explorer les Cours
-          </button>
-        </Link>
-      </footer>
     </div>
   );
 }
