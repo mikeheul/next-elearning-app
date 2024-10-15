@@ -27,7 +27,7 @@ export default function Home() {
           <div className="bg-white dark:bg-gray-800 p-10 rounded-lg shadow-md text-center">
             <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4">Instructeurs Experts</h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Apprenez auprès d'experts du secteur avec une expérience réelle.
+              Apprenez auprès d&apos;experts du secteur avec une expérience réelle.
             </p>
           </div>
           <div className="bg-white dark:bg-gray-800 p-10 rounded-lg shadow-md text-center">
