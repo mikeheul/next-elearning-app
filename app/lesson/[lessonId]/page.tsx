@@ -6,11 +6,24 @@ import { useRouter } from "next/navigation";
 import { Lesson } from "@/types/types";
 import { PanelsTopLeftIcon, CheckIcon } from "lucide-react";
 
+const getProgressBarColor = (progress: number) => {
+    if (progress === 100) {
+        return 'bg-green-500';
+    } else if (progress >= 75) {
+        return 'bg-yellow-500'; 
+    } else if (progress >= 50) {
+        return 'bg-orange-500'; 
+    } else {
+        return 'bg-red-500'; 
+    }
+};
+
 export default function LessonPage({ params }: { params: { lessonId: string } }) {
     const initialLessonId = params.lessonId; // Récupération de l'ID de la leçon à partir des paramètres de la route
     const [lesson, setLesson] = useState<Lesson | null>(null); // État pour stocker la leçon actuelle
     const [lessons, setLessons] = useState<Lesson[]>([]); // Liste des leçons du cours
     const [chapterProgress, setChapterProgress] = useState<{ [key: string]: number }>({}); // État pour suivre la progression de chaque chapitre
+    const [courseProgress, setCourseProgress] = useState<number>(0); // État pour la progression du cours
     const [readChapters, setReadChapters] = useState<{ [key: string]: boolean }>({}); // État pour suivre si un chapitre a été lu
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Toggle pour la barre latérale sur mobile
     const router = useRouter(); // Hook pour accéder à l'instance du routeur
@@ -68,7 +81,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             if (timeout) {
                 clearTimeout(timeout); // Nettoyage du timeout précédent
             }
-            
+
             timeout = setTimeout(later, wait); // Réglage du nouveau timeout
         };
     }
@@ -76,48 +89,63 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     // Fonction pour mettre à jour la progression en fonction du scroll de la page
     const handleScroll = debounce(() => {
         if (lesson) {
-            const { scrollY, innerHeight } = window; // Position de scroll actuelle et hauteur de la fenêtre
-            const totalHeight = document.documentElement.scrollHeight; // Hauteur totale de la page
-            const progress = (scrollY / (totalHeight - innerHeight)) * 101; // Calcul de la progression
-
-            const currentLessonId = lesson?.id; // ID de la leçon actuelle
+            const { scrollY, innerHeight } = window;
+            const totalHeight = document.documentElement.scrollHeight;
+            const progress = (scrollY / (totalHeight - innerHeight)) * 101; // Calcul de la progression de défilement
+    
+            const currentLessonId = lesson.id;
+    
             if (currentLessonId) {
-                // Mettre à jour la progression du chapitre
-                setChapterProgress((prev) => ({
-                    ...prev,
-                    [currentLessonId]: progress,
-                }));
-
-                console.log(chapterProgress)
-
-                // Vérifier si le chapitre a été lu (100%)
-                if (progress >= 100 && !readChapters[currentLessonId]) {
-                    setReadChapters((prev) => ({
+                setChapterProgress((prev) => {
+                    const previousProgress = prev[currentLessonId] || 0; // Récupérer la progression précédente
+                    const newProgress = Math.max(previousProgress, progress); // Mise à jour de la progression
+    
+                    // Marquer le chapitre comme lu seulement si le scroll atteint 100%
+                    if (newProgress >= 100 && !readChapters[currentLessonId]) {
+                        setReadChapters((prev) => ({
+                            ...prev,
+                            [currentLessonId]: true, // Marquer comme lu
+                        }));
+                    }
+    
+                    return {
                         ...prev,
-                        [currentLessonId]: true, // Marquer comme lu
-                    }));
-                }
-
-                console.log(progress); // Afficher la progression actuelle dans la console
-
+                        [currentLessonId]: newProgress, // Mettre à jour la progression maximale
+                    };
+                });
+    
                 // Calculer le pourcentage total du cours
                 const totalChapters = lessons.length; // Nombre total de chapitres
-                const completedChapters = Object.values(readChapters).filter(checked => checked).length; // Chapitres déjà lus
-                const courseProgress = ((completedChapters + (progress >= 100 ? 1 : 0)) / totalChapters) * 100; // Pourcentage de progression du cours
-
-                // Afficher le pourcentage de progression du cours dans la console
-                console.log(`Progression du cours: ${courseProgress.toFixed(2)}%`);
+                const completedChapters = Object.values(readChapters).filter((checked) => checked).length; // Chapitres déjà lus
+                
+                // Utiliser 'progress' pour calculer la progression globale
+                const courseProgressValue = ((completedChapters + (progress >= 100 && !readChapters[currentLessonId] ? 1 : 0)) / totalChapters) * 100;
+    
+                // Mettre à jour la progression globale du cours
+                setCourseProgress(courseProgressValue);
+                console.log(`Progression du cours: ${courseProgressValue.toFixed(2)}%`); // Log pour vérifier la progression
             }
         }
-    }, 200); // Débounce de 200 ms pour gérer le scroll
+    }, 200);
+        
 
-    // Attache l'événement de scroll à la fenêtre
+    // Effet pour attacher l'événement de scroll à la fenêtre
     useEffect(() => {
         window.addEventListener("scroll", handleScroll); // Écouteur d'événement pour le défilement
         return () => {
             window.removeEventListener("scroll", handleScroll); // Nettoyage de l'écouteur lors du démontage
         };
     }, [lesson, handleScroll]); // Dépendances de l'effet
+
+    // Effet pour initialiser la progression du chapitre à 100% si déjà lu
+    useEffect(() => {
+        if (lesson && readChapters[lesson.id]) {
+            setChapterProgress((prev) => ({
+                ...prev,
+                [lesson.id]: 100, // Initialiser la progression à 100% si le chapitre a été lu
+            }));
+        }
+    }, [lesson, readChapters]);
 
     // Fonction pour gérer le clic sur une leçon
     const handleLessonClick = async (lessonId: string) => {
@@ -126,6 +154,14 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             if (response.ok) {
                 const data = await response.json(); // Conversion de la réponse en JSON
                 setLesson(data); // Mise à jour de l'état avec la leçon récupérée
+
+                // Vérifier si le chapitre a déjà été lu et initialiser la progression
+                if (readChapters[lessonId]) {
+                    setChapterProgress((prev) => ({
+                        ...prev,
+                        [lessonId]: 100, // Initialiser la progression à 100%
+                    }));
+                }
             } else {
                 console.error("Erreur lors de la récupération de la leçon sélectionnée.");
             }
@@ -144,6 +180,14 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
 
     return (
         <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
+            {/* Barre de progression fixe en haut */}
+            <div className="fixed top-0 left-0 right-0 bg-gray-300 z-50">
+                <div
+                    className="h-2 bg-blue-500 transition-all duration-300"
+                    style={{ width: `${Math.min(Math.floor(chapterProgress[lesson.id] || 0), 100)}%` }}
+                ></div>
+            </div>
+    
             {/* En-tête mobile */}
             <div className="md:hidden flex justify-between items-center mb-4">
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Chapitres</h2>
@@ -154,7 +198,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     <PanelsTopLeftIcon className="h-6 w-6" />
                 </button>
             </div>
-
+    
             {/* Barre latérale des chapitres */}
             <aside
                 className={`fixed md:relative z-40 w-64 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 md:mr-8 transition-transform duration-300 transform ${
@@ -171,7 +215,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Chapitres</h2>
                 <ul className="space-y-2">
                     {lessons.map((l) => (
-                        <li key={l.id}>
+                        <li key={l.id} className="relative">
                             <button
                                 onClick={() => {
                                     handleLessonClick(l.id); // Charger la leçon sélectionnée
@@ -180,19 +224,34 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                                 className={`block w-full text-left px-4 py-2 rounded-lg ${
                                     l.id === lesson.id // Vérification si la leçon est actuellement sélectionnée
                                         ? 'bg-blue-500 text-white'
-                                        : 'text-gray-900 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-700'
+                                        : 'text-gray-900 bg-slate-100 dark:bg-[#2e3a4a] dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-700'
                                 }`}
                             >
                                 {l.title} {/* Titre de la leçon */}
                                 {readChapters[l.id] && ( // Afficher l'icône de check si le chapitre a été lu
-                                    <CheckIcon className="inline-block ml-2 text-green-500" size={16} />
+                                    <CheckIcon className="absolute w-2 h-2 p-1 top-2 right-2 bg-green-400 text-black rounded-full flex items-center justify-center ml-2" size={16} />
                                 )}
                             </button>
                         </li>
                     ))}
                 </ul>
-            </aside>
 
+                <div className="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
+                    <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300">Progression du cours</h3>
+                    <div className="relative w-full h-2 bg-gray-300 rounded-lg overflow-hidden my-2">
+                        <div
+                            className={`absolute h-full transition-all duration-300 ${getProgressBarColor(courseProgress)}`}
+                            style={{
+                                width: `${courseProgress.toFixed(2)}%`, // Affiche la progression globale du cours
+                            }}
+                        ></div>
+                    </div>
+                    <p className="text-right text-sm text-gray-600 dark:text-gray-400">
+                        {courseProgress.toFixed(2)}% {/* Pourcentage de progression du cours */}
+                    </p>
+                </div>
+            </aside>
+    
             {/* Overlay pour fermer la barre latérale sur mobile */}
             {isSidebarOpen && (
                 <div
@@ -200,7 +259,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     onClick={() => setIsSidebarOpen(false)} // Fermer la barre latérale lorsque l'overlay est cliqué
                 ></div>
             )}
-
+    
             {/* Contenu de la leçon */}
             <div className="flex-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
                 <h1 className="text-md text-gray-900 dark:text-yellow-500 mb-6">
@@ -209,6 +268,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     </a>{" "}
                     / {lesson.title} {/* Titre de la leçon */}
                 </h1>
+    
                 <div
                     className="prose prose-md text-gray-800 dark:text-gray-200" // Styles de prose pour le contenu
                     dangerouslySetInnerHTML={{ __html: lessonContent }} // Insertion du contenu HTML
