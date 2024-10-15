@@ -11,8 +11,8 @@ export default function Home() {
         <p className="text-xl text-center sm:text-2xl text-gray-700 dark:text-gray-300">
           Maîtrisez de nouvelles compétences, explorez des connaissances et libérez votre potentiel grâce à nos cours animés par des experts.
         </p>
-        <Link href="/course" className="w-full text-center">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition duration-300 my-5">
+        <Link href="/course" className="w-full text-center mb-10">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition duration-300">
             Commencer
           </button>
         </Link>
