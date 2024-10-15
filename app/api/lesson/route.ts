@@ -48,69 +48,69 @@ export async function POST(req: Request) {
         }
 
         // Fichier HTML de la leçon
-        const lessonHtml = `
-        <!DOCTYPE html>
-        <html lang="fr">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${title}</title>
-        </head>
-        <body>
-            <div id="lesson-content">
-                ${htmlContent}
-            </div>
-        </body>
-        </html>`;
+        // const lessonHtml = `
+        // <!DOCTYPE html>
+        // <html lang="fr">
+        // <head>
+        //     <meta charset="UTF-8">
+        //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        //     <title>${title}</title>
+        // </head>
+        // <body>
+        //     <div id="lesson-content">
+        //         ${htmlContent}
+        //     </div>
+        // </body>
+        // </html>`;
 
-        // Fichier imsmanifest.xml
-        const imsManifest = `
-        <?xml version="1.0" encoding="UTF-8"?>
-        <manifest identifier="com.example.course" version="1.2" xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2" xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2">
-            <metadata>
-                <schema>ADL SCORM</schema>
-                <schemaversion>1.2</schemaversion>
-                <lom>
-                    <general>
-                        <title>
-                            <string>${title}</string>
-                        </title>
-                    </general>
-                </lom>
-            </metadata>
-            <organizations default="org">
-                <organization identifier="org">
-                    <item identifier="item1" identifierref="resource1">
-                        <title>${title}</title>
-                    </item>
-                </organization>
-            </organizations>
-            <resources>
-                <resource identifier="resource1" type="webcontent" href="index.html">
-                    <file href="index.html" />
-                </resource>
-            </resources>
-        </manifest>`;
+        // // Fichier imsmanifest.xml
+        // const imsManifest = `
+        // <?xml version="1.0" encoding="UTF-8"?>
+        // <manifest identifier="com.example.course" version="1.2" xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2" xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2">
+        //     <metadata>
+        //         <schema>ADL SCORM</schema>
+        //         <schemaversion>1.2</schemaversion>
+        //         <lom>
+        //             <general>
+        //                 <title>
+        //                     <string>${title}</string>
+        //                 </title>
+        //             </general>
+        //         </lom>
+        //     </metadata>
+        //     <organizations default="org">
+        //         <organization identifier="org">
+        //             <item identifier="item1" identifierref="resource1">
+        //                 <title>${title}</title>
+        //             </item>
+        //         </organization>
+        //     </organizations>
+        //     <resources>
+        //         <resource identifier="resource1" type="webcontent" href="index.html">
+        //             <file href="index.html" />
+        //         </resource>
+        //     </resources>
+        // </manifest>`;
 
-        const sanitizedTitle = sanitizeFileName(title); // Nettoyage du titre
-        const zipFilePath = path.join(process.cwd(), 'public', `${sanitizedTitle}.zip`); // Chemin de sauvegarde du ZIP
+        // const sanitizedTitle = sanitizeFileName(title); // Nettoyage du titre
+        // const zipFilePath = path.join(process.cwd(), 'public', `${sanitizedTitle}.zip`); // Chemin de sauvegarde du ZIP
 
-        // Crée une écriture de fichier
-        const output = fs.createWriteStream(zipFilePath);
-        const archive = archiver('zip', { zlib: { level: 9 } });
+        // // Crée une écriture de fichier
+        // const output = fs.createWriteStream(zipFilePath);
+        // const archive = archiver('zip', { zlib: { level: 9 } });
 
-        // Connecter le stream de l'archive au fichier de sortie
-        archive.pipe(output);
+        // // Connecter le stream de l'archive au fichier de sortie
+        // archive.pipe(output);
 
-        // Ajouter les fichiers HTML et XML dans l'archive
-        archive.append(lessonHtml, { name: 'index.html' });
-        archive.append(imsManifest, { name: 'imsmanifest.xml' });
+        // // Ajouter les fichiers HTML et XML dans l'archive
+        // archive.append(lessonHtml, { name: 'index.html' });
+        // archive.append(imsManifest, { name: 'imsmanifest.xml' });
 
-        // Finaliser l'archive
-        await archive.finalize();
+        // // Finaliser l'archive
+        // await archive.finalize();
 
         // Réponse avec l'emplacement du fichier ZIP
-        return NextResponse.json({ message: 'Leçon créée avec succès', zipFilePath });
+        return NextResponse.json({ message: 'Leçon créée avec succès' });
     } catch (error) {
         console.error('Erreur lors de la génération du fichier SCORM:', error);
         return NextResponse.json({ message: 'Erreur interne' }, { status: 500 });
