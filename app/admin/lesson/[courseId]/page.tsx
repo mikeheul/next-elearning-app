@@ -16,11 +16,12 @@ export default function AddLesson() {
         const response = await fetch(`/api/lesson`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, content, courseId }), // Inclure le courseId avec le titre et le contenu
+            body: JSON.stringify({ title, content, courseId }),
         });
 
+        console.log("courseId:", courseId);
+
         if (response.ok) {
-            // Redirection après la soumission réussie
             router.push(`/course/${courseId}`);
         } else {
             console.error('Erreur lors de la création de la leçon');
