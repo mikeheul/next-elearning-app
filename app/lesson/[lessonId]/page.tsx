@@ -88,6 +88,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     [currentLessonId]: progress,
                 }));
 
+                console.log(chapterProgress)
+
                 // Vérifier si le chapitre a été lu (100%)
                 if (progress >= 100 && !readChapters[currentLessonId]) {
                     setReadChapters((prev) => ({
