@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Link from "next/link";
+import Navbar from "@/components/NavBar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,10 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-700`}
       >
-        <header className="flex gap-3 justify-between items-center px-8 py-6 bg-slate-600 dark:bg-slate-800">
+        {/* <header className="flex gap-3 justify-between items-center px-8 py-6 bg-slate-600 dark:bg-slate-800">
           <Link href='/course' className="text-white text-lg font-semibold">Cours</Link>
           <ThemeSwitcher />
-        </header>
+        </header> */}
+        <Navbar />
         <main>
           {children}
         </main>
