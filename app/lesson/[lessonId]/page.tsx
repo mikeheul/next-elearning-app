@@ -92,7 +92,13 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 className={`fixed md:relative z-40 w-64 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 md:mr-8 transition-transform duration-300 transform ${
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
                 }`}
-                style={{ top: 0, left: 0, height: "100vh" }} 
+                style={{
+                    top: 0,
+                    left: 0,
+                    height: "100vh",
+                    maxHeight: "100vh", // Limiter la hauteur
+                    overflowY: "auto",   // Activer le défilement vertical
+                }}
             >
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Chapitres</h2>
                 <ul className="space-y-2">
