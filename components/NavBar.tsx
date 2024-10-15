@@ -17,7 +17,7 @@ export default function Navbar() {
                     {/* Logo */}
                     <div className="flex items-center">
                         <Link href="/" className="text-2xl font-bold text-gray-900 dark:text-white">
-                            MonCours
+                            Learnify
                         </Link>
                     </div>
 
