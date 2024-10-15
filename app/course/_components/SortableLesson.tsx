@@ -50,7 +50,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
                         // className="flex items-center bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg shadow-md"
                         className="flex items-center text-red-500"
                     >
-                        <Trash2Icon className="" size={15} />
+                        <Trash2Icon className="" size={18} />
                     </button>
                     <button
                         onClick={() => {
@@ -59,7 +59,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
                         // className="flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg shadow-md"
                         className="flex items-center text-slate-900 dark:text-slate-200"
                     >
-                        <EditIcon className="" size={15} />
+                        <EditIcon className="" size={18} />
                     </button>
                 </div>
 

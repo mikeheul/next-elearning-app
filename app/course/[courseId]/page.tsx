@@ -134,7 +134,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                 <div className="flex flex-col gap-3 md:flex-row my-8">
                     <button
                         onClick={handleDownload}
-                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                        className="flex justify-center items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
                     >
                         <DownloadIcon size={20} />
                     </button>
