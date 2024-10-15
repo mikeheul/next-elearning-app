@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
 import { Lesson } from "@/types/types";
-import { Menu, PanelsTopLeftIcon } from "lucide-react"; // Import the Menu icon for mobile
+import { PanelsTopLeftIcon } from "lucide-react"; // Import the Menu icon for mobile
 
 export default function LessonPage({ params }: { params: { lessonId: string } }) {
     const initialLessonId = params.lessonId;
