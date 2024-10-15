@@ -17,7 +17,7 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import SortableLesson from '../_components/SortableLesson';
-import { Loader } from 'lucide-react'; // Import a loading icon from lucide-react
+import { LoaderCircleIcon } from 'lucide-react'; // Import a loading icon from lucide-react
 
 export default function CourseDetail({ params }: { params: { courseId: string } }) {
 
@@ -100,7 +100,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen bg-slate-50 dark:bg-gray-900">
-                <Loader className="animate-spin h-8 w-8 text-blue-600 dark:text-blue-400" />
+                <LoaderCircleIcon className="animate-spin h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
         );
     }
