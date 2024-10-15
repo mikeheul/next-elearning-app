@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
 import { Lesson } from "@/types/types";
-import { PanelsTopLeftIcon } from "lucide-react"; // Import the Menu icon for mobile
+import { PanelsTopLeftIcon, CheckIcon } from "lucide-react"; // Import the Menu icon and Check icon
 
 export default function LessonPage({ params }: { params: { lessonId: string } }) {
     const initialLessonId = params.lessonId;
     const [lesson, setLesson] = useState<Lesson | null>(null);
-    // const [loading, setLoading] = useState(true);
     const [lessons, setLessons] = useState<Lesson[]>([]); // Liste des leçons du cours
+    const [chapterProgress, setChapterProgress] = useState<{ [key: string]: number }>({}); // État pour suivre la progression de chaque chapitre
+    const [readChapters, setReadChapters] = useState<{ [key: string]: boolean }>({}); // État pour suivre si un chapitre a été lu
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Toggle pour la barre latérale sur mobile
     const router = useRouter();
 
@@ -30,8 +31,6 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             } catch (error) {
                 console.error("Erreur lors de la récupération de la leçon :", error);
                 router.push("/404");
-            } finally {
-                // setLoading(false);
             }
         }
 
@@ -52,8 +51,61 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         fetchLesson(initialLessonId);
     }, [initialLessonId, router, lessons.length]);
 
+    // Fonction debounce
+    function debounce(func: Function, wait: number) {
+        let timeout: NodeJS.Timeout;
+        return function (...args: any) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Fonction pour mettre à jour la progression en fonction du scroll de la page
+    const handleScroll = debounce(() => {
+        if (lesson) {
+            const { scrollY, innerHeight } = window; // Position de scroll actuelle et hauteur de la fenêtre
+            const totalHeight = document.documentElement.scrollHeight; // Hauteur totale de la page
+            const progress = (scrollY / (totalHeight - innerHeight)) * 100; // Calcul de la progression
+
+            const currentLessonId = lesson?.id;
+            if (currentLessonId) {
+                setChapterProgress((prev) => ({
+                    ...prev,
+                    [currentLessonId]: progress,
+                }));
+
+                // Vérifier si le chapitre a été lu (100%)
+                if (progress >= 100 && !readChapters[currentLessonId]) {
+                    setReadChapters((prev) => ({
+                        ...prev,
+                        [currentLessonId]: true, // Marquer comme lu
+                    }));
+                }
+
+                // Calculer le pourcentage total du cours
+                const totalChapters = lessons.length;
+                const completedChapters = Object.values(readChapters).filter(checked => checked).length; // Chapitres déjà lus
+                const courseProgress = ((completedChapters + (progress >= 100 ? 1 : 0)) / totalChapters) * 100;
+
+                // Afficher le pourcentage de progression du cours dans la console
+                console.log(`Progression du cours: ${courseProgress.toFixed(2)}%`);
+            }
+        }
+    }, 200);
+
+    // Attache l'événement de scroll à la fenêtre
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, [lesson, handleScroll]);
+
     const handleLessonClick = async (lessonId: string) => {
-        // setLoading(true);
         try {
             const response = await fetch(`/api/lesson/${lessonId}`);
             if (response.ok) {
@@ -64,8 +116,6 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             }
         } catch (error) {
             console.error("Erreur lors du chargement de la nouvelle leçon :", error);
-        } finally {
-            // setLoading(false);
         }
     };
 
@@ -107,7 +157,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                             <button
                                 onClick={() => {
                                     handleLessonClick(l.id);
-                                    setIsSidebarOpen(false); 
+                                    setIsSidebarOpen(false);
                                 }}
                                 className={`block w-full text-left px-4 py-2 rounded-lg ${
                                     l.id === lesson.id
@@ -116,6 +166,9 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                                 }`}
                             >
                                 {l.title}
+                                {readChapters[l.id] && ( // Afficher l'icône de check si le chapitre a été lu
+                                    <CheckIcon className="inline-block ml-2 text-green-500" size={16} />
+                                )}
                             </button>
                         </li>
                     ))}
