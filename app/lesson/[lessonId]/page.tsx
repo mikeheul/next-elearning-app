@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
 import { Lesson } from "@/types/types";
@@ -51,15 +51,21 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         fetchLesson(initialLessonId);
     }, [initialLessonId, router, lessons.length]);
 
-    // Fonction debounce
-    function debounce(func: Function, wait: number) {
-        let timeout: NodeJS.Timeout;
-        return function (...args: any) {
+    function debounce<F extends (...args: unknown[]) => void>(func: F, wait: number) {
+        let timeout: NodeJS.Timeout | undefined;
+    
+        return function (...args: Parameters<F>) {
             const later = () => {
-                clearTimeout(timeout);
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
                 func(...args);
             };
-            clearTimeout(timeout);
+    
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            
             timeout = setTimeout(later, wait);
         };
     }
@@ -85,6 +91,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                         [currentLessonId]: true, // Marquer comme lu
                     }));
                 }
+
+                console.log(chapterProgress)
 
                 // Calculer le pourcentage total du cours
                 const totalChapters = lessons.length;
