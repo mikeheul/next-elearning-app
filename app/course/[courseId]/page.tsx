@@ -17,7 +17,7 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import SortableLesson from '../_components/SortableLesson';
-import { LoaderCircleIcon } from 'lucide-react'; // Import a loading icon from lucide-react
+import { DownloadIcon, LoaderCircleIcon } from 'lucide-react'; // Import a loading icon from lucide-react
 
 export default function CourseDetail({ params }: { params: { courseId: string } }) {
 
@@ -97,6 +97,13 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
         console.log("Download zip !")
     };
 
+    const goToFirstLesson = () => {
+        if (course && course.lessons.length > 0) {
+            const firstLessonId = course.lessons[0].id; // ID de la première leçon
+            router.push(`/lesson/${firstLessonId}`); // Redirection vers la première leçon
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen bg-slate-50 dark:bg-gray-900">
@@ -124,12 +131,22 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                     {course.title}
                 </h1>
 
-                <button
-                    onClick={handleDownload}
-                    className="mb-8 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                >
-                    Télécharger le cours en zip
-                </button>
+                <div className="flex flex-col gap-3 md:flex-row my-8">
+                    <button
+                        onClick={handleDownload}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                        <DownloadIcon size={20} />
+                    </button>
+
+                    {/* Bouton pour accéder à la première leçon */}
+                    <button
+                            onClick={goToFirstLesson}
+                            className="bg-emerald-700 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                            Accéder au cours
+                    </button>
+                </div>
                 
                 <p className="text-gray-700 dark:text-gray-300 text-lg mb-8">
                     {course.description}
