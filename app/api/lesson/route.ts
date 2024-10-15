@@ -38,6 +38,11 @@ export async function POST(req: Request) {
             },
         });
 
+        await db.course.update({
+            where: { id: courseId },
+            data: { updatedAt: new Date() }, // Mettez à jour la date de modification
+        });
+
         if(!lesson) {
             console.log('Error')
         }

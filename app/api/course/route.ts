@@ -48,7 +48,7 @@ export async function GET() {
             //     isPublic: true,
             // },
             orderBy: {
-                createdAt: 'desc',
+                updatedAt: 'desc',
             },
             include: {
                 lessons: true,
