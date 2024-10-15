@@ -47,9 +47,11 @@ const CourseCard = ({ course }: CourseCardProps) => {
                 </p>
                 
                 <div className="flex gap-4 my-5">
-                    <span className={`inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white ${badgeColor} rounded-full`}>
-                        <BookOpenIcon className="mr-1" size={16} /> {/* Icône BookOpen */}
-                        {course.lessons.length} chapitre{course.lessons.length > 1 ? 's' : ''}
+                    <span className={`inline-flex gap-1 items-center justify-center px-3 py-1 text-sm font-medium text-white ${badgeColor} rounded-full`}>
+                        <BookOpenIcon className="mr-1 relative top-[1px]" size={16} /> {/* Ajuste la position de l'icône */}
+                        <span className="align-middle">
+                            {course.lessons.length} chapitre{course.lessons.length > 1 ? 's' : ''}
+                        </span>
                     </span>
 
                     {/* Affichage du nombre de quizz */}
