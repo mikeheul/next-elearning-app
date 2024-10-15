@@ -42,7 +42,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
             </div>
 
             <div className="flex items-center space-x-4">
-                <div className='flex gap-2 absolute top-3 right-3'>
+                <div className='bg-slate-200 dark:bg-slate-900 flex gap-2 absolute top-0 right-0 p-3 rounded-bl-md rounded-tr-md'>
                     <button
                         onClick={() => {
                             router.push(`/admin/lesson/delete/${lesson.id}`);
