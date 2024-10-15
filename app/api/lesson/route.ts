@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
-import { marked } from 'marked';
-import archiver from 'archiver';
-import fs from 'fs';
-import path from 'path';
+// import { marked } from 'marked';
+// import archiver from 'archiver';
+// import fs from 'fs';
+// import path from 'path';
 import { db } from '@/lib/db';
 
-function sanitizeFileName(title: string): string {
-    return title
-        .trim() // Supprime les espaces au début et à la fin
-        .replace(/[\s]+/g, '_') // Remplace les espaces par des underscores
-        .replace(/[^\w.-]+/g, '') // Supprime les caractères non alphanumériques, sauf les underscores, tirets et points
-        .toLowerCase(); // Optionnel : convertir en minuscules
-}
+// function sanitizeFileName(title: string): string {
+//     return title
+//         .trim() // Supprime les espaces au début et à la fin
+//         .replace(/[\s]+/g, '_') // Remplace les espaces par des underscores
+//         .replace(/[^\w.-]+/g, '') // Supprime les caractères non alphanumériques, sauf les underscores, tirets et points
+//         .toLowerCase(); // Optionnel : convertir en minuscules
+// }
 
 export async function POST(req: Request) {
     try {
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         }
 
         // Convertir le Markdown en HTML
-        const htmlContent = marked(content);
+        // const htmlContent = marked(content);
 
         const lessonCount = await db.lesson.count({
             where: { courseId },
@@ -110,6 +110,7 @@ export async function POST(req: Request) {
         // await archive.finalize();
 
         // Réponse avec l'emplacement du fichier ZIP
+        // return NextResponse.json({ message: 'Leçon créée avec succès', zipFilePath });
         return NextResponse.json({ message: 'Leçon créée avec succès' });
     } catch (error) {
         console.error('Erreur lors de la génération du fichier SCORM:', error);
