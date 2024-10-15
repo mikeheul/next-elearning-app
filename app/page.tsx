@@ -20,8 +20,8 @@ export default function Home() {
 
       {/* Section des caractéristiques */}
       <main className="row-start-2 flex flex-col items-center sm:items-stretch gap-16">
-        <h2 className="text-3xl sm:text-4xl font-semibold text-gray-800 dark:text-gray-100">
-          Pourquoi choisir Learnify ?
+        <h2 className="text-3xl text-center sm:text-4xl font-semibold text-gray-800 dark:text-gray-100">
+          Pourquoi choisir Learnify&nbsp;?
         </h2>
         <div className="grid gap-8 sm:grid-cols-3 w-full">
           <div className="bg-white dark:bg-gray-800 p-10 rounded-lg shadow-md text-center">
