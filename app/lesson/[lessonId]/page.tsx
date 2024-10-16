@@ -119,7 +119,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         }
 
         fetchLesson(initialLessonId); // Appel de la fonction pour récupérer la leçon initiale
-    }, [initialLessonId, router, lesson, lessons.length]); // Dépendances de l'effet
+    }, [initialLessonId, router, lessons.length]); // Dépendances de l'effet
 
     // Fonction de debounce pour limiter la fréquence d'exécution d'une fonction
     function debounce<F extends (...args: unknown[]) => void>(func: F, wait: number) {
@@ -366,7 +366,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                                         <>
                                             {readChapters[l.id] && (
                                                 <CheckIcon className="absolute w-2 h-2 p-1 top-2 right-2 bg-green-400 text-black rounded-full flex items-center justify-center ml-2" size={16} />
-                                                )}
+                                            )}
                                         </>
                                     )}
                                 </button>
