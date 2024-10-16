@@ -23,7 +23,7 @@ export default function Home() {
         <h2 className="text-3xl text-center sm:text-4xl font-semibold text-gray-800 dark:text-gray-100">
           Pourquoi choisir Learnify&nbsp;?
         </h2>
-        <div className="grid gap-8 sm:grid-cols-3 w-full">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full">
           <div className="bg-white dark:bg-gray-800 p-10 rounded-lg shadow-md text-center">
             <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4">Instructeurs Experts</h3>
             <p className="text-gray-600 dark:text-gray-300">
