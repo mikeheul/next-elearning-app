@@ -84,4 +84,35 @@ aside::-webkit-scrollbar-thumb:hover {
     .editor-container {
         flex-direction: column;
     }
+
+    .prose h1 {
+        font-size: clamp(1.5rem, 4vw + 1rem, 3.5rem);
+    }
+
+    .prose table, .prose thead, .prose tbody, .prose th, .prose td, .prose tr {
+        display: block;
+        width: 100%;
+    }
+
+    .prose thead tr {
+        display: none; /* Masquer les en-têtes du tableau sur mobile */
+    }
+
+    .prose td {
+        /* display: flex; */
+        /* justify-content: space-between; */
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .prose td:nth-child(1) {
+        font-weight: bold;
+        color: #FBBF24;
+    }
+
+    .prose td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        flex-basis: 40%; /* Largeur réservée à la "colonne" des étiquettes */
+    }
 }

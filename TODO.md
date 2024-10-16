@@ -1,3 +1,4 @@
+- Ajouter catégories / niveaux aux cours / chapitres
 - Authentification
 - Cours en favoris
 - Suivre la progression d'un apprenant (profil perso + dashboard admin)
