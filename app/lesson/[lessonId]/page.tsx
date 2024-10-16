@@ -155,6 +155,11 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 const data = await response.json(); // Conversion de la réponse en JSON
                 setLesson(data); // Mise à jour de l'état avec la leçon récupérée
 
+                window.scrollTo({
+                    top: 0, // Position tout en haut
+                    behavior: "smooth", // Optionnel : défilement en douceur
+                });
+
                 // Vérifier si le chapitre a déjà été lu et initialiser la progression
                 if (readChapters[lessonId]) {
                     setChapterProgress((prev) => ({
