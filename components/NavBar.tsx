@@ -5,10 +5,11 @@ import { LogIn, MenuIcon, UserPlus, XIcon } from "lucide-react"; // ou lucide-re
 import Link from 'next/link';
 import ThemeSwitcher from "./ThemeSwitcher";
 
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { user } = useUser();
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -42,6 +43,9 @@ export default function Navbar() {
                         </SignedOut>
 
                         <SignedIn>
+                            <span className="text-gray-700 dark:text-gray-300 font-semibold">
+                                {user?.firstName || user?.username}
+                            </span>
                             <UserButton afterSignOutUrl="/" />     
                         </SignedIn>
 
