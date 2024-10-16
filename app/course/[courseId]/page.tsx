@@ -24,8 +24,22 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isMobile, setIsMobile] = useState(false); // Détection mobile
     const router = useRouter();
     const courseId = params.courseId;
+
+    useEffect(() => {
+        // Détection de la taille de l'écran
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768); // Considérer mobile si largeur < 768px
+        };
+
+        // Vérifier à l'initialisation et ajouter un listener pour le redimensionnement
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         async function fetchCourse() {
@@ -177,23 +191,38 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                     </div>
                 </div>
 
-                <DndContext
-                    sensors={sensors}
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                >
-                    <SortableContext items={course.lessons} strategy={verticalListSortingStrategy}>
-                        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                            {course.lessons.length > 0 ? (
-                                course.lessons.map((lesson) => (
-                                    <SortableLesson key={lesson.id} lesson={lesson} />
-                                ))
-                            ) : (
-                                <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
-                            )}
-                        </div>
-                    </SortableContext>
-                </DndContext>
+                {!isMobile ? (
+                    <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <SortableContext items={course.lessons} strategy={verticalListSortingStrategy}>
+                            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                                {course.lessons.length > 0 ? (
+                                    course.lessons.map((lesson) => (
+                                        <SortableLesson key={lesson.id} lesson={lesson} />
+                                    ))
+                                ) : (
+                                    <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
+                                )}
+                            </div>
+                        </SortableContext>
+                    </DndContext>
+                ) : (
+                    // Si on est sur mobile, afficher les leçons sans drag-and-drop
+                    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {course.lessons.length > 0 ? (
+                            course.lessons.map((lesson) => (
+                                <div key={lesson.id}>
+                                    <SortableLesson lesson={lesson} />
+                                </div>
+                            ))
+                        ) : (
+                            <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
+                        )}
+                    </div>
+                )}
                 
                 {/* Section des Quizzes */}
                 <div className="my-8 bg-slate-200 dark:bg-slate-800 p-6 rounded-md">
