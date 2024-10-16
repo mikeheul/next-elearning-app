@@ -76,34 +76,65 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         fetchLesson(initialLessonId); // Appel de la fonction pour récupérer la leçon initiale
     }, [initialLessonId, router, lessons.length]);
 
-    // Effet séparé pour récupérer la progression si l'utilisateur est connecté
     useEffect(() => {
-        if (user && lesson) {
-            const fetchProgress = async (lessonId: string) => {
+        if (user && lessons.length) {
+            const fetchProgressForAllLessons = async () => {
                 try {
-                    const progressResponse = await fetch(`/api/user/progress/${lessonId}`);
-                    if (progressResponse.ok) {
-                        const progressData = await progressResponse.json();
-                        setChapterProgress((prev) => ({
-                            ...prev,
-                            [lessonId]: progressData.progress || 0, // mettez à jour avec la progression récupérée
-                        }));
-                        // Marque le chapitre comme lu si la progression est de 100%
-                        if (progressData.progress >= 100) {
-                            setReadChapters((prev) => ({
-                                ...prev,
-                                [lessonId]: true, // Marque le chapitre comme lu
-                            }));
+                    const promises = lessons.map(async (lesson) => {
+                        const progressResponse = await fetch(`/api/user/progress/${lesson.id}`);
+                        if (progressResponse.ok) {
+                            const progressData = await progressResponse.json();
+                            return {
+                                lessonId: lesson.id,
+                                progress: progressData.progress || 0,
+                            };
+                        } else {
+                            return { lessonId: lesson.id, progress: 0 };
                         }
-                    }
+                    });
+    
+                    const progressResults = await Promise.all(promises);
+    
+                    // Mise à jour des progressions et des chapitres lus
+                    const updatedReadChapters: { [key: string]: boolean } = {};
+                    const updatedChapterProgress: { [key: string]: number } = {};
+    
+                    progressResults.forEach(({ lessonId, progress }) => {
+                        updatedChapterProgress[lessonId] = progress;
+                        if (progress >= 100) {
+                            updatedReadChapters[lessonId] = true;
+                        }
+                    });
+    
+                    setChapterProgress(updatedChapterProgress); // Met à jour la progression
+                    setReadChapters(updatedReadChapters); // Marque les chapitres comme lus
                 } catch (error) {
-                    console.error("Erreur lors de la récupération de la progression :", error);
+                    console.error("Erreur lors de la récupération des progressions :", error);
                 }
-            }
-
-            fetchProgress(initialLessonId);
+            };
+    
+            fetchProgressForAllLessons();
         }
-    }, [user, lesson, initialLessonId]);
+    }, [user, lessons]);
+
+    useEffect(() => {
+        if (lessons.length > 0) {
+            const totalChapters = lessons.length;
+            const completedChapters = Object.values(readChapters).filter((isRead) => isRead).length;
+            const calculatedCourseProgress = (completedChapters / totalChapters) * 100;
+            
+            setCourseProgress(calculatedCourseProgress); // Met à jour la progression du cours
+        }
+    }, [lessons, readChapters]);
+
+    useEffect(() => {
+        if (lesson && readChapters[lesson.id]) {
+            setChapterProgress((prev) => ({
+                ...prev,
+                [lesson.id]: 100, // Initialiser la progression à 100% si le chapitre est lu
+            }));
+        }
+    }, [lesson, readChapters]);
 
     // Fonction de debounce pour limiter la fréquence d'exécution d'une fonction
     function debounce<F extends (...args: unknown[]) => void>(func: F, wait: number) {
@@ -124,31 +155,6 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             timeout = setTimeout(later, wait); // Réglage du nouveau timeout
         };
     }
-
-    // const updateCourseProgress = async (courseId: string, progress: number) => {
-    //     if (!user) {
-    //         console.error("L'utilisateur n'est pas défini."); // Vérifiez si l'utilisateur est connecté
-    //         return; // Sortir si l'utilisateur n'est pas connecté
-    //     }
-    
-    //     try {
-    //         const response = await fetch(`/api/course/${courseId}/progress`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ userId: user.id, progress }), // Envoyer l'ID utilisateur et la progression
-    //         });
-    
-    //         if (!response.ok) {
-    //             throw new Error("Erreur lors de la mise à jour de la progression du cours");
-    //         }
-    
-    //         console.log("Progression du cours mise à jour avec succès !");
-    //     } catch (error) {
-    //         console.error("Erreur lors de la mise à jour de la progression du cours :", error);
-    //     }
-    // };
 
     const updateProgress = async (lessonId: string, progress: number) => {
         // Vérifiez si `lesson` n'est pas null avant de procéder
@@ -220,9 +226,6 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     
                 // Mettre à jour la progression globale du cours
                 setCourseProgress(courseProgressValue);
-
-                console.log("Progress :" + progress); // Log pour vérifier la progression
-                console.log(`Progression du cours: ${courseProgress.toFixed(2)}%`); // Log pour vérifier la progression
             }
         }
     }, 200);
