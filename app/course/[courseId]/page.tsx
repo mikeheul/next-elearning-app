@@ -18,6 +18,7 @@ import {
 } from '@dnd-kit/sortable';
 import SortableLesson from '../_components/SortableLesson';
 import { DownloadIcon, LoaderCircleIcon } from 'lucide-react'; // Import a loading icon from lucide-react
+import { useUser } from '@clerk/nextjs';
 
 export default function CourseDetail({ params }: { params: { courseId: string } }) {
 
@@ -27,6 +28,8 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
     const [isMobile, setIsMobile] = useState(false); // Détection mobile
     const router = useRouter();
     const courseId = params.courseId;
+
+    const { isSignedIn } = useUser();
 
     useEffect(() => {
         // Détection de la taille de l'écran
@@ -166,20 +169,22 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                     {course.description}
                 </p>
 
-                <div className="flex gap-2 mb-8">
-                    <button
-                        onClick={() => router.push(`/admin/lesson/${course.id}`)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Ajouter un chapitre
-                    </button>
-                    <button
-                        onClick={() => router.push(`/admin/${course.id}/quiz`)} // Use router to navigate
-                        className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                    >
-                        <span>Ajouter un Quiz</span>
-                    </button>
-                </div>
+                {isSignedIn && (
+                    <div className="flex gap-2 mb-8">
+                        <button
+                            onClick={() => router.push(`/admin/lesson/${course.id}`)}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                            Ajouter un chapitre
+                        </button>
+                        <button
+                            onClick={() => router.push(`/admin/${course.id}/quiz`)} // Use router to navigate
+                            className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        >
+                            <span>Ajouter un Quiz</span>
+                        </button>
+                    </div>
+                )}
 
                 {/* Section des Leçons */}
                 <div className="flex gap-5 items-center my-5">
@@ -192,23 +197,37 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                 </div>
 
                 {!isMobile ? (
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={closestCenter}
-                        onDragEnd={handleDragEnd}
-                    >
-                        <SortableContext items={course.lessons} strategy={verticalListSortingStrategy}>
-                            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                                {course.lessons.length > 0 ? (
-                                    course.lessons.map((lesson) => (
-                                        <SortableLesson key={lesson.id} lesson={lesson} />
-                                    ))
-                                ) : (
-                                    <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
-                                )}
-                            </div>
-                        </SortableContext>
-                    </DndContext>
+                    isSignedIn ? (
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <SortableContext items={course.lessons} strategy={verticalListSortingStrategy}>
+                                <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                                    {course.lessons.length > 0 ? (
+                                        course.lessons.map((lesson) => (
+                                            <SortableLesson key={lesson.id} lesson={lesson} />
+                                        ))
+                                    ) : (
+                                        <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
+                                    )}
+                                </div>
+                            </SortableContext>
+                        </DndContext>
+                    ) : (
+                        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {course.lessons.length > 0 ? (
+                            course.lessons.map((lesson) => (
+                                <div key={lesson.id}>
+                                    <SortableLesson lesson={lesson} />
+                                </div>
+                            ))
+                        ) : (
+                            <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
+                        )}
+                        </div>
+                    )
                 ) : (
                     // Si on est sur mobile, afficher les leçons sans drag-and-drop
                     <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">

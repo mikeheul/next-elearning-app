@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Course } from '@/types/types';
 import CourseCard from './_components/CourseCard';
 import Pagination from './[courseId]/_components/Pagination';
+import { useUser } from '@clerk/nextjs';
 
 export const dynamic = 'force-dynamic'
 
@@ -16,6 +17,7 @@ export default function CourseList() {
     const [searchTerm, setSearchTerm] = useState('');
 
     const router = useRouter();
+    const { isSignedIn } = useUser();
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentPage(1); // Reset to the first page when the search term changes
@@ -86,15 +88,16 @@ export default function CourseList() {
                     />
                 </div>
 
-                {/* Bouton pour ajouter un nouveau cours */}
-                <div className="mb-8">
-                    <button
-                        onClick={() => router.push(`/admin/course`)} // Redirige vers la page de création de cours
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Ajouter un cours
-                    </button>
-                </div>
+                {isSignedIn && (
+                    <div className="mb-8">
+                        <button
+                            onClick={() => router.push(`/admin/course`)} // Redirige vers la page de création de cours
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                            Ajouter un cours
+                        </button>
+                    </div>
+                )}
 
                 <Pagination
                     currentPage={currentPage}
