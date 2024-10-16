@@ -413,7 +413,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 {!user && (
                     <div className="absolute inset-0 bg-gradient-to-b from-white/80 to-white dark:from-gray-800/90 dark:to-gray-900 opacity-1 z-0 h-full">
                         {/* Si l'utilisateur n'est pas connecté, afficher le bouton de connexion */}
-                        <div className="flex flex-col justify-end h-full mt-4 mb-10 text-center">
+                        <div className="flex flex-col justify-start h-full mt-4 mb-10 text-center p-10">
                             <p className="text-gray-600 dark:text-gray-400">
                                 Connectez-vous pour accéder à l&apos;intégralité du cours.
                             </p>
