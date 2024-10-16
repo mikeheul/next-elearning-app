@@ -247,7 +247,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                         ></div>
                     </div>
                     <p className="text-right text-sm text-gray-600 dark:text-gray-400">
-                        {courseProgress.toFixed(2)}% {/* Pourcentage de progression du cours */}
+                        {courseProgress.toFixed(0)}% {/* Pourcentage de progression du cours */}
                     </p>
                 </div>
             </aside>

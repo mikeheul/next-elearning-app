@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { MenuIcon, XIcon } from "lucide-react"; // ou lucide-react pour les icônes
+import { LogIn, MenuIcon, UserPlus, XIcon } from "lucide-react"; // ou lucide-react pour les icônes
 import Link from 'next/link';
 import ThemeSwitcher from "./ThemeSwitcher";
+
+import { useAuth, useUser, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +25,26 @@ export default function Navbar() {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-4">
+
+                        <SignedOut>
+                            <Link
+                                href="/sign-in"
+                                className="block md:inline-block text-lg font-medium text-white hover:text-custom_orange transition duration-300"
+                            >
+                                <LogIn size={24} />
+                            </Link>
+                            <Link
+                                href="/sign-up"
+                                className="block md:inline-block text-lg font-medium text-white hover:text-custom_orange transition duration-300"
+                                >
+                                <UserPlus size={24} />
+                            </Link>
+                        </SignedOut>
+
+                        <SignedIn>
+                            <UserButton afterSignOutUrl="/" />     
+                        </SignedIn>
+
                         <Link href="/course" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             Cours
                         </Link>
