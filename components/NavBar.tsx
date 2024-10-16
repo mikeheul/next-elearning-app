@@ -29,15 +29,15 @@ export default function Navbar() {
                         <SignedOut>
                             <Link
                                 href="/sign-in"
-                                className="block md:inline-block text-lg font-medium text-white hover:text-custom_orange transition duration-300"
+                                className="block md:inline-block dark:text-white transition duration-300"
                             >
-                                <LogIn size={24} />
+                                <LogIn size={20} strokeWidth={1} />
                             </Link>
                             <Link
                                 href="/sign-up"
-                                className="block md:inline-block text-lg font-medium text-white hover:text-custom_orange transition duration-300"
+                                className="block md:inline-block dark:text-white transition duration-300"
                                 >
-                                <UserPlus size={24} />
+                                <UserPlus size={20} strokeWidth={1} />
                             </Link>
                         </SignedOut>
 

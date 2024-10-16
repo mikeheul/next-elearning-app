@@ -17,6 +17,11 @@ export default function CourseList() {
 
     const router = useRouter();
 
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCurrentPage(1); // Reset to the first page when the search term changes
+        setSearchTerm(e.target.value);
+    };
+
     useEffect(() => {
         async function fetchCourses() {
             try {
@@ -77,7 +82,7 @@ export default function CourseList() {
                             focus:outline-none focus:ring-2 focus:ring-blue-500
                             dark:focus:ring-blue-400`}
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)} // Met à jour l'état de recherche
+                        onChange={handleSearchChange} // Met à jour l'état de recherche
                     />
                 </div>
 
