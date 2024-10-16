@@ -5,7 +5,7 @@ import { LogIn, MenuIcon, UserPlus, XIcon } from "lucide-react"; // ou lucide-re
 import Link from 'next/link';
 import ThemeSwitcher from "./ThemeSwitcher";
 
-import { useAuth, useUser, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
