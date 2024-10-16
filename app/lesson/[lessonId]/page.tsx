@@ -27,7 +27,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const [readChapters, setReadChapters] = useState<{ [key: string]: boolean }>({}); // État pour suivre si un chapitre a été lu
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Toggle pour la barre latérale sur mobile
     const [isLoading, setIsLoading] = useState(false); // Ajout de l'état de chargement
-    
+    const [isSticky, setIsSticky] = useState(false);
+
     const router = useRouter(); // Hook pour accéder à l'instance du routeur
 
     // Effet pour récupérer les données de la leçon et des leçons du cours
@@ -211,15 +212,12 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     
             {/* Barre latérale des chapitres */}
             <aside
-                className={`fixed md:relative z-40 w-64 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 md:mr-8 transition-transform duration-300 transform ${
+                className={`z-40 w-64 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 md:mr-8 transition-transform duration-300 transform ${
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-                }`}
+                } sticky top-4`}  // Position sticky avec top-4
                 style={{
-                    top: 0,
-                    left: 0,
-                    height: "100vh", // Hauteur fixe de la barre latérale
-                    maxHeight: "100vh", // Limiter la hauteur
-                    overflowY: "auto",   // Activer le défilement vertical
+                    maxHeight: "calc(100vh - 1rem)", // Limite la hauteur à la fenêtre visible avec un petit espace
+                    overflowY: "auto",   // Scroll interne si le contenu dépasse la hauteur
                 }}
             >
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Chapitres</h2>
