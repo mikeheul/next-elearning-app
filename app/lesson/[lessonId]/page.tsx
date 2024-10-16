@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
 import { Lesson } from "@/types/types";
-import { PanelsTopLeftIcon, CheckIcon } from "lucide-react";
+import { PanelsTopLeftIcon, CheckIcon, Loader2Icon } from "lucide-react";
 
 const getProgressBarColor = (progress: number) => {
     if (progress === 100) {
@@ -26,6 +26,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const [courseProgress, setCourseProgress] = useState<number>(0); // État pour la progression du cours
     const [readChapters, setReadChapters] = useState<{ [key: string]: boolean }>({}); // État pour suivre si un chapitre a été lu
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Toggle pour la barre latérale sur mobile
+    const [isLoading, setIsLoading] = useState(false); // Ajout de l'état de chargement
+    
     const router = useRouter(); // Hook pour accéder à l'instance du routeur
 
     // Effet pour récupérer les données de la leçon et des leçons du cours
@@ -51,6 +53,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         // Fonction pour récupérer la liste des leçons d'un cours
         async function fetchLessons(courseId: string) {
             try {
+                setIsLoading(true); // Démarrage du chargement des chapitres
                 const response = await fetch(`/api/course/${courseId}/lessonslist`); // Requête pour récupérer la liste des leçons
                 if (response.ok) {
                     const lessonsData = await response.json(); // Conversion de la réponse en JSON
@@ -60,6 +63,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 }
             } catch (error) {
                 console.error("Erreur lors de la récupération des leçons :", error);
+            } finally {
+                setIsLoading(false);
             }
         }
 
@@ -218,28 +223,35 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 }}
             >
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Chapitres</h2>
-                <ul className="space-y-2">
-                    {lessons.map((l) => (
-                        <li key={l.id} className="relative">
-                            <button
-                                onClick={() => {
-                                    handleLessonClick(l.id); // Charger la leçon sélectionnée
-                                    setIsSidebarOpen(false); // Fermer la barre latérale après sélection
-                                }}
-                                className={`block w-full text-left px-4 py-2 rounded-lg ${
-                                    l.id === lesson.id // Vérification si la leçon est actuellement sélectionnée
-                                        ? 'bg-blue-500 text-white'
-                                        : 'text-gray-900 bg-slate-100 dark:bg-[#2e3a4a] dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-700'
-                                }`}
-                            >
-                                {l.title} {/* Titre de la leçon */}
-                                {readChapters[l.id] && ( // Afficher l'icône de check si le chapitre a été lu
-                                    <CheckIcon className="absolute w-2 h-2 p-1 top-2 right-2 bg-green-400 text-black rounded-full flex items-center justify-center ml-2" size={16} />
-                                )}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                
+                {isLoading ? (
+                    <div className="flex justify-center">
+                        <Loader2Icon className="animate-spin h-6 w-6 text-gray-500" /> {/* Icône de chargement */}
+                    </div>
+                ) : (
+                    <ul className="space-y-2">
+                        {lessons.map((l) => (
+                            <li key={l.id} className="relative">
+                                <button
+                                    onClick={() => {
+                                        handleLessonClick(l.id); // Charger la leçon sélectionnée
+                                        setIsSidebarOpen(false); // Fermer la barre latérale après sélection
+                                    }}
+                                    className={`block w-full text-left px-4 py-2 rounded-lg ${
+                                        l.id === lesson.id // Vérification si la leçon est actuellement sélectionnée
+                                            ? 'bg-blue-500 text-white'
+                                            : 'text-gray-900 bg-slate-100 dark:bg-[#2e3a4a] dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-700'
+                                    }`}
+                                >
+                                    {l.title} {/* Titre de la leçon */}
+                                    {readChapters[l.id] && ( // Afficher l'icône de check si le chapitre a été lu
+                                        <CheckIcon className="absolute w-2 h-2 p-1 top-2 right-2 bg-green-400 text-black rounded-full flex items-center justify-center ml-2" size={16} />
+                                    )}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
                 <div className="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
                     <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300">Progression du cours</h3>
