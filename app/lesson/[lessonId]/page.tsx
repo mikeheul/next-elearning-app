@@ -7,6 +7,8 @@ import { Lesson } from "@/types/types";
 import { PanelsTopLeftIcon, CheckIcon, Loader2Icon } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 
+import Swal from 'sweetalert2';
+
 const getProgressBarColor = (progress: number) => {
     if (progress === 100) {
         return 'bg-green-500';
@@ -259,8 +261,13 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const handleLessonClick = async (lessonId: string) => {
 
         if (!user) {
-            alert("Vous devez être connecté pour accéder à cette leçon."); // Message d'alerte si l'utilisateur n'est pas connecté
-            return; // Ne pas procéder si l'utilisateur n'est pas connecté
+            Swal.fire({
+                title: 'Connectez-vous',
+                text: "Vous devez être connecté pour accéder à cette leçon.",
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return; 
         }
 
         try {
