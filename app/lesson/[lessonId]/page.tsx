@@ -8,6 +8,7 @@ import { PanelsTopLeftIcon, CheckIcon, Loader2Icon } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 
 import Swal from 'sweetalert2';
+import Link from "next/link";
 
 const getProgressBarColor = (progress: number) => {
     if (progress === 100) {
@@ -405,9 +406,11 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                             <p className="text-gray-600 dark:text-gray-400">
                                 Connectez-vous pour accéder à l&apos;intégralité du cours.
                             </p>
-                            <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg">
-                                Se connecter
-                            </button>
+                            <Link href='/sign-in'>
+                                <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg">
+                                    Se connecter
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 )}
