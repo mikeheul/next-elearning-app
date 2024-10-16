@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LogIn, MenuIcon, UserPlus, XIcon } from "lucide-react"; // ou lucide-react pour les icônes
+import { LogIn, MenuIcon, User, UserPlus, XIcon } from "lucide-react"; // ou lucide-react pour les icônes
 import Link from 'next/link';
 import ThemeSwitcher from "./ThemeSwitcher";
 
@@ -43,10 +43,15 @@ export default function Navbar() {
                         </SignedOut>
 
                         <SignedIn>
-                            <span className="text-gray-700 dark:text-gray-300 font-semibold">
-                                {user?.firstName || user?.username}
-                            </span>
-                            <UserButton afterSignOutUrl="/" />     
+                            <div className="flex gap-2 rounded-full p-1">
+                                <div className="flex items-center space-x-2">
+                                    {/* Icône utilisateur */}
+                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border border-transparent px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                        {user?.firstName || user?.username}
+                                    </span>
+                                </div>
+                                <UserButton afterSignOutUrl="/" />     
+                            </div>
                         </SignedIn>
 
                         <Link href="/course" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
