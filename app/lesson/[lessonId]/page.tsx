@@ -124,30 +124,30 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         };
     }
 
-    const updateCourseProgress = async (courseId: string, progress: number) => {
-        if (!user) {
-            console.error("L'utilisateur n'est pas défini."); // Vérifiez si l'utilisateur est connecté
-            return; // Sortir si l'utilisateur n'est pas connecté
-        }
+    // const updateCourseProgress = async (courseId: string, progress: number) => {
+    //     if (!user) {
+    //         console.error("L'utilisateur n'est pas défini."); // Vérifiez si l'utilisateur est connecté
+    //         return; // Sortir si l'utilisateur n'est pas connecté
+    //     }
     
-        try {
-            const response = await fetch(`/api/course/${courseId}/progress`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId: user.id, progress }), // Envoyer l'ID utilisateur et la progression
-            });
+    //     try {
+    //         const response = await fetch(`/api/course/${courseId}/progress`, {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ userId: user.id, progress }), // Envoyer l'ID utilisateur et la progression
+    //         });
     
-            if (!response.ok) {
-                throw new Error("Erreur lors de la mise à jour de la progression du cours");
-            }
+    //         if (!response.ok) {
+    //             throw new Error("Erreur lors de la mise à jour de la progression du cours");
+    //         }
     
-            console.log("Progression du cours mise à jour avec succès !");
-        } catch (error) {
-            console.error("Erreur lors de la mise à jour de la progression du cours :", error);
-        }
-    };
+    //         console.log("Progression du cours mise à jour avec succès !");
+    //     } catch (error) {
+    //         console.error("Erreur lors de la mise à jour de la progression du cours :", error);
+    //     }
+    // };
 
     const updateProgress = async (lessonId: string, progress: number) => {
         // Vérifiez si `lesson` n'est pas null avant de procéder
