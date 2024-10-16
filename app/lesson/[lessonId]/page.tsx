@@ -117,7 +117,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         }
 
         fetchLesson(initialLessonId); // Appel de la fonction pour récupérer la leçon initiale
-    }, [initialLessonId, router, lessons.length]); // Dépendances de l'effet
+    }, [initialLessonId, router, lesson, lessons.length]); // Dépendances de l'effet
 
     // Fonction de debounce pour limiter la fréquence d'exécution d'une fonction
     function debounce<F extends (...args: unknown[]) => void>(func: F, wait: number) {
@@ -408,7 +408,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                         {/* Si l'utilisateur n'est pas connecté, afficher le bouton de connexion */}
                         <div className="flex flex-col justify-end h-full mt-4 mb-10 text-center">
                             <p className="text-gray-600 dark:text-gray-400">
-                                Connectez-vous pour accéder à l'intégralité du cours.
+                                Connectez-vous pour accéder à l&apos;intégralité du cours.
                             </p>
                             <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg">
                                 Se connecter
