@@ -44,22 +44,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 }
                 const data = await response.json(); // Conversion de la réponse en JSON
                 setLesson(data); // Mise à jour de l'état avec la leçon récupérée
-
-                const progressResponse = await fetch(`/api/user/progress/${lessonId}`);
-                if (progressResponse.ok) {
-                    const progressData = await progressResponse.json();
-                    setChapterProgress((prev) => ({
-                        ...prev,
-                        [lessonId]: progressData.progress || 0, // mettez à jour avec la progression récupérée
-                    }));
-                    if (progressData.progress >= 100) {
-                        setReadChapters((prev) => ({
-                            ...prev,
-                            [lessonId]: true, // Marque le chapitre comme lu
-                        }));
-                    }
-                }
-
+    
                 if (!lessons.length) { // Si aucune leçon n'est déjà chargée, récupérer les leçons du cours
                     fetchLessons(data.courseId);
                 }
@@ -68,18 +53,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 router.push("/404"); // Redirection vers une page 404 en cas d'erreur
             }
         }
-
-        function calculateCourseProgress(updatedReadChapters: { [key: string]: boolean }, totalLessons: number) {
-            const completedChapters = Object.values(updatedReadChapters).filter(Boolean).length;
-            const newCourseProgress = (completedChapters / totalLessons) * 100;
-            setCourseProgress(newCourseProgress);
-            
-            // Mettez à jour la progression dans la base de données
-            if (lesson) {
-                updateCourseProgress(lesson.courseId, newCourseProgress);
-            }
-        }
-
+    
         // Fonction pour récupérer la liste des leçons d'un cours
         async function fetchLessons(courseId: string) {
             try {
@@ -88,26 +62,6 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 if (response.ok) {
                     const lessonsData = await response.json(); // Conversion de la réponse en JSON
                     setLessons(lessonsData); // Mise à jour de l'état avec les leçons
-
-                    // Check read status for all lessons
-                    const readStatusPromises = lessonsData.map(async (l: Lesson) => {
-                        const progressResponse = await fetch(`/api/user/progress/${l.id}`);
-                        if (progressResponse.ok) {
-                            const progressData = await progressResponse.json();
-                            return { id: l.id, completed: progressData.progress >= 100 };
-                        }
-                        return { id: l.id, completed: false };
-                    });
-                    const readStatuses = await Promise.all(readStatusPromises);
-                    
-                    const updatedReadChapters = readStatuses.reduce((acc, { id, completed }) => {
-                        acc[id] = completed;
-                        return acc;
-                    }, {} as { [key: string]: boolean });
-                    
-                    setReadChapters(updatedReadChapters);
-                    calculateCourseProgress(updatedReadChapters, lessonsData.length);
-
                 } else {
                     console.error("Erreur lors de la récupération des leçons du cours.");
                 }
@@ -117,9 +71,38 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 setIsLoading(false);
             }
         }
-
+    
         fetchLesson(initialLessonId); // Appel de la fonction pour récupérer la leçon initiale
-    }, [initialLessonId, router, lessons.length]); // Dépendances de l'effet
+    }, [initialLessonId, router, lessons.length]);
+
+    // Effet séparé pour récupérer la progression si l'utilisateur est connecté
+    useEffect(() => {
+        if (user && lesson) {
+            const fetchProgress = async (lessonId: string) => {
+                try {
+                    const progressResponse = await fetch(`/api/user/progress/${lessonId}`);
+                    if (progressResponse.ok) {
+                        const progressData = await progressResponse.json();
+                        setChapterProgress((prev) => ({
+                            ...prev,
+                            [lessonId]: progressData.progress || 0, // mettez à jour avec la progression récupérée
+                        }));
+                        // Marque le chapitre comme lu si la progression est de 100%
+                        if (progressData.progress >= 100) {
+                            setReadChapters((prev) => ({
+                                ...prev,
+                                [lessonId]: true, // Marque le chapitre comme lu
+                            }));
+                        }
+                    }
+                } catch (error) {
+                    console.error("Erreur lors de la récupération de la progression :", error);
+                }
+            }
+
+            fetchProgress(initialLessonId);
+        }
+    }, [user, lesson, initialLessonId]);
 
     // Fonction de debounce pour limiter la fréquence d'exécution d'une fonction
     function debounce<F extends (...args: unknown[]) => void>(func: F, wait: number) {
@@ -169,8 +152,13 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const updateProgress = async (lessonId: string, progress: number) => {
         // Vérifiez si `lesson` n'est pas null avant de procéder
         if (!lesson) {
-            console.error("La leçon n'est pas définie."); // Vous pouvez également gérer cela d'une autre manière, selon vos besoins
+            console.log("La leçon n'est pas définie."); // Vous pouvez également gérer cela d'une autre manière, selon vos besoins
             return; // Sortir de la fonction si la leçon est nulle
+        }
+
+        if(!user) {
+            console.log("L'utilisateur n'est pas défini."); // Vérifiez si l'utilisateur est connecté
+            return; // Sortir si l'utilisateur n'est pas connecté
         }
     
         try {
