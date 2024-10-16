@@ -67,6 +67,17 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             }
         }
 
+        function calculateCourseProgress(updatedReadChapters: { [key: string]: boolean }, totalLessons: number) {
+            const completedChapters = Object.values(updatedReadChapters).filter(Boolean).length;
+            const newCourseProgress = (completedChapters / totalLessons) * 100;
+            setCourseProgress(newCourseProgress);
+            
+            // Mettez à jour la progression dans la base de données
+            if (lesson) {
+                updateCourseProgress(lesson.courseId, newCourseProgress);
+            }
+        }
+
         // Fonction pour récupérer la liste des leçons d'un cours
         async function fetchLessons(courseId: string) {
             try {
@@ -94,6 +105,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     
                     setReadChapters(updatedReadChapters);
                     calculateCourseProgress(updatedReadChapters, lessonsData.length);
+
                 } else {
                     console.error("Erreur lors de la récupération des leçons du cours.");
                 }
@@ -102,12 +114,6 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             } finally {
                 setIsLoading(false);
             }
-        }
-
-        function calculateCourseProgress(updatedReadChapters: { [key: string]: boolean }, totalLessons: number) {
-            const completedChapters = Object.values(updatedReadChapters).filter(Boolean).length;
-            const newCourseProgress = (completedChapters / totalLessons) * 100;
-            setCourseProgress(newCourseProgress);
         }
 
         fetchLesson(initialLessonId); // Appel de la fonction pour récupérer la leçon initiale
@@ -133,10 +139,30 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         };
     }
 
-    // Fonction pour mettre à jour la progression globale
-    // const updateGlobalProgress = async (courseId: string, courseProgress: number) => {
-        
-    // };
+    const updateCourseProgress = async (courseId: string, progress: number) => {
+        if (!user) {
+            console.error("L'utilisateur n'est pas défini."); // Vérifiez si l'utilisateur est connecté
+            return; // Sortir si l'utilisateur n'est pas connecté
+        }
+    
+        try {
+            const response = await fetch(`/api/course/${courseId}/progress`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: user.id, progress }), // Envoyer l'ID utilisateur et la progression
+            });
+    
+            if (!response.ok) {
+                throw new Error("Erreur lors de la mise à jour de la progression du cours");
+            }
+    
+            console.log("Progression du cours mise à jour avec succès !");
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour de la progression du cours :", error);
+        }
+    };
 
     const updateProgress = async (lessonId: string, progress: number) => {
         // Vérifiez si `lesson` n'est pas null avant de procéder
@@ -203,7 +229,9 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     
                 // Mettre à jour la progression globale du cours
                 setCourseProgress(courseProgressValue);
-                console.log(`Progression du cours: ${courseProgressValue.toFixed(2)}%`); // Log pour vérifier la progression
+
+                console.log("Progress :" + progress); // Log pour vérifier la progression
+                console.log(`Progression du cours: ${courseProgress.toFixed(2)}%`); // Log pour vérifier la progression
             }
         }
     }, 200);
@@ -229,6 +257,12 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
 
     // Fonction pour gérer le clic sur une leçon
     const handleLessonClick = async (lessonId: string) => {
+
+        if (!user) {
+            alert("Vous devez être connecté pour accéder à cette leçon."); // Message d'alerte si l'utilisateur n'est pas connecté
+            return; // Ne pas procéder si l'utilisateur n'est pas connecté
+        }
+
         try {
             const response = await fetch(`/api/lesson/${lessonId}`); // Requête pour récupérer les détails de la leçon sélectionnée
             if (response.ok) {
@@ -264,7 +298,9 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const lessonContent = marked(lesson.content);
 
     return (
-        <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
+        <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 dark:bg-gray-900 p-4 md:p-8 relative">
+            {/* Overlay dégradé pour cacher le contenu */}
+
             {/* Barre de progression fixe en haut */}
             <div className="fixed top-0 left-0 right-0 bg-gray-300 z-50">
                 <div
@@ -272,7 +308,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     style={{ width: `${Math.min(Math.floor(chapterProgress[lesson.id] || 0), 100)}%` }}
                 ></div>
             </div>
-    
+            
             {/* En-tête mobile */}
             <div className="md:hidden flex justify-between items-center mb-4">
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Chapitres</h2>
@@ -283,7 +319,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     <PanelsTopLeftIcon className="h-6 w-6" />
                 </button>
             </div>
-    
+
             {/* Barre latérale des chapitres */}
             <aside
                 className={`fixed md:relative z-40 w-64 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 md:mr-8 transition-transform duration-300 transform ${
@@ -316,14 +352,14 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                                         l.id === lesson.id // Vérification si la leçon est actuellement sélectionnée
                                             ? 'bg-blue-500 text-white'
                                             : 'text-gray-900 bg-slate-100 dark:bg-[#2e3a4a] dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-700'
-                                    }`}
+                                        }`}
                                 >
                                     {l.title} {/* Titre de la leçon */}
                                     {user && ( // Vérifiez si l'utilisateur est connecté
                                         <>
                                             {readChapters[l.id] && (
                                                 <CheckIcon className="absolute w-2 h-2 p-1 top-2 right-2 bg-green-400 text-black rounded-full flex items-center justify-center ml-2" size={16} />
-                                            )}
+                                                )}
                                         </>
                                     )}
                                 </button>
@@ -349,7 +385,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     </div>
                 )}
             </aside>
-    
+
             {/* Overlay pour fermer la barre latérale sur mobile */}
             {isSidebarOpen && (
                 <div
@@ -357,20 +393,33 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     onClick={() => setIsSidebarOpen(false)} // Fermer la barre latérale lorsque l'overlay est cliqué
                 ></div>
             )}
-    
+
             {/* Contenu de la leçon */}
-            <div className="flex-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
+            <div className="flex-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 relative z-20">
                 <h1 className="text-md text-gray-900 dark:text-yellow-500 mb-6">
                     <a className="font-bold" href={`/course/${lesson.courseId}`}>
                         {lesson.course.title} {/* Titre du cours */}
                     </a>{" "}
                     / {lesson.title} {/* Titre de la leçon */}
                 </h1>
-    
-                <div
-                    className="prose prose-md text-gray-800 dark:text-gray-200" // Styles de prose pour le contenu
-                    dangerouslySetInnerHTML={{ __html: lessonContent }} // Insertion du contenu HTML
-                ></div>
+
+                {!user && (
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/80 to-white dark:from-gray-800/90 dark:to-gray-900 opacity-1 z-0 h-full">
+                        {/* Si l'utilisateur n'est pas connecté, afficher le bouton de connexion */}
+                        <div className="flex flex-col justify-end h-full mt-4 mb-10 text-center">
+                            <p className="text-gray-600 dark:text-gray-400">
+                                Connectez-vous pour accéder à l'intégralité du cours.
+                            </p>
+                            <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg">
+                                Se connecter
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Contenu de la leçon */}
+                <div className="prose prose-md text-gray-800 dark:text-gray-200" dangerouslySetInnerHTML={{ __html: lessonContent }}></div>
+
             </div>
         </div>
     );

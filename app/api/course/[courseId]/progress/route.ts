@@ -8,6 +8,8 @@ export async function PUT(req: NextRequest, { params }: { params: { courseId: st
     try {
         const { userId, progress } = await req.json(); // Assurez-vous de récupérer userId aussi
 
+        console.log("infos ---------- : " + userId + " " + progress)
+
         // Validation de la progression
         if (typeof progress !== 'number' || progress < 0 || progress > 100) {
             return NextResponse.json({ message: 'Progression invalide' }, { status: 400 });
