@@ -1,16 +1,17 @@
 model Course {
-    id              String       @id @default(auto()) @map("_id") @db.ObjectId  
-    title           String                               
-    description     String                               
-    // scormPkg   ScormPackage? @relation(fields: [scormPkgId], references: [id])  // Relation vers le package SCORM généré
-    // scormPkgId String?                              // Identifiant du package SCORM (peut être nul si pas encore généré)
-    
-    lessons         Lesson[]
-    quizzes         Quiz[]
+    id                  String       @id @default(auto()) @map("_id") @db.ObjectId  
+    title               String                               
+    description         String                               
 
-    isPublic        Boolean     @default(true)
+    lessons             Lesson[]
+    quizzes             Quiz[]
+
+    isPublic            Boolean     @default(true)
     
-    userId          String                                
-    createdAt       DateTime     @default(now())          
-    updatedAt       DateTime     @updatedAt               
+    userId              String                  
+
+    courseprogresses    CourseProgress[]
+
+    createdAt           DateTime     @default(now())          
+    updatedAt           DateTime     @updatedAt               
 }

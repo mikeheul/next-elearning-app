@@ -1,10 +1,12 @@
 model Lesson {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    title     String
-    content   String
+    id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+    title               String
+    content             String
     
-    courseId  String   @db.ObjectId
-    course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    courseId            String   @db.ObjectId
+    course              Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-    order     Int?
+    order               Int?
+
+    lessonprogresses    LessonProgress[]
 }

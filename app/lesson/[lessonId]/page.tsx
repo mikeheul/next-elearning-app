@@ -5,6 +5,7 @@ import { marked } from "marked";
 import { useRouter } from "next/navigation";
 import { Lesson } from "@/types/types";
 import { PanelsTopLeftIcon, CheckIcon, Loader2Icon } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 const getProgressBarColor = (progress: number) => {
     if (progress === 100) {
@@ -29,6 +30,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const [isLoading, setIsLoading] = useState(false); // Ajout de l'état de chargement
     
     const router = useRouter(); // Hook pour accéder à l'instance du routeur
+    const { user } = useUser();
 
     // Effet pour récupérer les données de la leçon et des leçons du cours
     useEffect(() => {
@@ -40,6 +42,21 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 }
                 const data = await response.json(); // Conversion de la réponse en JSON
                 setLesson(data); // Mise à jour de l'état avec la leçon récupérée
+
+                const progressResponse = await fetch(`/api/user/progress/${lessonId}`);
+                if (progressResponse.ok) {
+                    const progressData = await progressResponse.json();
+                    setChapterProgress((prev) => ({
+                        ...prev,
+                        [lessonId]: progressData.progress || 0, // mettez à jour avec la progression récupérée
+                    }));
+                    if (progressData.progress >= 100) {
+                        setReadChapters((prev) => ({
+                            ...prev,
+                            [lessonId]: true, // Marque le chapitre comme lu
+                        }));
+                    }
+                }
 
                 if (!lessons.length) { // Si aucune leçon n'est déjà chargée, récupérer les leçons du cours
                     fetchLessons(data.courseId);
@@ -58,6 +75,25 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 if (response.ok) {
                     const lessonsData = await response.json(); // Conversion de la réponse en JSON
                     setLessons(lessonsData); // Mise à jour de l'état avec les leçons
+
+                    // Check read status for all lessons
+                    const readStatusPromises = lessonsData.map(async (l: Lesson) => {
+                        const progressResponse = await fetch(`/api/user/progress/${l.id}`);
+                        if (progressResponse.ok) {
+                            const progressData = await progressResponse.json();
+                            return { id: l.id, completed: progressData.progress >= 100 };
+                        }
+                        return { id: l.id, completed: false };
+                    });
+                    const readStatuses = await Promise.all(readStatusPromises);
+                    
+                    const updatedReadChapters = readStatuses.reduce((acc, { id, completed }) => {
+                        acc[id] = completed;
+                        return acc;
+                    }, {} as { [key: string]: boolean });
+                    
+                    setReadChapters(updatedReadChapters);
+                    calculateCourseProgress(updatedReadChapters, lessonsData.length);
                 } else {
                     console.error("Erreur lors de la récupération des leçons du cours.");
                 }
@@ -66,6 +102,12 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             } finally {
                 setIsLoading(false);
             }
+        }
+
+        function calculateCourseProgress(updatedReadChapters: { [key: string]: boolean }, totalLessons: number) {
+            const completedChapters = Object.values(updatedReadChapters).filter(Boolean).length;
+            const newCourseProgress = (completedChapters / totalLessons) * 100;
+            setCourseProgress(newCourseProgress);
         }
 
         fetchLesson(initialLessonId); // Appel de la fonction pour récupérer la leçon initiale
@@ -91,6 +133,36 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         };
     }
 
+    // Fonction pour mettre à jour la progression globale
+    // const updateGlobalProgress = async (courseId: string, courseProgress: number) => {
+        
+    // };
+
+    const updateProgress = async (lessonId: string, progress: number) => {
+        // Vérifiez si `lesson` n'est pas null avant de procéder
+        if (!lesson) {
+            console.error("La leçon n'est pas définie."); // Vous pouvez également gérer cela d'une autre manière, selon vos besoins
+            return; // Sortir de la fonction si la leçon est nulle
+        }
+    
+        try {
+            const response = await fetch(`/api/lesson/${lessonId}/progress`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ lessonId, progress }), 
+            });
+    
+            if (!response.ok) {
+                throw new Error("Erreur lors de la mise à jour de la progression");
+            }
+    
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour de la progression :", error);
+        }
+    };
+
     // Fonction pour mettre à jour la progression en fonction du scroll de la page
     const handleScroll = debounce(() => {
         if (lesson) {
@@ -112,6 +184,9 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                             [currentLessonId]: true, // Marquer comme lu
                         }));
                     }
+
+                    // Appeler la fonction pour mettre à jour la progression sur le serveur
+                    updateProgress(currentLessonId, newProgress);
     
                     return {
                         ...prev,
@@ -244,8 +319,12 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                                     }`}
                                 >
                                     {l.title} {/* Titre de la leçon */}
-                                    {readChapters[l.id] && ( // Afficher l'icône de check si le chapitre a été lu
-                                        <CheckIcon className="absolute w-2 h-2 p-1 top-2 right-2 bg-green-400 text-black rounded-full flex items-center justify-center ml-2" size={16} />
+                                    {user && ( // Vérifiez si l'utilisateur est connecté
+                                        <>
+                                            {readChapters[l.id] && (
+                                                <CheckIcon className="absolute w-2 h-2 p-1 top-2 right-2 bg-green-400 text-black rounded-full flex items-center justify-center ml-2" size={16} />
+                                            )}
+                                        </>
                                     )}
                                 </button>
                             </li>
@@ -253,20 +332,22 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     </ul>
                 )}
 
-                <div className="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
-                    <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300">Progression du cours</h3>
-                    <div className="relative w-full h-2 bg-gray-300 rounded-lg overflow-hidden my-2">
-                        <div
-                            className={`absolute h-full transition-all duration-300 ${getProgressBarColor(courseProgress)}`}
-                            style={{
-                                width: `${courseProgress.toFixed(2)}%`, // Affiche la progression globale du cours
-                            }}
-                        ></div>
+                {user && (
+                    <div className="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
+                        <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300">Progression du cours</h3>
+                        <div className="relative w-full h-2 bg-gray-300 rounded-lg overflow-hidden my-2">
+                            <div
+                                className={`absolute h-full transition-all duration-300 ${getProgressBarColor(courseProgress)}`}
+                                style={{
+                                    width: `${courseProgress.toFixed(2)}%`, // Affiche la progression globale du cours
+                                }}
+                            ></div>
+                        </div>
+                        <p className="text-right text-sm text-gray-600 dark:text-gray-400">
+                            {courseProgress.toFixed(0)}% {/* Pourcentage de progression du cours */}
+                        </p>
                     </div>
-                    <p className="text-right text-sm text-gray-600 dark:text-gray-400">
-                        {courseProgress.toFixed(0)}% {/* Pourcentage de progression du cours */}
-                    </p>
-                </div>
+                )}
             </aside>
     
             {/* Overlay pour fermer la barre latérale sur mobile */}

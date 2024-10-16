@@ -1,0 +1,13 @@
+model LessonProgress {
+    id              String      @id @default(auto()) @map("_id") @db.ObjectId
+    userId          String   
+    progress        Float    
+    completed       Boolean     @default(false) 
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
+
+    lessonId        String      @db.ObjectId
+    lesson          Lesson      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, lessonId]) // Un utilisateur ne peut avoir qu'une seule progression par leçon
+}
