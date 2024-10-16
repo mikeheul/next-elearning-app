@@ -89,6 +89,10 @@ export default function Navbar() {
                             Contact
                         </Link>
                         <ThemeSwitcher />
+
+                        <div className="p-3">
+                            <UserButton afterSignOutUrl="/" /> 
+                        </div>
                     </div>
                 </div>
             )}
