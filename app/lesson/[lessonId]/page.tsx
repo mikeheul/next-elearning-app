@@ -263,7 +263,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         if (!user) {
             Swal.fire({
                 title: 'Connectez-vous',
-                text: "Vous devez être connecté pour accéder à cette leçon.",
+                text: "Vous devez être connecté pour accéder à ce chapitre !",
                 icon: 'warning',
                 confirmButtonText: 'OK'
             });
