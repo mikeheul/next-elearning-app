@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LogIn, MenuIcon, User, UserPlus, XIcon } from "lucide-react"; // ou lucide-react pour les icônes
+import { LogIn, MenuIcon, UserPlus, XIcon } from "lucide-react"; // ou lucide-react pour les icônes
 import Link from 'next/link';
 import ThemeSwitcher from "./ThemeSwitcher";
 
