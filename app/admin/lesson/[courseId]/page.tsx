@@ -8,7 +8,7 @@ import { CloudinaryUploadWidgetResults, CldUploadWidget } from 'next-cloudinary'
 export default function AddLesson() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [isUploading, setIsUploading] = useState(false);
+    // const [isUploading, setIsUploading] = useState(false);
 
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -129,7 +129,8 @@ export default function AddLesson() {
                         type="submit"
                         className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600"
                     >
-                        {isUploading ? 'Uploading video...' : 'Enregistrer le chapitre'}
+                        {/* {isUploading ? 'Uploading video...' : 'Enregistrer le chapitre'} */}
+                        Enregistrer le chapitre
                     </button>
                 </form>
 
