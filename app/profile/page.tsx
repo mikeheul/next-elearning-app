@@ -47,7 +47,7 @@ const UserProgressions = () => {
         fetchProgressions();
     }, [user]);
 
-    if (loading) return <p className="text-gray-500 dark:text-gray-400">Loading...</p>;
+    if (loading) return <p className="text-gray-500 dark:text-gray-400">Chargement...</p>;
 
     const getProgressColor = (progress: number) => {
         if (progress === 100) return 'bg-green-500'; // Complété
@@ -60,7 +60,7 @@ const UserProgressions = () => {
     return (
         <div className="p-6">
             <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">User Progressions</h2>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Progressions des chapitres</h2>
                 <div className="mt-4 overflow-x-auto">
                     <table className="min-w-full table-auto bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table">
                         <thead className="bg-gray-200 dark:bg-gray-700">
@@ -105,7 +105,7 @@ const UserProgressions = () => {
                                     ></div>
                                 </div>
                                 <p className="mt-2 text-gray-600 dark:text-gray-400">
-                                    Progression: {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(2)} %
+                                    Progression : {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(2)} %
                                 </p>
                                 <p className={`text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
                                     {progress.completed ? 'Achevé' : 'En cours'}
