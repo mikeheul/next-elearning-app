@@ -13,19 +13,20 @@ const UserProgressions = () => {
     const [progressions, setProgressions] = useState<LessonProgress[]>([]);
     const [loading, setLoading] = useState(true);
 
-    if(!user) {
-        router.push("/")
-
-        Swal.fire({
-            title: 'Connectez-vous',
-            text: "Vous devez être connecté pour accéder à votre profil !",
-            icon: 'warning',
-            confirmButtonText: 'OK'
-        });
-        return; 
-    }
-
     useEffect(() => {
+
+        if (!user) {
+            router.push("/");
+
+            Swal.fire({
+                title: 'Connectez-vous',
+                text: "Vous devez être connecté pour accéder à votre profil !",
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
         const fetchProgressions = async () => {
             if (!user) return; // Si l'utilisateur n'est pas connecté, ne rien faire
 
