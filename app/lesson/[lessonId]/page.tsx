@@ -9,7 +9,6 @@ import { useUser } from "@clerk/nextjs";
 
 import Swal from 'sweetalert2';
 import Link from "next/link";
-import LessonVideo from "@/components/LessonVideo";
 
 const getProgressBarColor = (progress: number) => {
     if (progress === 100) {
