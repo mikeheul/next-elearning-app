@@ -1,13 +1,29 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { LessonProgress } from '@/types/types';
+import Swal from 'sweetalert2';
 
 const UserProgressions = () => {
-    const { user } = useUser(); // Récupère les informations de l'utilisateur connecté
+    const { user } = useUser(); 
+    const router = useRouter();
+
     const [progressions, setProgressions] = useState<LessonProgress[]>([]);
     const [loading, setLoading] = useState(true);
+
+    if(!user) {
+        router.push("/")
+
+        Swal.fire({
+            title: 'Connectez-vous',
+            text: "Vous devez être connecté pour accéder à votre profil !",
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return; 
+    }
 
     useEffect(() => {
         const fetchProgressions = async () => {
