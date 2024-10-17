@@ -32,3 +32,11 @@ export interface Question {
     answers: string[];
     correctAnswer: string;
 }
+
+export interface LessonProgress {
+    id: string;            
+    userId: string;        
+    progress: number;         
+    completed: boolean;
+    lesson: Lesson;
+}
