@@ -1,14 +1,50 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import MarkdownEditor from '@/components/MarkdownEditor';
+import { CloudinaryUploadWidgetResults, CldUploadWidget } from 'next-cloudinary';
 
 export default function AddLesson() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
+
+    const [videoUrl, setVideoUrl] = useState<string | null>(null);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    console.log(videoRef)
+
     const router = useRouter();
     const { courseId } = useParams(); 
+
+    const handleSuccess = useCallback((result: CloudinaryUploadWidgetResults) => {
+        const info = result.info;
+
+        if (info && typeof info !== 'string') {
+            console.log('Upload success:', info.secure_url);
+            const uploadedVideoUrl = info.secure_url;
+
+            // Enregistre l'URL de la vidéo
+            setVideoUrl(uploadedVideoUrl);
+
+            // Générer la balise vidéo une seule fois pour l'intégrer dans le Markdown
+            const videoHtml = `<video controls width="100%">
+                <source src="${uploadedVideoUrl}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>`;
+
+            // Ajoute la vidéo dans le contenu Markdown
+            setContent((prevContent) => `${prevContent}\n\n${videoHtml}`);
+        } else {
+            console.error('Upload failed: info is undefined or is a string');
+        }
+    }, []);
+
+    useEffect(() => {
+        if (videoRef.current && videoUrl) {
+            videoRef.current.play();
+        }
+    }, [videoUrl]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -16,7 +52,13 @@ export default function AddLesson() {
         const response = await fetch(`/api/lesson`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, content, courseId }),
+            body: JSON.stringify(
+                { 
+                    title, 
+                    content,
+                    courseId 
+                }
+            ),
         });
 
         console.log("courseId:", courseId);
@@ -26,6 +68,10 @@ export default function AddLesson() {
         } else {
             console.error('Erreur lors de la création de la leçon');
         }
+    };
+
+    const handleUploadButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
     };
 
     return (
@@ -54,13 +100,47 @@ export default function AddLesson() {
                         <MarkdownEditor content={content} setContent={setContent} />
                     </div>
 
+                    <div className="mb-6">
+                        <CldUploadWidget 
+                            key={2}
+                            uploadPreset="pmqgswly"
+                            onSuccess={handleSuccess}
+                            options={
+                                {
+                                    "clientAllowedFormats": ['mp4', 'avi'],
+                                }
+                            }
+                        >
+                            {({ open }) => (
+                                <button 
+                                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                                    onClick={(e) => {
+                                        handleUploadButtonClick(e); // Empêche la soumission
+                                        open(); // Ouvre le widget de téléchargement
+                                    }}
+                                >
+                                    Téléverser une vidéo
+                                </button>
+                            )}
+                        </CldUploadWidget>
+                    </div>
+
                     <button
                         type="submit"
                         className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600"
                     >
-                        Enregistrer le chapitre
+                        {isUploading ? 'Uploading video...' : 'Enregistrer le chapitre'}
                     </button>
                 </form>
+
+                <div className="mt-5">
+                    {videoUrl && (
+                        <video ref={videoRef} controls width="100%">
+                            <source src={videoUrl} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )}
+                </div>
             </div>
         </div>
     );
