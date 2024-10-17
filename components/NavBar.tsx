@@ -52,9 +52,9 @@ export default function Navbar() {
                                 </div>
                                 <UserButton afterSignOutUrl="/" />
 
-                                {/* <Link href="/profile" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-                                        Profil
-                                </Link>     */}
+                                <Link href="/profile" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                                    Profil
+                                </Link>    
                             </div>
                         </SignedIn>
 
