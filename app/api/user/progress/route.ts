@@ -1,27 +1,27 @@
-import { db } from "@/lib/db"; // Assurez-vous que le chemin vers votre DB est correct
-import { getAuth } from "@clerk/nextjs/server"; // Import Clerk pour obtenir l'authentification
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { getAuth } from '@clerk/nextjs/server';
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
+    const { userId } = getAuth(request); // Récupère l'ID de l'utilisateur connecté
+
+    if (!userId) {
+        return NextResponse.json({ message: 'User not authenticated' }, { status: 401 });
+    }
+
     try {
-        // Récupérer l'utilisateur connecté via Clerk
-        const { userId } = getAuth(req);
-
-        // Vérification que l'utilisateur est bien authentifié
-        if (!userId) {
-            return NextResponse.json({ message: 'Non autorisé' }, { status: 401 });
-        }
-
-        // Récupérer la progression de la leçon pour cet utilisateur
-        const progresses = await db.lessonProgress.findMany({
+        const progressions = await db.lessonProgress.findMany({
             where: {
-                userId
+                userId: userId,
+            },
+            include: {
+                lesson: true,
             },
         });
 
-        return NextResponse.json(progresses, { status: 200 });
+        return NextResponse.json(progressions);
     } catch (error) {
-        console.error('Erreur lors de la récupération des progressions', error);
-        return NextResponse.json({ error: 'Erreur lors de la récupération des progressions' }, { status: 500 });
+        console.error('Erreur lors de la récupération des progressions :', error);
+        return NextResponse.json({ message: 'Erreur lors de la récupération des progressions' }, { status: 500 });
     }
 }
