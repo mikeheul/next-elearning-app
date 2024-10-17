@@ -61,12 +61,12 @@ export default function Navbar() {
                         <Link href="/course" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             Cours
                         </Link>
-                        <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                        {/* <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             À propos
                         </Link>
                         <Link href="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             Contact
-                        </Link>
+                        </Link> */}
                         <ThemeSwitcher />
                     </div>
 
@@ -82,7 +82,22 @@ export default function Navbar() {
             {/* Mobile Menu */}
             {isOpen && (
                 <div className="md:hidden">
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <div className="flex flex-col items-center px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                        <SignedIn>
+                            <div className="flex flex-col justify-center gap-3 rounded-full p-1 px-3">
+                                <div className="flex items-center justify-center space-x-2 py-2">
+                                    {/* Icône utilisateur */}
+                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border border-transparent px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                        {user?.firstName || user?.username}
+                                    </span>
+                                </div>
+
+                                <Link href="/profile" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                                    Profil
+                                </Link>    
+                            </div>
+                        </SignedIn>
+
                         <Link href="/course" className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
                             Cours
                         </Link>
