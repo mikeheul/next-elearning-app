@@ -5,7 +5,11 @@ import MarkdownIt from 'markdown-it';
 
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), { ssr: false });
 
-const markdownParser = new MarkdownIt();
+const markdownParser = new MarkdownIt({ 
+    html: true, // Permet le rendu de HTML
+    linkify: true,
+    typographer: true,
+});
 
 interface MarkdownEditorProps {
     content: string;

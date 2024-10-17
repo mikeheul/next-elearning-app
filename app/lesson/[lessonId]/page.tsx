@@ -9,6 +9,7 @@ import { useUser } from "@clerk/nextjs";
 
 import Swal from 'sweetalert2';
 import Link from "next/link";
+import LessonVideo from "@/components/LessonVideo";
 
 const getProgressBarColor = (progress: number) => {
     if (progress === 100) {
@@ -228,8 +229,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 setCourseProgress(courseProgressValue);
             }
         }
-    }, 200);
-        
+    }, 200);    
 
     // Effet pour attacher l'événement de scroll à la fenêtre
     useEffect(() => {
@@ -237,9 +237,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         return () => {
             window.removeEventListener("scroll", handleScroll); // Nettoyage de l'écouteur lors du démontage
         };
-    }, [lesson, handleScroll]); // Dépendances de l'effet
+    }, [handleScroll]);
 
-    // Effet pour initialiser la progression du chapitre à 100% si déjà lu
     useEffect(() => {
         if (lesson && readChapters[lesson.id]) {
             setChapterProgress((prev) => ({
@@ -295,6 +294,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
 
     // Conversion du contenu de la leçon en HTML à partir du Markdown
     const lessonContent = marked(lesson.content);
+    // const lessonContent = lesson.content instanceof Promise ? await lesson.content : lesson.content;
 
     return (
         <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 dark:bg-gray-900 p-4 md:p-8 relative">

@@ -8,11 +8,9 @@ import { CloudinaryUploadWidgetResults, CldUploadWidget } from 'next-cloudinary'
 export default function AddLesson() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    // const [isUploading, setIsUploading] = useState(false);
 
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    console.log(videoRef)
 
     const router = useRouter();
     const { courseId } = useParams(); 
@@ -134,14 +132,14 @@ export default function AddLesson() {
                     </button>
                 </form>
 
-                <div className="mt-5">
+                {/* <div className="mt-5">
                     {videoUrl && (
                         <video ref={videoRef} controls width="100%">
                             <source src={videoUrl} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
                     )}
-                </div>
+                </div> */}
             </div>
         </div>
     );
