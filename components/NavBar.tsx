@@ -43,7 +43,7 @@ export default function Navbar() {
                         </SignedOut>
 
                         <SignedIn>
-                            <div className="flex gap-2 rounded-full p-1">
+                            <div className="flex items-center justify-center gap-2 rounded-full p-1">
                                 <div className="flex items-center space-x-2">
                                     {/* Icône utilisateur */}
                                     <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border border-transparent px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
