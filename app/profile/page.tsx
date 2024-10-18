@@ -61,10 +61,10 @@ const UserProgressions = () => {
     const inProgressChapters = progressions.filter(progress => !progress.completed);
 
     const renderTable = (chapters: LessonProgress[]) => (
-        <table className="min-w-full table-auto bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table mt-5">
+        <table className="min-w-full table-auto bg-slate-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table mt-5">
             <thead className="bg-gray-200 dark:bg-gray-700">
                 <tr>
-                    <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Chapitre (cours)</th>
+                    <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Chapitre</th>
                     <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Progression</th>
                     <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Statut</th>
                 </tr>
