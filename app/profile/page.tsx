@@ -1,32 +1,17 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-// import { useRouter } from 'next/navigation';
+import Link from 'next/link'; // Import Link from 'next/link'
 import { useUser } from '@clerk/nextjs';
 import { LessonProgress } from '@/types/types';
-// import Swal from 'sweetalert2';
+import { LibraryBigIcon } from 'lucide-react';
 
 const UserProgressions = () => {
     const { user } = useUser(); 
-    // const router = useRouter();
-
     const [progressions, setProgressions] = useState<LessonProgress[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
-        // if (!user) {
-        //     router.push("/");
-
-        //     Swal.fire({
-        //         title: 'Connectez-vous',
-        //         text: "Vous devez être connecté pour accéder à votre profil !",
-        //         icon: 'warning',
-        //         confirmButtonText: 'OK'
-        //     });
-        //     return;
-        // }
-
         const fetchProgressions = async () => {
             if (!user) return; // Si l'utilisateur n'est pas connecté, ne rien faire
 
@@ -57,8 +42,26 @@ const UserProgressions = () => {
         return 'bg-red-400'; // Moins de 25%
     };
 
-    const completedChapters = progressions.filter(progress => progress.completed);
-    const inProgressChapters = progressions.filter(progress => !progress.completed);
+    // Regrouper les progressions par cours
+    const groupByCourse = (progressions: LessonProgress[]) => {
+        return progressions.reduce((acc, progress) => {
+            const courseTitle = progress.lesson.course.title;
+            if (!acc[courseTitle]) {
+                acc[courseTitle] = {
+                    inProgress: [],
+                    completed: [],
+                };
+            }
+            if (progress.completed) {
+                acc[courseTitle].completed.push(progress);
+            } else {
+                acc[courseTitle].inProgress.push(progress);
+            }
+            return acc;
+        }, {} as Record<string, { inProgress: LessonProgress[], completed: LessonProgress[] }>);
+    };
+
+    const progressionsByCourse = groupByCourse(progressions);
 
     const renderTable = (chapters: LessonProgress[]) => (
         <table className="min-w-full table-auto bg-slate-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table mt-5">
@@ -73,7 +76,9 @@ const UserProgressions = () => {
                 {chapters.map((progress) => (
                     <tr key={progress.id} className="hover:bg-gray-100 dark:hover:bg-gray-600 transition">
                         <td className="py-5 px-4 text-gray-700 dark:text-gray-300">
-                            <span className="font-bold">{progress.lesson.title}</span> <br /><span className="text-sm text-slate-400">{progress.lesson.course.title}</span>
+                            <Link href={`/lesson/${progress.lesson.id}`}>
+                                {progress.lesson.title}
+                            </Link>
                             <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-700 mt-2">
                                 <div
                                     className={`progress h-full ${getProgressColor(Math.min(progress.progress, 100))} rounded-full`}
@@ -93,76 +98,62 @@ const UserProgressions = () => {
         </table>
     );
 
+    // Responsive version for small screens
+    const renderResponsive = (chapters: LessonProgress[]) => (
+        <div className="md:hidden">
+            {chapters.map((progress) => (
+                <div key={progress.id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
+                    <Link className="dark:text-white" href={`/lesson/${progress.lesson.id}`}>
+                        {progress.lesson.title}
+                    </Link>
+                    <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-600 mt-2">
+                        <div
+                            className={`progress h-full ${getProgressColor(Math.min(progress.progress, 100))} rounded-full`}
+                            style={{ width: `${Math.min(progress.progress, 100)}%` }}
+                        ></div>
+                    </div>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
+                        Progression : {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(0)} %
+                    </p>
+                    <p className={`text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
+                        {progress.completed ? 'Achevé' : 'En cours'}
+                    </p>
+                </div>
+            ))}
+        </div>
+    );
+
     return (
         <div className="p-6">
             <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Progressions des chapitres</h2>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Progressions des chapitres par cours</h2>
                 <div className="mt-4 overflow-x-auto">
+                    {Object.keys(progressionsByCourse).map((courseTitle) => (
+                        <div key={courseTitle} className="mb-8 border dark:border-slate-600 p-6 rounded-lg">
+                            <Link className="flex gap-2 items-center" href={`/course/${progressionsByCourse[courseTitle].inProgress[0]?.lesson.course.id}`}>
+                                <LibraryBigIcon className="dark:text-white" size={20} />
+                                <span className="font-bold text-2xl dark:text-white">{courseTitle}</span>
+                            </Link>
 
-                    {/* Tableau pour les chapitres en cours */}
-                    {inProgressChapters.length > 0 && (
-                        <div className="mb-8">
-                            <h3 className="hidden md:block text-lg font-semibold text-yellow-600 dark:text-yellow-400">Chapitres en cours</h3>
-                            {renderTable(inProgressChapters)}
+                            {/* Chapitres en cours pour chaque cours */}
+                            {progressionsByCourse[courseTitle].inProgress.length > 0 && (
+                                <>
+                                    <h4 className="text-md font-semibold text-yellow-600 dark:text-yellow-400 my-5">Chapitres en cours</h4>
+                                    {renderTable(progressionsByCourse[courseTitle].inProgress)}
+                                    {renderResponsive(progressionsByCourse[courseTitle].inProgress)}
+                                </>
+                            )}
+
+                            {/* Chapitres terminés pour chaque cours */}
+                            {progressionsByCourse[courseTitle].completed.length > 0 && (
+                                <>
+                                    <h4 className="text-md font-semibold text-green-600 dark:text-green-400 my-5">Chapitres terminés</h4>
+                                    {renderTable(progressionsByCourse[courseTitle].completed)}
+                                    {renderResponsive(progressionsByCourse[courseTitle].completed)}
+                                </>
+                            )}
                         </div>
-                    )}
-
-                    {/* Tableau pour les chapitres terminés */}
-                    {completedChapters.length > 0 && (
-                        <div>
-                            <h3 className="hidden md:block text-lg font-semibold text-green-600 dark:text-green-400">Chapitres terminés</h3>
-                            {renderTable(completedChapters)}
-                        </div>
-                    )}
-
-                    {/* Responsive pour les petits écrans */}
-                    <div className="md:hidden">
-                        {inProgressChapters.length > 0 && (
-                            <div className="mb-4">
-                                <h3 className="text-lg font-semibold text-yellow-600 dark:text-yellow-400 mb-5">Chapitres en cours</h3>
-                                {inProgressChapters.map((progress) => (
-                                    <div key={progress.id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
-                                        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{progress.lesson.title}</h3>
-                                        <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-600 mt-2">
-                                            <div
-                                                className={`progress h-full ${getProgressColor(Math.min(progress.progress, 100))} rounded-full`}
-                                                style={{ width: `${Math.min(progress.progress, 100)}%` }}
-                                            ></div>
-                                        </div>
-                                        <p className="mt-2 text-gray-600 dark:text-gray-400">
-                                            Progression : {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(2)} %
-                                        </p>
-                                        <p className={`text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
-                                            {progress.completed ? 'Achevé' : 'En cours'}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {completedChapters.length > 0 && (
-                            <div className="mb-4">
-                                <h3 className="text-lg font-semibold text-green-600 dark:text-green-400 mb-5">Chapitres terminés</h3>
-                                {completedChapters.map((progress) => (
-                                    <div key={progress.id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
-                                        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{progress.lesson.title}</h3>
-                                        <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-600 mt-2">
-                                            <div
-                                                className={`progress h-full ${getProgressColor(Math.min(progress.progress, 100))} rounded-full`}
-                                                style={{ width: `${Math.min(progress.progress, 100)}%` }}
-                                            ></div>
-                                        </div>
-                                        <p className="mt-2 text-gray-600 dark:text-gray-400">
-                                            Progression : {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(2)} %
-                                        </p>
-                                        <p className={`text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
-                                            {progress.completed ? 'Achevé' : 'En cours'}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>
