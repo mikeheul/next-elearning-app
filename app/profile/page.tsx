@@ -89,7 +89,7 @@ const UserProgressions = () => {
                             {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(0)} %
                         </td>
                         <td className={`py-2 px-4 text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
-                            {progress.completed ? 'Achevé' : 'En cours'}
+                            {progress.completed ? 'Terminé' : 'En cours'}
                         </td>
                         <td className="py-2 px-4 text-center">
                             <Link href={`/lesson/${progress.lesson.id}`} className="dark:text-white flex justify-center items-center h-full">
@@ -120,7 +120,7 @@ const UserProgressions = () => {
                         Progression : {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(0)} %
                     </p>
                     <p className={`text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
-                        {progress.completed ? 'Achevé' : 'En cours'}
+                        {progress.completed ? 'Terminé' : 'En cours'}
                     </p>
                     <Link href={`/lesson/${progress.lesson.id}`} className="p-3 text-white bg-emerald-500 hover:bg-emerald-600 mt-5 rounded-lg inline-flex justify-center items-center h-full transition duration-300">
                         <Eye size={20} />
