@@ -106,7 +106,7 @@ const UserProgressions = () => {
     const renderResponsive = (chapters: LessonProgress[]) => (
         <div className="md:hidden">
             {chapters.map((progress) => (
-                <div key={progress.id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
+                <div key={progress.id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700/50 dark:hover:bg-gray-700/60 rounded-lg shadow">
                     <Link className="dark:text-white" href={`/lesson/${progress.lesson.id}`}>
                         {progress.lesson.title}
                     </Link>
