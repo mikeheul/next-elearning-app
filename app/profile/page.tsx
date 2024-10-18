@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link'; // Import Link from 'next/link'
 import { useUser } from '@clerk/nextjs';
 import { LessonProgress } from '@/types/types';
-import { LibraryBigIcon } from 'lucide-react';
+import { LibraryBigIcon, Eye } from 'lucide-react';
 
 const UserProgressions = () => {
     const { user } = useUser(); 
@@ -64,21 +64,20 @@ const UserProgressions = () => {
     const progressionsByCourse = groupByCourse(progressions);
 
     const renderTable = (chapters: LessonProgress[]) => (
-        <table className="min-w-full table-auto bg-slate-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table mt-5">
+        <table className="text-center min-w-full table-auto bg-slate-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table mt-5">
             <thead className="bg-gray-200 dark:bg-gray-700">
                 <tr>
-                    <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Chapitre</th>
-                    <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Progression</th>
-                    <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Statut</th>
+                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200">Chapitre</th>
+                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200">Progression</th>
+                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200">Statut</th>
+                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200">Visualiser</th>
                 </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
                 {chapters.map((progress) => (
                     <tr key={progress.id} className="hover:bg-gray-100 dark:hover:bg-gray-600 transition">
-                        <td className="py-5 px-4 text-gray-700 dark:text-gray-300">
-                            <Link href={`/lesson/${progress.lesson.id}`}>
+                        <td className="text-left py-5 px-4 text-gray-700 dark:text-gray-300">
                                 {progress.lesson.title}
-                            </Link>
                             <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-700 mt-2">
                                 <div
                                     className={`progress h-full ${getProgressColor(Math.min(progress.progress, 100))} rounded-full`}
@@ -91,6 +90,11 @@ const UserProgressions = () => {
                         </td>
                         <td className={`py-2 px-4 text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
                             {progress.completed ? 'Achevé' : 'En cours'}
+                        </td>
+                        <td className="py-2 px-4 text-center">
+                            <Link href={`/lesson/${progress.lesson.id}`} className="dark:text-white flex justify-center items-center h-full">
+                                <Eye size={20} />
+                            </Link>
                         </td>
                     </tr>
                 ))}
