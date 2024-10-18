@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link'; // Import Link from 'next/link'
+import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
 import { LessonProgress } from '@/types/types';
 import { LibraryBigIcon, Eye } from 'lucide-react';
@@ -13,7 +13,7 @@ const UserProgressions = () => {
 
     useEffect(() => {
         const fetchProgressions = async () => {
-            if (!user) return; // Si l'utilisateur n'est pas connecté, ne rien faire
+            if (!user) return; 
 
             try {
                 const response = await fetch(`/api/user/progress`);
