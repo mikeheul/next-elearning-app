@@ -64,13 +64,13 @@ const UserProgressions = () => {
     const progressionsByCourse = groupByCourse(progressions);
 
     const renderTable = (chapters: LessonProgress[]) => (
-        <table className="text-center min-w-full table-auto bg-slate-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table mt-5">
+        <table className="text-center min-w-full table-fixed bg-slate-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table mt-5">
             <thead className="bg-gray-200 dark:bg-gray-700">
                 <tr>
-                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200">Chapitre</th>
-                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200">Progression</th>
-                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200">Statut</th>
-                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200">Visualiser</th>
+                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200 w-1/3">Chapitre</th>
+                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200 w-1/6">Progression</th>
+                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200 w-1/6">Statut</th>
+                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200 w-1/6">Visualiser</th>
                 </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
