@@ -122,6 +122,9 @@ const UserProgressions = () => {
                     <p className={`text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
                         {progress.completed ? 'Achevé' : 'En cours'}
                     </p>
+                    <Link href={`/lesson/${progress.lesson.id}`} className="p-3 text-white bg-emerald-500 hover:bg-emerald-600 mt-5 rounded-lg inline-flex justify-center items-center h-full transition duration-300">
+                        <Eye size={20} />
+                    </Link>
                 </div>
             ))}
         </div>
