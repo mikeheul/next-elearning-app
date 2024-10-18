@@ -128,7 +128,7 @@ const UserProgressions = () => {
     );
 
     return (
-        <div className="p-0 md:p-4">
+        <div className="px-0 py-4 md:p-4">
             <div className="mx-auto p-3 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Progressions des chapitres par cours</h2>
                 <div className="mt-4 overflow-x-auto">
