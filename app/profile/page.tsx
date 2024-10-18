@@ -75,7 +75,7 @@ const UserProgressions = () => {
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
                 {chapters.map((progress) => (
-                    <tr key={progress.id} className="hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+                    <tr key={progress.id} className="hover:bg-gray-100 dark:hover:bg-gray-700/30 transition">
                         <td className="text-left py-5 px-4 text-gray-700 dark:text-gray-300">
                                 {progress.lesson.title}
                             <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-700 mt-2">
@@ -128,8 +128,8 @@ const UserProgressions = () => {
     );
 
     return (
-        <div className="p-6">
-            <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <div className="p-0 md:p-4">
+            <div className="mx-auto p-3 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Progressions des chapitres par cours</h2>
                 <div className="mt-4 overflow-x-auto">
                     {Object.keys(progressionsByCourse).map((courseTitle) => (
