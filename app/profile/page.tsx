@@ -1,31 +1,31 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { LessonProgress } from '@/types/types';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 const UserProgressions = () => {
     const { user } = useUser(); 
-    const router = useRouter();
+    // const router = useRouter();
 
     const [progressions, setProgressions] = useState<LessonProgress[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
-        if (!user) {
-            router.push("/");
+        // if (!user) {
+        //     router.push("/");
 
-            Swal.fire({
-                title: 'Connectez-vous',
-                text: "Vous devez être connecté pour accéder à votre profil !",
-                icon: 'warning',
-                confirmButtonText: 'OK'
-            });
-            return;
-        }
+        //     Swal.fire({
+        //         title: 'Connectez-vous',
+        //         text: "Vous devez être connecté pour accéder à votre profil !",
+        //         icon: 'warning',
+        //         confirmButtonText: 'OK'
+        //     });
+        //     return;
+        // }
 
         const fetchProgressions = async () => {
             if (!user) return; // Si l'utilisateur n'est pas connecté, ne rien faire
@@ -47,7 +47,7 @@ const UserProgressions = () => {
         fetchProgressions();
     }, [user]);
 
-    if (loading) return <p className="text-gray-500 dark:text-gray-400">Chargement...</p>;
+    if (loading) return <p className="text-gray-500 text-center dark:text-gray-400 mt-5">Chargement...</p>;
 
     const getProgressColor = (progress: number) => {
         if (progress === 100) return 'bg-green-500'; // Complété
