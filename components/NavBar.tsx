@@ -46,7 +46,7 @@ export default function Navbar() {
                             <div className="flex items-center justify-center gap-3 rounded-full p-1">
                                 <div className="flex items-center space-x-2">
                                     {/* Icône utilisateur */}
-                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border border-transparent px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
                                         {user?.firstName || user?.username}
                                     </span>
                                 </div>
@@ -87,7 +87,7 @@ export default function Navbar() {
                             <div className="flex flex-col justify-center gap-3 rounded-full p-1 px-3">
                                 <div className="flex items-center justify-center space-x-2 py-2">
                                     {/* Icône utilisateur */}
-                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border border-transparent px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
                                         {user?.firstName || user?.username}
                                     </span>
                                 </div>
