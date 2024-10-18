@@ -102,7 +102,7 @@ const UserProgressions = () => {
                     {/* Tableau pour les chapitres en cours */}
                     {inProgressChapters.length > 0 && (
                         <div className="mb-8">
-                            <h3 className="text-lg font-semibold text-yellow-600 dark:text-yellow-400">Chapitres en cours</h3>
+                            <h3 className="hidden md:block text-lg font-semibold text-yellow-600 dark:text-yellow-400">Chapitres en cours</h3>
                             {renderTable(inProgressChapters)}
                         </div>
                     )}
@@ -110,7 +110,7 @@ const UserProgressions = () => {
                     {/* Tableau pour les chapitres terminés */}
                     {completedChapters.length > 0 && (
                         <div>
-                            <h3 className="text-lg font-semibold text-green-600 dark:text-green-400">Chapitres terminés</h3>
+                            <h3 className="hidden md:block text-lg font-semibold text-green-600 dark:text-green-400">Chapitres terminés</h3>
                             {renderTable(completedChapters)}
                         </div>
                     )}
@@ -119,7 +119,7 @@ const UserProgressions = () => {
                     <div className="md:hidden">
                         {inProgressChapters.length > 0 && (
                             <div className="mb-4">
-                                <h3 className="text-lg font-semibold text-yellow-600 dark:text-yellow-400">Chapitres en cours</h3>
+                                <h3 className="text-lg font-semibold text-yellow-600 dark:text-yellow-400 mb-5">Chapitres en cours</h3>
                                 {inProgressChapters.map((progress) => (
                                     <div key={progress.id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
                                         <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{progress.lesson.title}</h3>
@@ -142,7 +142,7 @@ const UserProgressions = () => {
 
                         {completedChapters.length > 0 && (
                             <div className="mb-4">
-                                <h3 className="text-lg font-semibold text-green-600 dark:text-green-400">Chapitres terminés</h3>
+                                <h3 className="text-lg font-semibold text-green-600 dark:text-green-400 mb-5">Chapitres terminés</h3>
                                 {completedChapters.map((progress) => (
                                     <div key={progress.id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
                                         <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{progress.lesson.title}</h3>
