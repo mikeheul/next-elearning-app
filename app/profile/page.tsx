@@ -65,7 +65,7 @@ const UserProgressions = () => {
                     <table className="min-w-full table-auto bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table">
                         <thead className="bg-gray-200 dark:bg-gray-700">
                             <tr>
-                                <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Chapitre</th>
+                                <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Chapitre (cours)</th>
                                 <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Progression</th>
                                 <th className="py-2 px-4 text-left text-gray-700 dark:text-gray-200">Statut</th>
                             </tr>
@@ -74,7 +74,7 @@ const UserProgressions = () => {
                             {progressions.map((progress) => (
                                 <tr key={progress.id} className="hover:bg-gray-100 dark:hover:bg-gray-600 transition">
                                     <td className="py-5 px-4 text-gray-700 dark:text-gray-300">
-                                        {progress.lesson.title}
+                                        <span className="font-bold">{progress.lesson.title}</span> <br /><span className="text-sm text-slate-400">{progress.lesson.course.title}</span>
                                         <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-700 mt-2">
                                             <div
                                                 className={`progress h-full ${getProgressColor(Math.min(progress.progress, 100))} rounded-full`}
@@ -83,7 +83,7 @@ const UserProgressions = () => {
                                         </div>
                                     </td>
                                     <td className="py-2 px-4 text-gray-600 dark:text-gray-400">
-                                        {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(2)} %
+                                        {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(0)} %
                                     </td>
                                     <td className={`py-2 px-4 text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
                                         {progress.completed ? 'Achevé' : 'En cours'}

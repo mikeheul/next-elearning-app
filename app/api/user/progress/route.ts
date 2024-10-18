@@ -15,8 +15,15 @@ export async function GET(request: NextRequest) {
                 userId: userId,
             },
             include: {
-                lesson: true,
+                lesson: {
+                    include: {
+                        course: true
+                    }
+                }
             },
+            orderBy: {
+                updatedAt: 'desc'
+            }
         });
 
         return NextResponse.json(progressions);
