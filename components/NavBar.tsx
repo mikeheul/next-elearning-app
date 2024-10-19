@@ -101,6 +101,10 @@ export default function Navbar() {
                                     </span>
                                 </div>
 
+                                {isAdmin && (
+                                    <Link href='/' className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-gray-700 dark:text-gray-300">Admin</Link>
+                                )}
+
                                 <Link href="/profile" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                                     Progressions
                                 </Link>    
