@@ -5,12 +5,13 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { LessonProgress } from "@/types/types";
 
-import { Medal, Star, Award } from 'lucide-react'; // Import des icônes depuis Lucide
+import { Medal, Star, Award, CheckCircle, BookOpen } from 'lucide-react'; // Import des icônes depuis Lucide
 
 export default function ProfilePage() {
     const { user } = useUser();
     const router = useRouter();
     const [progresses, setProgresses] = useState<LessonProgress[]>([]);
+    const [recentActivities, setRecentActivities] = useState<LessonProgress[]>([]);
 
     useEffect(() => {
         if (!user) {
@@ -28,6 +29,15 @@ export default function ProfilePage() {
                 }
                 const data: LessonProgress[] = await response.json();
                 setProgresses(data);
+
+                // Filtrer les progressions complétées et les trier par date
+                const completedLessons = data
+                    .filter(progress => progress.progress === 100)  // Filtrer les progressions complétées à 100%
+                    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()) // Trier par date de mise à jour (ordre décroissant)
+                    .slice(0, 5); // Limiter aux 5 dernières activités
+
+                setRecentActivities(completedLessons);
+
             } catch (error) {
                 console.error("Erreur lors de la récupération des progressions:", error);
                 router.push("/404");
@@ -65,54 +75,79 @@ export default function ProfilePage() {
                         {progresses.length === 0 ? (
                             <p className="text-gray-600 dark:text-gray-300">Aucune progression trouvée.</p>
                         ) : (
-                        <ul className="space-y-4">
-                            {progresses.map((lessonProgress) => (
-                            <li key={lessonProgress.id} className="flex items-center justify-between">
-                                <span className="text-gray-800 dark:text-gray-200">
-                                    {lessonProgress.lesson.title}
-                                </span>
-                                <span className="text-gray-500 dark:text-gray-400">
-                                    {Math.min(parseFloat(lessonProgress.progress.toFixed(2)), 100).toFixed(0)}%
-                                </span>
-                            </li>
-                            ))}
-                        </ul>
+                            <ul className="space-y-6">
+                                {progresses.map((lessonProgress) => (
+                                    <li 
+                                        key={lessonProgress.id} 
+                                        className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-center justify-between"
+                                    >
+                                        <div className="flex items-center space-x-4">
+                                            {/* Icône pour représenter le cours */}
+                                            <div className="flex-shrink-0">
+                                                <BookOpen strokeWidth={1} className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                                            </div>
+                                            {/* Titre du cours et sous-titre */}
+                                            <div>
+                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{lessonProgress.lesson.title}</h3>
+                                                <p className="text-sm text-gray-500 dark:text-gray-400">{lessonProgress.lesson.course.title}</p>
+                                            </div>
+                                        </div>
+                                        <div className="w-2/5">
+                                            {/* Barre de progression avec couleur en fonction du pourcentage */}
+                                            <div className="relative w-full h-1 bg-gray-300 dark:bg-gray-600 rounded-full overflow-hidden">
+                                                <div 
+                                                    className={`h-full rounded-full ${
+                                                        lessonProgress.progress >= 75 ? 'bg-green-500' : 
+                                                        lessonProgress.progress >= 50 ? 'bg-yellow-500' : 
+                                                        'bg-red-500'
+                                                    }`}
+                                                    style={{ width: `${Math.min(lessonProgress.progress, 100)}%` }}
+                                                />
+                                            </div>
+                                            <p className="text-right text-xs mt-1 text-gray-500 dark:text-gray-400">
+                                                {Math.min(lessonProgress.progress, 100).toFixed(0)}%
+                                            </p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
                         )}
                     </div>
 
+                    {/* Section badges */}
                     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 lg:col-span-1">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Mes Badges</h2>
                         <div className="grid grid-cols-1 gap-4">
                             {/* Badge 1 */}
-                            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-4 rounded-lg shadow-md flex items-center space-x-4 flex-wrap w-full">
+                            <div className="flex items-center space-x-4">
                                 <div className="flex-shrink-0">
-                                    <Medal className="h-10 w-10 text-white" />
+                                    <Medal strokeWidth={1} className="h-10 w-10 text-yellow-400" />
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-lg font-bold text-white truncate">Champion</h3>
-                                    <p className="text-sm text-yellow-200 truncate">A complété 10 leçons</p>
+                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Champion</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">A complété 10 leçons</p>
                                 </div>
                             </div>
 
                             {/* Badge 2 */}
-                            <div className="bg-gradient-to-r from-blue-400 to-blue-500 p-4 rounded-lg shadow-md flex items-center space-x-4 flex-wrap w-full">
+                            <div className="flex items-center space-x-4">
                                 <div className="flex-shrink-0">
-                                    <Star className="h-10 w-10 text-white" />
+                                    <Star strokeWidth={1} className="h-10 w-10 text-blue-400" />
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-lg font-bold text-white truncate">Expert</h3>
-                                    <p className="text-sm text-blue-200 truncate">A obtenu un score parfait</p>
+                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Expert</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">A obtenu un score parfait</p>
                                 </div>
                             </div>
 
                             {/* Badge 3 */}
-                            <div className="bg-gradient-to-r from-green-400 to-green-500 p-4 rounded-lg shadow-md flex items-center space-x-4 flex-wrap w-full">
+                            <div className="flex items-center space-x-4">
                                 <div className="flex-shrink-0">
-                                    <Award className="h-10 w-10 text-white" />
+                                    <Award strokeWidth={1} className="h-10 w-10 text-green-400" />
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-lg font-bold text-white truncate">Maître</h3>
-                                    <p className="text-sm text-green-200 truncate">A terminé 5 cours</p>
+                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Maître</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">A terminé 5 cours</p>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +156,36 @@ export default function ProfilePage() {
                     {/* Section Activité Récente */}
                     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 lg:col-span-2">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Activité Récente</h2>
-                        <p className="text-gray-600 dark:text-gray-300">Vous avez complété la leçon 2 dans le cours &quot;Introduction à JavaScript&quot;.</p>
+                        {recentActivities.length === 0 ? (
+                            <p className="text-gray-600 dark:text-gray-300">Aucune activité récente.</p>
+                        ) : (
+                            <ul className="space-y-4">
+                                {recentActivities.map((activity) => (
+                                    <li 
+                                        key={activity.id} 
+                                        className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow duration-200 ease-in-out"
+                                    >
+                                        <div className="flex items-center space-x-3">
+                                            {/* Icone check si terminé */}
+                                            <div className="flex-shrink-0">
+                                                <CheckCircle className="h-6 w-6 text-green-500" />
+                                            </div>
+                                            {/* Titre de la leçon */}
+                                            <div>
+                                                <span className="text-gray-800 dark:text-gray-200 font-medium">{activity.lesson.title}</span>
+                                                <p className="text-gray-500 dark:text-gray-400 text-sm">Cours complété</p>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            {/* Date de complétion */}
+                                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                                                Terminé le {new Date(activity.updatedAt).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
 
                     {/* Section Paramètres du compte */}

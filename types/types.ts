@@ -39,4 +39,5 @@ export interface LessonProgress {
     progress: number;         
     completed: boolean;
     lesson: Lesson;
+    updatedAt: Date;
 }
