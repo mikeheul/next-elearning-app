@@ -5,6 +5,7 @@ export interface Lesson {
     order: number; 
     courseId: string;
     course: Course;
+    lessonprogresses: LessonProgress[]
 }
 
 export interface Course {
@@ -40,4 +41,33 @@ export interface LessonProgress {
     completed: boolean;
     lesson: Lesson;
     updatedAt: Date;
+}
+
+export interface PopularCourse {
+    id: string;
+    title: string;
+    description: string;
+    totalProgressions: number;
+}
+
+export interface CourseWithLessons {
+    id: string;
+    title: string;
+    description: string;
+    lessons: {
+        id: string;
+        title: string;
+        content: string;
+        order: number | null;
+        lessonprogresses: {
+            id: string;
+            userId: string;
+            createdAt: Date;
+            updatedAt: Date;
+            progress: number;
+            completed: boolean;
+            lessonId: string;
+        }[];
+        courseId: string; // Ajoutez cette propriété
+    }[];
 }
