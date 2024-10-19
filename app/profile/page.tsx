@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { LessonProgress } from "@/types/types";
+import { LessonProgress, CourseProgress } from "@/types/types";
 
 import { Medal, Star, Award, CheckCircle, BookOpen, Clipboard } from 'lucide-react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
@@ -12,7 +12,7 @@ export default function ProfilePage() {
     const { user } = useUser();
     const router = useRouter();
     const [progresses, setProgresses] = useState<LessonProgress[]>([]);
-    const [courseProgresses, setCourseProgresses] = useState<any[]>([]); // Change this to the correct type for course progresses
+    const [courseProgresses, setCourseProgresses] = useState<CourseProgress[]>([]); // Change this to the correct type for course progresses
     const [recentActivities, setRecentActivities] = useState<LessonProgress[]>([]);
 
     useEffect(() => {

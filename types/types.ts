@@ -73,3 +73,11 @@ export interface CourseWithLessons {
         courseId: string; // Ajoutez cette propriété
     }[];
 }
+
+interface CourseProgress {
+    id: string;
+    title: string;
+    progress: number;  // Pourcentage de progression
+    description: string;
+    updatedAt: string;  // ou Date
+}
