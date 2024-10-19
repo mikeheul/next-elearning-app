@@ -49,7 +49,7 @@ export default function ProfilePage() {
                 if (!response.ok) {
                     throw new Error("Progressions non trouvées");
                 }
-                const data: any[] = await response.json(); // Adjust type as necessary
+                const data: CourseProgress[] = await response.json(); // Adjust type as necessary
                 setCourseProgresses(data);
 
             } catch (error) {
