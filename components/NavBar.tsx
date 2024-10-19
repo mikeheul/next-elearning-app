@@ -12,6 +12,7 @@ export default function Navbar() {
     const { user } = useUser();
 
     const toggleMenu = () => setIsOpen(!isOpen);
+    const handleLinkClick = () => setIsOpen(false);
 
     let isAdmin = false;
     if (user) {
@@ -96,28 +97,28 @@ export default function Navbar() {
                             <div className="flex flex-col justify-center gap-3 rounded-full p-1 px-3">
                                 <div className="flex items-center justify-center space-x-2 py-2">
                                     {/* Icône utilisateur */}
-                                    <Link href="/profile" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    <Link href="/profile" onClick={handleLinkClick} className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
                                         {user?.firstName || user?.username}
                                     </Link>
                                 </div>
 
                                 {isAdmin && (
-                                    <Link href='/' className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-white">Admin</Link>
+                                    <Link href='/' onClick={handleLinkClick} className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-white">Admin</Link>
                                 )}
 
-                                <Link href="/progression" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                                <Link href="/progression" onClick={handleLinkClick} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                                     Progressions
                                 </Link>    
                             </div>
                         </SignedIn>
 
-                        <Link href="/course" className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
+                        <Link href="/course" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
                             Cours
                         </Link>
-                        <Link href="/about" className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
+                        <Link href="/about" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
                             À propos
                         </Link>
-                        <Link href="/contact" className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
+                        <Link href="/contact" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
                             Contact
                         </Link>
                         <ThemeSwitcher />

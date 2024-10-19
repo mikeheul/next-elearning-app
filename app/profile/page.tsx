@@ -40,7 +40,7 @@ export default function ProfilePage() {
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             {/* Header */}
-            <div className="bg-white dark:bg-gray-800 shadow-md">
+            <div className="bg-white dark:bg-gray-900 shadow-md">
                 <div className="container mx-auto px-4 py-6">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Mon Profil</h1>
                     <p className="text-gray-600 dark:text-gray-300">Bienvenue, {user?.fullName || "Utilisateur"}</p>
