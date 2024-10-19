@@ -5,7 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { LessonProgress } from "@/types/types";
 
-import { Medal, Star, Award, CheckCircle, BookOpen } from 'lucide-react'; // Import des icônes depuis Lucide
+import { Medal, Star, Award, CheckCircle, BookOpen } from 'lucide-react';
 
 export default function ProfilePage() {
     const { user } = useUser();
@@ -14,10 +14,10 @@ export default function ProfilePage() {
     const [recentActivities, setRecentActivities] = useState<LessonProgress[]>([]);
 
     useEffect(() => {
-        if (!user) {
-            router.push("/404");
-            return;
-        }
+        // if (!user) {
+        //     router.push("/404");
+        //     return;
+        // }
 
         async function fetchProgresses() {
             try {
@@ -51,7 +51,7 @@ export default function ProfilePage() {
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             {/* Header */}
             <div className="bg-white dark:bg-gray-900 shadow-md">
-                <div className="container mx-auto px-4 py-6">
+                <div className="px-4 py-6">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Mon Profil</h1>
                     <p className="text-gray-600 dark:text-gray-300">Bienvenue, {user?.fullName || "Utilisateur"}</p>
                 </div>
