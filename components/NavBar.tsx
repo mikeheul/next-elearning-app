@@ -103,7 +103,7 @@ export default function Navbar() {
                                 </div>
 
                                 {isAdmin && (
-                                    <Link href='/' onClick={handleLinkClick} className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-white">Admin</Link>
+                                    <Link href='/admin' onClick={handleLinkClick} className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-white">Admin</Link>
                                 )}
 
                                 <Link href="/progression" onClick={handleLinkClick} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
