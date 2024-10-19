@@ -2,21 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-// import { Doughnut } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
     BarElement,
     Title,
-    // ArcElement,
     Tooltip,
     Legend,
 } from "chart.js";
 
 // Import ChartJS modules
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-// ChartJS.register(ArcElement, Tooltip, Legend);
+
+export const dynamic = 'force-dynamic'
 
 // Types for popular course data
 type CoursePopularity = {
@@ -24,14 +23,6 @@ type CoursePopularity = {
     title: string;
     totalProgressions: number; // Assurez-vous que c'est correct
 };
-
-// const colors = [
-//     "rgba(54, 162, 235, 0.5)", // Blue
-//     "rgba(255, 99, 132, 0.5)", // Red
-//     "rgba(75, 192, 192, 0.5)", // Green
-//     "rgba(255, 206, 86, 0.5)", // Yellow
-//     "rgba(153, 102, 255, 0.5)", // Purple
-// ];
 
 export default function AdminPage() {
     const [courseData, setCourseData] = useState<CoursePopularity[]>([]);
@@ -66,14 +57,6 @@ export default function AdminPage() {
                 borderWidth: 1,
             },
         ],
-        // datasets: [
-        //     {
-        //         label: "Nombre de suivis",
-        //         data: courseData.map((course) => course.totalProgressions),
-        //         backgroundColor: courseData.map((_, index) => colors[index % colors.length]), // Appliquer les couleurs
-        //         borderWidth: 1,
-        //     },
-        // ],
     };
 
     const chartOptions = {
@@ -107,8 +90,7 @@ export default function AdminPage() {
                     ) : (
                         <div className="w-full md:w-2/3" style={{ height: "400px" }}>
                             <Bar data={chartData} options={chartOptions} />
-                            {/* <Doughnut data={chartData} options={chartOptions} /> Utiliser Doughnut ici */}
-                        </div>
+                    </div>
                     )}
                 </div>
             </div>
