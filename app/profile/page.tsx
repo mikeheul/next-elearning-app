@@ -82,7 +82,7 @@ export default function ProfilePage() {
 
                     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 lg:col-span-1">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Mes Badges</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                             {/* Badge 1 */}
                             <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-4 rounded-lg shadow-md flex items-center space-x-4 flex-wrap w-full">
                                 <div className="flex-shrink-0">
