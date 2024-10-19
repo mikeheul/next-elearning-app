@@ -25,7 +25,7 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <div className="flex items-center">
-                        <Link href="/" className="text-2xl font-bold text-gray-900 dark:text-white">
+                        <Link href="/" onClick={handleLinkClick} className="text-2xl font-bold text-gray-900 dark:text-white">
                             Learnify
                         </Link>
                     </div>
