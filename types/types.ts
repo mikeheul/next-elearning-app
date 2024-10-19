@@ -74,7 +74,7 @@ export interface CourseWithLessons {
     }[];
 }
 
-interface CourseProgress {
+export interface CourseProgress {
     id: string;
     title: string;
     progress: number;  // Pourcentage de progression
