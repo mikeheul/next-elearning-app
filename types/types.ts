@@ -41,6 +41,7 @@ export interface LessonProgress {
     completed: boolean;
     lesson: Lesson;
     updatedAt: Date;
+    course: Course;
 }
 
 export interface PopularCourse {
@@ -54,6 +55,7 @@ export interface CourseWithLessons {
     id: string;
     title: string;
     description: string;
+    updatedAt: Date;
     lessons: {
         id: string;
         title: string;
