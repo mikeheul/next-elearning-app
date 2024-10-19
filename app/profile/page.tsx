@@ -106,7 +106,7 @@ export default function ProfilePage() {
                                             {progresses.map((lessonProgress) => (
                                                 <li 
                                                     key={lessonProgress.id} 
-                                                    className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-center justify-between"
+                                                    className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md flex flex-col gap-2 md:flex-row md:items-center justify-between"
                                                 >
                                                     <div className="flex items-center space-x-4">
                                                         <div className="flex-shrink-0">
@@ -117,7 +117,7 @@ export default function ProfilePage() {
                                                             <p className="text-sm text-gray-500 dark:text-gray-400">{lessonProgress.lesson.course.title}</p>
                                                         </div>
                                                     </div>
-                                                    <div className="w-2/5">
+                                                    <div className="w-full md:w-2/5">
                                                         <div className="relative w-full h-1 bg-gray-300 dark:bg-gray-600 rounded-full overflow-hidden">
                                                             <div 
                                                                 className={`h-full rounded-full ${
@@ -147,7 +147,7 @@ export default function ProfilePage() {
                                             {courseProgresses.map((course) => (
                                                 <li 
                                                     key={course.id} 
-                                                    className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-center justify-between"
+                                                    className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md flex flex-col gap-2 md:flex-row md:items-center justify-between"
                                                 >
                                                     <div className="flex items-center space-x-4">
                                                         <div className="flex-shrink-0">
@@ -157,7 +157,7 @@ export default function ProfilePage() {
                                                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{course.title}</h3>
                                                         </div>
                                                     </div>
-                                                    <div className="w-2/5">
+                                                    <div className="w-full md:w-2/5">
                                                         <div className="relative w-full h-1 bg-gray-300 dark:bg-gray-600 rounded-full overflow-hidden">
                                                             <div 
                                                                 className={`h-full rounded-full ${
