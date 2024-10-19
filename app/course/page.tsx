@@ -17,12 +17,17 @@ export default function CourseList() {
     const [searchTerm, setSearchTerm] = useState('');
 
     const router = useRouter();
-    const { isSignedIn } = useUser();
+    const { isSignedIn, user } = useUser();
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentPage(1); // Reset to the first page when the search term changes
         setSearchTerm(e.target.value);
     };
+
+    let isAdmin = false;
+    if (user) {
+        isAdmin = user.publicMetadata?.role === 'admin'; // Optional chaining to prevent errors
+    }
 
     useEffect(() => {
         async function fetchCourses() {
@@ -88,7 +93,8 @@ export default function CourseList() {
                     />
                 </div>
 
-                {isSignedIn && (
+                {(isSignedIn && isAdmin) && (
+                    
                     <div className="mb-8">
                         <button
                             onClick={() => router.push(`/admin/course`)} // Redirige vers la page de création de cours

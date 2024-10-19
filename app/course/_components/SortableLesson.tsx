@@ -14,7 +14,7 @@ interface SortableLessonProps {
 const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
 
     const router = useRouter();
-    const { isSignedIn } = useUser();
+    const { isSignedIn, user } = useUser();
 
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
         id: lesson.id,
@@ -24,6 +24,11 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
         transform: CSS.Transform.toString(transform),
         transition,
     };
+
+    let isAdmin = false;
+    if (user) {
+        isAdmin = user.publicMetadata?.role === 'admin'; // Optional chaining to prevent errors
+    }
 
     return (
         <div
@@ -43,7 +48,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
                 </a>
             </div>
 
-            {isSignedIn && (
+            {(isSignedIn && isAdmin) && (
                 <div className="flex items-center space-x-4">
                     <div className='bg-slate-200 dark:bg-slate-900 flex gap-2 absolute top-0 right-0 p-3 rounded-bl-md rounded-tr-md'>
                         <button
@@ -66,9 +71,11 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
                         </button>
                     </div>
 
+                    { isAdmin && (
                     <div className="cursor-grab">
                         <GripVerticalIcon className="text-gray-600 dark:text-gray-600" size={24} />
                     </div>
+                    )}
                 </div>
             )}
         </div>

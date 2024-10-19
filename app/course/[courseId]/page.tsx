@@ -29,7 +29,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
     const router = useRouter();
     const courseId = params.courseId;
 
-    const { isSignedIn } = useUser();
+    const { isSignedIn, user } = useUser();
 
     useEffect(() => {
         // Détection de la taille de l'écran
@@ -141,6 +141,11 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
         return <p className="text-center text-gray-500 mt-5">Cours non trouvé.</p>;
     }
 
+    let isAdmin = false;
+    if (user) {
+        isAdmin = user.publicMetadata?.role === 'admin'; // Optional chaining to prevent errors
+    }
+
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -169,7 +174,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                     {course.description}
                 </p>
 
-                {isSignedIn && (
+                {(isSignedIn && isAdmin) && (
                     <div className="flex gap-2 mb-8">
                         <button
                             onClick={() => router.push(`/admin/lesson/${course.id}`)}
@@ -197,7 +202,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                 </div>
 
                 {!isMobile ? (
-                    isSignedIn ? (
+                    (isSignedIn && isAdmin) ? (
                         <DndContext
                             sensors={sensors}
                             collisionDetection={closestCenter}
