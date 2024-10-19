@@ -51,17 +51,17 @@ export default function Navbar() {
                             <div className="flex items-center justify-center gap-3 rounded-full p-1">
                                 <div className="flex items-center space-x-2">
                                     {/* Icône utilisateur */}
-                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    <Link href="/profile" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
                                         {user?.firstName || user?.username}
-                                    </span>
+                                    </Link>
                                 </div>
                                 <UserButton afterSignOutUrl="/" />
 
                                 {isAdmin && (
-                                    <Link href='/' className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-gray-700 dark:text-gray-300">Admin</Link>
+                                    <Link href='/' className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-white">Admin</Link>
                                 )}
 
-                                <Link href="/profile" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                                <Link href="/progression" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                                     Progressions
                                 </Link>    
                             </div>
@@ -96,16 +96,16 @@ export default function Navbar() {
                             <div className="flex flex-col justify-center gap-3 rounded-full p-1 px-3">
                                 <div className="flex items-center justify-center space-x-2 py-2">
                                     {/* Icône utilisateur */}
-                                    <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    <Link href="/profile" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
                                         {user?.firstName || user?.username}
-                                    </span>
+                                    </Link>
                                 </div>
 
                                 {isAdmin && (
-                                    <Link href='/' className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-gray-700 dark:text-gray-300">Admin</Link>
+                                    <Link href='/' className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-white">Admin</Link>
                                 )}
 
-                                <Link href="/profile" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                                <Link href="/progression" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                                     Progressions
                                 </Link>    
                             </div>

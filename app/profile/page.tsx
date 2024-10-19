@@ -1,170 +1,117 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useUser } from '@clerk/nextjs';
-import { LessonProgress } from '@/types/types';
-import { LibraryBigIcon, Eye } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { LessonProgress } from "@/types/types";
 
-const UserProgressions = () => {
-    const { user } = useUser(); 
-    const [progressions, setProgressions] = useState<LessonProgress[]>([]);
-    const [loading, setLoading] = useState(true);
+export default function ProfilePage() {
+    const { user } = useUser();
+    const router = useRouter();
+    const [progresses, setProgresses] = useState<LessonProgress[]>([]);
 
     useEffect(() => {
-        const fetchProgressions = async () => {
-            if (!user) return; 
+        if (!user) {
+            router.push("/404");
+            return;
+        }
 
+        async function fetchProgresses() {
             try {
-                const response = await fetch(`/api/user/progress`);
+                const response = await fetch(`/api/user/progress`, {
+                    method: "GET",
+                });
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error("Progressions non trouvées");
                 }
-                const data = await response.json();
-                setProgressions(data);
+                const data: LessonProgress[] = await response.json();
+                setProgresses(data);
             } catch (error) {
-                console.error('Error fetching progressions:', error);
-            } finally {
-                setLoading(false);
+                console.error("Erreur lors de la récupération des progressions:", error);
+                router.push("/404");
             }
-        };
+        }
 
-        fetchProgressions();
-    }, [user]);
-
-    if (loading) return <p className="text-gray-500 text-center dark:text-gray-400 mt-5">Chargement...</p>;
-
-    const getProgressColor = (progress: number) => {
-        if (progress === 100) return 'bg-green-500'; // Complété
-        if (progress >= 75) return 'bg-green-400'; // 75% et plus
-        if (progress >= 50) return 'bg-yellow-400'; // 50% à 74%
-        if (progress >= 25) return 'bg-orange-400'; // 25% à 49%
-        return 'bg-red-400'; // Moins de 25%
-    };
-
-    // Regrouper les progressions par cours
-    const groupByCourse = (progressions: LessonProgress[]) => {
-        return progressions.reduce((acc, progress) => {
-            const courseTitle = progress.lesson.course.title;
-            if (!acc[courseTitle]) {
-                acc[courseTitle] = {
-                    inProgress: [],
-                    completed: [],
-                };
-            }
-            if (progress.completed) {
-                acc[courseTitle].completed.push(progress);
-            } else {
-                acc[courseTitle].inProgress.push(progress);
-            }
-            return acc;
-        }, {} as Record<string, { inProgress: LessonProgress[], completed: LessonProgress[] }>);
-    };
-
-    const progressionsByCourse = groupByCourse(progressions);
-
-    const renderTable = (chapters: LessonProgress[]) => (
-        <table className="text-center min-w-full table-fixed bg-slate-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow hidden md:table mt-5">
-            <thead className="bg-gray-200 dark:bg-gray-700">
-                <tr>
-                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200 w-1/3">Chapitre</th>
-                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200 w-1/6">Progression</th>
-                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200 w-1/6">Statut</th>
-                    <th className="py-2 px-4 text-center text-gray-700 dark:text-gray-200 w-1/6">Visualiser</th>
-                </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
-                {chapters.map((progress) => (
-                    <tr key={progress.id} className="hover:bg-gray-100 dark:hover:bg-gray-700/30 transition">
-                        <td className="text-left py-5 px-4 text-gray-700 dark:text-gray-300">
-                                {progress.lesson.title}
-                            <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-700 mt-2">
-                                <div
-                                    className={`progress h-full ${getProgressColor(Math.min(progress.progress, 100))} rounded-full`}
-                                    style={{ width: `${Math.min(progress.progress, 100)}%` }}
-                                ></div>
-                            </div>
-                        </td>
-                        <td className="py-2 px-4 text-gray-600 dark:text-gray-400">
-                            {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(0)} %
-                        </td>
-                        <td className={`py-2 px-4 text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
-                            {progress.completed ? 'Terminé' : 'En cours'}
-                        </td>
-                        <td className="py-2 px-4 text-center">
-                            <Link href={`/lesson/${progress.lesson.id}`} className="dark:text-white flex justify-center items-center h-full">
-                                <Eye size={20} />
-                            </Link>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    );
-
-    // Responsive version for small screens
-    const renderResponsive = (chapters: LessonProgress[]) => (
-        <div className="md:hidden">
-            {chapters.map((progress) => (
-                <div key={progress.id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700/50 dark:hover:bg-gray-700/60 rounded-lg shadow">
-                    <Link className="dark:text-white" href={`/lesson/${progress.lesson.id}`}>
-                        {progress.lesson.title}
-                    </Link>
-                    <div className="progress-bar w-full h-2 bg-gray-200 rounded-full dark:bg-gray-600 mt-2">
-                        <div
-                            className={`progress h-full ${getProgressColor(Math.min(progress.progress, 100))} rounded-full`}
-                            style={{ width: `${Math.min(progress.progress, 100)}%` }}
-                        ></div>
-                    </div>
-                    <p className="mt-2 text-gray-600 dark:text-gray-400">
-                        Progression : {Math.min(parseFloat(progress.progress.toFixed(2)), 100).toFixed(0)} %
-                    </p>
-                    <p className={`text-sm ${progress.completed ? 'text-green-500' : 'text-yellow-500'} dark:${progress.completed ? 'text-green-300' : 'text-yellow-400'}`}>
-                        {progress.completed ? 'Terminé' : 'En cours'}
-                    </p>
-                    <Link href={`/lesson/${progress.lesson.id}`} className="p-3 text-white bg-emerald-500 hover:bg-emerald-600 mt-5 rounded-lg inline-flex justify-center items-center h-full transition duration-300">
-                        <Eye size={20} />
-                    </Link>
-                </div>
-            ))}
-        </div>
-    );
+        fetchProgresses();
+    }, [user, router]);
 
     return (
-        <div className="px-0 py-4 md:p-4">
-            <div className="mx-auto p-3 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Progressions des chapitres par cours</h2>
-                <div className="mt-4 overflow-x-auto">
-                    {Object.keys(progressionsByCourse).map((courseTitle) => (
-                        <div key={courseTitle} className="mb-8 border dark:border-slate-600 p-6 rounded-lg">
-                            <Link className="flex gap-2 items-center" href={`/course/${progressionsByCourse[courseTitle].inProgress[0]?.lesson.course.id}`}>
-                                <LibraryBigIcon className="dark:text-white" size={20} />
-                                <span className="font-bold text-2xl dark:text-white">{courseTitle}</span>
-                            </Link>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        {/* Header */}
+        <div className="bg-white dark:bg-gray-800 shadow-md">
+            <div className="container mx-auto px-4 py-6">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Mon Profil</h1>
+                <p className="text-gray-600 dark:text-gray-300">Bienvenue, {user?.fullName || "Utilisateur"}</p>
+            </div>
+        </div>
 
-                            {/* Chapitres en cours pour chaque cours */}
-                            {progressionsByCourse[courseTitle].inProgress.length > 0 && (
-                                <>
-                                    <h4 className="text-md font-semibold text-yellow-600 dark:text-yellow-400 my-5">Chapitres en cours</h4>
-                                    {renderTable(progressionsByCourse[courseTitle].inProgress)}
-                                    {renderResponsive(progressionsByCourse[courseTitle].inProgress)}
-                                </>
-                            )}
+        {/* Main content */}
+        <div className="container mx-auto px-4 py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Section Informations Personnelles */}
+                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Informations Personnelles</h2>
+                    <div className="text-gray-600 dark:text-gray-300">
+                        <p><span className="font-semibold">Nom: </span>{user?.fullName || "N/A"}</p>
+                        <p><span className="font-semibold">Inscription: </span>{user?.createdAt?.toLocaleDateString() || "N/A"}</p>
+                    </div>
+                </div>
 
-                            {/* Chapitres terminés pour chaque cours */}
-                            {progressionsByCourse[courseTitle].completed.length > 0 && (
-                                <>
-                                    <h4 className="text-md font-semibold text-green-600 dark:text-green-400 my-5">Chapitres terminés</h4>
-                                    {renderTable(progressionsByCourse[courseTitle].completed)}
-                                    {renderResponsive(progressionsByCourse[courseTitle].completed)}
-                                </>
-                            )}
+                {/* Section Progressions de cours */}
+                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 lg:col-span-2">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Progression des Cours</h2>
+                    {progresses.length === 0 ? (
+                        <p className="text-gray-600 dark:text-gray-300">Aucune progression trouvée.</p>
+                    ) : (
+                    <ul className="space-y-4">
+                        {progresses.map((lessonProgress) => (
+                        <li key={lessonProgress.id} className="flex items-center justify-between">
+                            <span className="text-gray-800 dark:text-gray-200">
+                                {lessonProgress.lesson.title}
+                            </span>
+                            <span className="text-gray-500 dark:text-gray-400">
+                                {Math.min(parseFloat(lessonProgress.progress.toFixed(2)), 100).toFixed(0)}%
+                            </span>
+                        </li>
+                        ))}
+                    </ul>
+                    )}
+                </div>
+
+                {/* Section Badges */}
+                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 lg:col-span-1">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Mes Badges</h2>
+                    <div className="flex space-x-4">
+                        <div className="bg-yellow-400 p-4 rounded-lg shadow-md">
+                            <span className="text-white font-bold">Badge 1</span>
                         </div>
-                    ))}
+                        <div className="bg-blue-400 p-4 rounded-lg shadow-md">
+                            <span className="text-white font-bold">Badge 2</span>
+                        </div>
+                        <div className="bg-green-400 p-4 rounded-lg shadow-md">
+                            <span className="text-white font-bold">Badge 3</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Section Activité Récente */}
+                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 lg:col-span-2">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Activité Récente</h2>
+                    <p className="text-gray-600 dark:text-gray-300">Vous avez complété la leçon 2 dans le cours "Introduction à JavaScript".</p>
+                </div>
+
+                {/* Section Paramètres du compte */}
+                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 lg:col-span-1">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Paramètres</h2>
+                    <button className="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700">
+                        Modifier le profil
+                    </button>
+                    <button className="w-full mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700">
+                        Supprimer le compte
+                    </button>
+                </div>
                 </div>
             </div>
         </div>
     );
-};
-
-export default UserProgressions;
+}
