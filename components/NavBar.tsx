@@ -13,6 +13,11 @@ export default function Navbar() {
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
+    let isAdmin = false;
+    if (user) {
+        isAdmin = user.publicMetadata?.role === 'admin'; // Optional chaining to prevent errors
+    }
+
     return (
         <nav className={`bg-slate-200 dark:bg-gray-800 shadow-md w-full z-10 py-5`}>
             <div className="px-4 sm:px-6 lg:px-20">
@@ -52,8 +57,12 @@ export default function Navbar() {
                                 </div>
                                 <UserButton afterSignOutUrl="/" />
 
+                                {isAdmin && (
+                                    <Link href='/' className="rounded-lg bg-red-500 hover:bg-red-600 px-3 py-1 text-gray-700 dark:text-gray-300">Admin</Link>
+                                )}
+
                                 <Link href="/profile" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-                                    Profil
+                                    Progressions
                                 </Link>    
                             </div>
                         </SignedIn>
@@ -93,7 +102,7 @@ export default function Navbar() {
                                 </div>
 
                                 <Link href="/profile" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-                                    Profil
+                                    Progressions
                                 </Link>    
                             </div>
                         </SignedIn>
