@@ -2,10 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from "@/lib/db"; 
 import { CourseWithLessons } from '@/types/types'; 
 
-// Définir un type intermédiaire pour les résultats de la base de données
-
-
-export async function GET(req: Request) {
+export async function GET() {
     try {
         // Récupérer les cours avec le nombre de progressions de leçon
         const popularCourses: CourseWithLessons[] = await db.course.findMany({
