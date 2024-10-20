@@ -115,12 +115,7 @@ export default function Navbar() {
                         <Link href="/course" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
                             Cours
                         </Link>
-                        <Link href="/about" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
-                            À propos
-                        </Link>
-                        <Link href="/contact" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
-                            Contact
-                        </Link>
+                        
                         <ThemeSwitcher />
 
                         <div className="p-3">
