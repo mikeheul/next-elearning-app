@@ -48,6 +48,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     
                 if (!lessons.length) { // Si aucune leçon n'est déjà chargée, récupérer les leçons du cours
                     fetchLessons(data.courseId);
+                    fetchCourseProgress(data.courseId);
                 }
             } catch (error) {
                 console.error("Erreur lors de la récupération de la leçon :", error);
@@ -55,6 +56,22 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             }
         }
     
+        async function fetchCourseProgress(courseId: string) {
+            try {
+                const response = await fetch(`/api/user/progress/course/${courseId}`, {
+                    method: "GET",
+                });
+                if (!response.ok) {
+                    throw new Error("Progression du cours non trouvée");
+                }
+                const data = await response.json();
+                setCourseProgress(data[0].progress || 0); // Mise à jour de la progression du cours avec la valeur récupérée
+            } catch (error) {
+                console.error("Erreur lors de la récupération de la progression du cours:", error);
+                router.push("/404"); // Redirection vers une page 404 en cas d'erreur
+            }
+        }
+
         // Fonction pour récupérer la liste des leçons d'un cours
         async function fetchLessons(courseId: string) {
             try {
@@ -74,10 +91,11 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         }
     
         fetchLesson(initialLessonId); // Appel de la fonction pour récupérer la leçon initiale
-    }, [initialLessonId, router, lessons.length]);
+    }, [initialLessonId, lessons.length]);
 
     useEffect(() => {
         if (user && lessons.length) {
+
             const fetchProgressForAllLessons = async () => {
                 try {
                     const promises = lessons.map(async (lesson) => {
@@ -94,7 +112,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     });
     
                     const progressResults = await Promise.all(promises);
-    
+                    
                     // Mise à jour des progressions et des chapitres lus
                     const updatedReadChapters: { [key: string]: boolean } = {};
                     const updatedChapterProgress: { [key: string]: number } = {};
@@ -108,24 +126,15 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     
                     setChapterProgress(updatedChapterProgress); // Met à jour la progression
                     setReadChapters(updatedReadChapters); // Marque les chapitres comme lus
+    
                 } catch (error) {
                     console.error("Erreur lors de la récupération des progressions :", error);
                 }
             };
-    
+
             fetchProgressForAllLessons();
         }
     }, [user, lessons]);
-
-    useEffect(() => {
-        if (lessons.length > 0) {
-            const totalChapters = lessons.length;
-            const completedChapters = Object.values(readChapters).filter((isRead) => isRead).length;
-            const calculatedCourseProgress = (completedChapters / totalChapters) * 100;
-            
-            setCourseProgress(calculatedCourseProgress); // Met à jour la progression du cours
-        }
-    }, [lessons, readChapters]);
 
     useEffect(() => {
         if (lesson && readChapters[lesson.id]) {
@@ -216,16 +225,6 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                         [currentLessonId]: newProgress, // Mettre à jour la progression maximale
                     };
                 });
-    
-                // Calculer le pourcentage total du cours
-                const totalChapters = lessons.length; // Nombre total de chapitres
-                const completedChapters = Object.values(readChapters).filter((checked) => checked).length; // Chapitres déjà lus
-                
-                // Utiliser 'progress' pour calculer la progression globale
-                const courseProgressValue = ((completedChapters + (progress >= 100 && !readChapters[currentLessonId] ? 1 : 0)) / totalChapters) * 100;
-    
-                // Mettre à jour la progression globale du cours
-                setCourseProgress(courseProgressValue);
             }
         }
     }, 200);    

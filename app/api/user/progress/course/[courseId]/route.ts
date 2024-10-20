@@ -3,8 +3,10 @@ import { db } from '@/lib/db';
 import { getAuth } from '@clerk/nextjs/server';
 import { CourseWithLessons } from '@/types/types';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, { params }: { params: { courseId: string } }) {
     const { userId } = getAuth(request);
+
+    const { courseId } = params;
 
     if (!userId) {
         return NextResponse.json({ message: 'User not authenticated' }, { status: 401 });
@@ -12,6 +14,9 @@ export async function GET(request: NextRequest) {
 
     try {
         const courses: CourseWithLessons[] = await db.course.findMany({
+            where : {
+                id: courseId
+            },
             include: {
                 lessons: {
                     include: {
@@ -44,8 +49,8 @@ export async function GET(request: NextRequest) {
             };
         });
 
-        const filteredCourseProgressions = courseProgressions.filter(course => course.progress > 0);
-
+        const filteredCourseProgressions = courseProgressions.filter(course => course.progress >= 0);
+        console.log(filteredCourseProgressions)
         return NextResponse.json(filteredCourseProgressions);
     } catch (error) {
         console.error('Erreur lors de la récupération des progressions :', error);
