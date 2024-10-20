@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -15,21 +15,23 @@ import {
 // Import ChartJS modules
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 // Types for popular course data
 type CoursePopularity = {
     courseId: string;
     title: string;
-    totalProgressions: number; // Assurez-vous que c'est correct
+    totalProgressions: number;
 };
 
 export default function AdminPage() {
     const [courseData, setCourseData] = useState<CoursePopularity[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     // Fetch the 5 most popular courses
     useEffect(() => {
-        async function fetchPopularCourses() {
+        const fetchPopularCourses = async () => {
             try {
                 const response = await fetch("/api/admin/popularCourses");
                 if (!response.ok) {
@@ -38,15 +40,17 @@ export default function AdminPage() {
                 const data: CoursePopularity[] = await response.json();
                 setCourseData(data);
             } catch (error) {
-                console.error("Error fetching popular courses:", error);
+                setError(error instanceof Error ? error.message : "Une erreur est survenue");
+            } finally {
+                setLoading(false);
             }
-        }
+        };
 
         fetchPopularCourses();
     }, []);
 
-    // Prepare data for Chart.js
-    const chartData = {
+    // Prepare data for Chart.js using useMemo
+    const chartData = useMemo(() => ({
         labels: courseData.map((course) => course.title),
         datasets: [
             {
@@ -57,7 +61,7 @@ export default function AdminPage() {
                 borderWidth: 1,
             },
         ],
-    };
+    }), [courseData]);
 
     const chartOptions = {
         responsive: true,
@@ -85,12 +89,16 @@ export default function AdminPage() {
                         Cours les plus populaires
                     </h2>
                     
-                    {courseData.length === 0 ? (
+                    {loading ? (
+                        <p className="text-gray-600 dark:text-gray-300">Chargement des données...</p>
+                    ) : error ? (
+                        <p className="text-red-600 dark:text-red-300">{error}</p>
+                    ) : courseData.length === 0 ? (
                         <p className="text-gray-600 dark:text-gray-300">Aucune donnée disponible</p>
                     ) : (
                         <div className="w-full md:w-2/3" style={{ height: "400px" }}>
                             <Bar data={chartData} options={chartOptions} />
-                    </div>
+                        </div>
                     )}
                 </div>
             </div>
