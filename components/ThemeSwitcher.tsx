@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react'; // Importer les icônes
 
 const ThemeSwitcher = () => {
-    const [theme, setTheme] = useState<'light' | 'dark'>('light');
+    const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
