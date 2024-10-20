@@ -121,8 +121,9 @@ export default function ProfilePage() {
                                                         <div className="relative w-full h-1 bg-gray-300 dark:bg-gray-600 rounded-full overflow-hidden">
                                                             <div 
                                                                 className={`h-full rounded-full ${
-                                                                    lessonProgress.progress >= 75 ? 'bg-green-500' : 
-                                                                    lessonProgress.progress >= 50 ? 'bg-yellow-500' : 
+                                                                    lessonProgress.progress >= 100 ? 'bg-green-500' :
+                                                                    lessonProgress.progress >= 75 ? 'bg-yellow-500' :  
+                                                                    lessonProgress.progress >= 50 ? 'bg-orange-500' : 
                                                                     'bg-red-500'
                                                                 }`}
                                                                 style={{ width: `${Math.min(lessonProgress.progress, 100)}%` }}
@@ -161,8 +162,9 @@ export default function ProfilePage() {
                                                         <div className="relative w-full h-1 bg-gray-300 dark:bg-gray-600 rounded-full overflow-hidden">
                                                             <div 
                                                                 className={`h-full rounded-full ${
-                                                                    course.progress >= 75 ? 'bg-green-500' : 
-                                                                    course.progress >= 50 ? 'bg-yellow-500' : 
+                                                                    course.progress >= 100 ? 'bg-green-500' : 
+                                                                    course.progress >= 75 ? 'bg-yellow-500' : 
+                                                                    course.progress >= 50 ? 'bg-orange-500' : 
                                                                     'bg-red-500'
                                                                 }`}
                                                                 style={{ width: `${Math.min(course.progress, 100)}%` }}
