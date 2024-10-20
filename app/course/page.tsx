@@ -15,6 +15,7 @@ export default function CourseList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [coursesPerPage] = useState(6);
     const [searchTerm, setSearchTerm] = useState('');
+    const [courseProgressions, setCourseProgressions] = useState<{ id: string; progress: number }[]>([]);
     
     const router = useRouter();
     const { isSignedIn, user } = useUser();
@@ -36,6 +37,32 @@ export default function CourseList() {
         };
         fetchCourses();
     }, []);
+
+    useEffect(() => {
+        const fetchProgressions = async () => {
+            if (isSignedIn && user) {
+                try {
+                    const responses = await Promise.all(
+                        courses.map(course => 
+                            fetch(`/api/user/progress/course/${course.id}`)
+                        )
+                    );
+
+                    const progressions = await Promise.all(responses.map(res => res.json()));
+                    const formattedProgressions = progressions.map((progress, index) => ({
+                        id: courses[index].id,
+                        progress: progress.length > 0 ? progress[0].progress : 0 // On suppose qu'il n'y a qu'une seule progression par utilisateur pour un cours
+                    }));
+
+                    setCourseProgressions(formattedProgressions);
+                } catch (error) {
+                    console.error('Erreur lors de la récupération des progressions :', error);
+                }
+            }
+        };
+
+        fetchProgressions();
+    }, [isSignedIn, user, courses]);
 
     // Utilisation de useMemo pour le filtrage des cours
     const filteredCourses = useMemo(() => 
@@ -105,9 +132,12 @@ export default function CourseList() {
                             Aucun cours disponible.
                         </p>
                     ) : (
-                        currentCourses.map((course) => (
-                            <CourseCard key={course.id} course={course} />
-                        ))
+                        currentCourses.map((course) => {
+                            const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+                            return (
+                                <CourseCard key={course.id} course={course} progress={progress} />
+                            );
+                        })
                     )}
                 </div>
             </div>

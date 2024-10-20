@@ -5,6 +5,7 @@ import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon, ClipboardListIcon } fr
 
 interface CourseCardProps {
     course: Course;
+    progress?: number;
 }
 
 const getBadgeColor = (count: number) => {
@@ -14,7 +15,7 @@ const getBadgeColor = (count: number) => {
     return 'bg-blue-500';
 };
 
-const CourseCard = ({ course }: CourseCardProps) => {
+const CourseCard = ({ course, progress }: CourseCardProps) => {
     const badgeColor = getBadgeColor(course.lessons.length);
     
     const formattedDate = new Date(course.updatedAt).toLocaleDateString('fr-FR', {
@@ -29,7 +30,17 @@ const CourseCard = ({ course }: CourseCardProps) => {
             className="relative flex flex-col justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800 hover:dark:bg-slate-700"
         >
             <div>
-                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+                <h2 className="flex gap-3 text-2xl font-semibold text-gray-800 dark:text-white">
+                    {/* Affichage de la progression uniquement si l'utilisateur est connecté */}
+                    {progress !== undefined && progress >= 100 && (
+                        <div className="flex items-center">
+                            {/* Affichage de l'icône d'achèvement si la progression est de 100% */}
+                            {/* <CheckCircleIcon className="h-5 w-5 text-green-500" aria-hidden="true" /> */}
+                            <span className="bg-green-300 text-green-600 text-xs font-semibold px-3 py-1 rounded-full">
+                                Terminé
+                            </span>
+                        </div>
+                    )}
                     {course.title}
                 </h2>
 
