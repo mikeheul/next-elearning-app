@@ -51,7 +51,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             }
         } catch (error) {
             console.error("Erreur lors de la récupération de la leçon :", error);
-            router.push("/404");
+            //router.push("/404");
         }
     }, [lessons.length, router]);
 
@@ -63,7 +63,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             setCourseProgress(data[0]?.progress || 0);
         } catch (error) {
             console.error("Erreur lors de la récupération de la progression du cours:", error);
-            router.push("/404");
+            // router.push("/404");
         }
     }, [router]);
 
