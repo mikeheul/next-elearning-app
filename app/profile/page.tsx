@@ -5,7 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { LessonProgress, CourseProgress } from "@/types/interfaces";
 
-import { Medal, Star, Award, CheckCircle, BookOpen, Clipboard } from 'lucide-react';
+import { Medal, Star, Award, CheckCircle, NotepadText, LibraryBigIcon } from 'lucide-react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 
 export default function ProfilePage() {
@@ -110,7 +110,7 @@ export default function ProfilePage() {
                                                 >
                                                     <div className="flex items-center space-x-4">
                                                         <div className="flex-shrink-0">
-                                                            <BookOpen strokeWidth={1} className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                                                            <NotepadText strokeWidth={1} className="h-6 w-6 text-indigo-600 dark:text-white/60" />
                                                         </div>
                                                         <div>
                                                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{lessonProgress.lesson.title}</h3>
@@ -152,7 +152,7 @@ export default function ProfilePage() {
                                                 >
                                                     <div className="flex items-center space-x-4">
                                                         <div className="flex-shrink-0">
-                                                            <Clipboard strokeWidth={1} className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                                                            <LibraryBigIcon strokeWidth={1} className="h-6 w-6 text-indigo-600 dark:text-white/60" />
                                                         </div>
                                                         <div>
                                                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{course.title}</h3>
