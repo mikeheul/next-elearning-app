@@ -45,10 +45,10 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
     // Détection de la taille de l'écran
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
+            setIsMobile(window.innerWidth < 768); // Considérer mobile si largeur < 768px
         };
 
-        handleResize(); // Initial check
+        handleResize(); // Vérification initiale
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -148,21 +148,42 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                 </div>
 
                 <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                    {(isSignedIn && isAdmin) ? (
-                        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                            <SortableContext items={course.lessons} strategy={verticalListSortingStrategy}>
-                                {course.lessons.length > 0 ? (
-                                    course.lessons.map(lesson => <SortableLesson key={lesson.id} lesson={lesson} />)
-                                ) : (
-                                    <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
-                                )}
-                            </SortableContext>
-                        </DndContext>
-                    ) : (
+                    {isMobile ? (
+                        // Si on est sur mobile, afficher les leçons sans drag-and-drop
                         course.lessons.length > 0 ? (
-                            course.lessons.map(lesson => <div key={lesson.id}><SortableLesson lesson={lesson} /></div>)
+                            course.lessons.map(lesson => (
+                                <div key={lesson.id}>
+                                    <SortableLesson lesson={lesson} />
+                                </div>
+                            ))
                         ) : (
                             <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
+                        )
+                    ) : (
+                        // Mode desktop avec drag-and-drop
+                        isSignedIn && isAdmin ? (
+                            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                                <SortableContext items={course.lessons} strategy={verticalListSortingStrategy}>
+                                    {course.lessons.length > 0 ? (
+                                        course.lessons.map(lesson => (
+                                            <SortableLesson key={lesson.id} lesson={lesson} />
+                                        ))
+                                    ) : (
+                                        <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
+                                    )}
+                                </SortableContext>
+                            </DndContext>
+                        ) : (
+                            // Si l'utilisateur n'est pas connecté ou n'est pas admin
+                            course.lessons.length > 0 ? (
+                                course.lessons.map(lesson => (
+                                    <div key={lesson.id}>
+                                        <SortableLesson lesson={lesson} />
+                                    </div>
+                                ))
+                            ) : (
+                                <p className='dark:text-white'>Aucun chapitre pour ce cours</p>
+                            )
                         )
                     )}
                 </div>
