@@ -82,7 +82,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [fetchCourseProgress]);
 
     const fetchProgressForAllLessons = useCallback(async () => {
         try {
@@ -192,8 +192,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     };
 
     useEffect(() => {
-        fetchLesson(params.lessonId);
-    }, [fetchLesson, params.lessonId]);
+        fetchLesson(initialLessonId);
+    }, [fetchLesson, initialLessonId]);
 
     useEffect(() => {
         if (user && lessons.length) {
