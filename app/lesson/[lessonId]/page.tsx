@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
 import { Lesson } from "@/types/types";
@@ -11,16 +11,20 @@ import Swal from 'sweetalert2';
 import Link from "next/link";
 
 const getProgressBarColor = (progress: number) => {
-    if (progress === 100) {
-        return 'bg-green-500';
-    } else if (progress >= 75) {
-        return 'bg-yellow-500'; 
-    } else if (progress >= 50) {
-        return 'bg-orange-500'; 
-    } else {
-        return 'bg-red-500'; 
-    }
+    if (progress >= 100) return 'bg-green-500';
+    if (progress >= 75) return 'bg-yellow-500';
+    if (progress >= 50) return 'bg-orange-500';
+    return 'bg-red-500';
 };
+
+// Fonction de debounce pour limiter la fréquence d'exécution d'une fonction
+function debounce<F extends (...args: unknown[]) => void>(func: F, wait: number) {
+    let timeout: NodeJS.Timeout;
+    return (...args: Parameters<F>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
 
 export default function LessonPage({ params }: { params: { lessonId: string } }) {
     const initialLessonId = params.lessonId; // Récupération de l'ID de la leçon à partir des paramètres de la route
@@ -35,220 +39,128 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const router = useRouter(); // Hook pour accéder à l'instance du routeur
     const { user } = useUser();
 
-    // Effet pour récupérer les données de la leçon et des leçons du cours
-    useEffect(() => {
-        async function fetchLesson(lessonId: string) {
-            try {
-                const response = await fetch(`/api/lesson/${lessonId}`); // Requête pour récupérer les détails de la leçon
-                if (!response.ok) {
-                    throw new Error("Leçon non trouvée"); // Gestion d'erreur si la leçon n'est pas trouvée
-                }
-                const data = await response.json(); // Conversion de la réponse en JSON
-                setLesson(data); // Mise à jour de l'état avec la leçon récupérée
-    
-                if (!lessons.length) { // Si aucune leçon n'est déjà chargée, récupérer les leçons du cours
-                    fetchLessons(data.courseId);
-                    fetchCourseProgress(data.courseId);
-                }
-            } catch (error) {
-                console.error("Erreur lors de la récupération de la leçon :", error);
-                router.push("/404"); // Redirection vers une page 404 en cas d'erreur
-            }
-        }
-    
-        async function fetchCourseProgress(courseId: string) {
-            try {
-                const response = await fetch(`/api/user/progress/course/${courseId}`, {
-                    method: "GET",
-                });
-                if (!response.ok) {
-                    throw new Error("Progression du cours non trouvée");
-                }
-                const data = await response.json();
-                setCourseProgress(data[0].progress || 0); // Mise à jour de la progression du cours avec la valeur récupérée
-            } catch (error) {
-                console.error("Erreur lors de la récupération de la progression du cours:", error);
-                router.push("/404"); // Redirection vers une page 404 en cas d'erreur
-            }
-        }
-
-        // Fonction pour récupérer la liste des leçons d'un cours
-        async function fetchLessons(courseId: string) {
-            try {
-                setIsLoading(true); // Démarrage du chargement des chapitres
-                const response = await fetch(`/api/course/${courseId}/lessonslist`); // Requête pour récupérer la liste des leçons
-                if (response.ok) {
-                    const lessonsData = await response.json(); // Conversion de la réponse en JSON
-                    setLessons(lessonsData); // Mise à jour de l'état avec les leçons
-                } else {
-                    console.error("Erreur lors de la récupération des leçons du cours.");
-                }
-            } catch (error) {
-                console.error("Erreur lors de la récupération des leçons :", error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-    
-        fetchLesson(initialLessonId); // Appel de la fonction pour récupérer la leçon initiale
-    }, [initialLessonId, lessons.length]);
-
-    useEffect(() => {
-        if (user && lessons.length) {
-
-            const fetchProgressForAllLessons = async () => {
-                try {
-                    const promises = lessons.map(async (lesson) => {
-                        const progressResponse = await fetch(`/api/user/progress/${lesson.id}`);
-                        if (progressResponse.ok) {
-                            const progressData = await progressResponse.json();
-                            return {
-                                lessonId: lesson.id,
-                                progress: progressData.progress || 0,
-                            };
-                        } else {
-                            return { lessonId: lesson.id, progress: 0 };
-                        }
-                    });
-    
-                    const progressResults = await Promise.all(promises);
-                    
-                    // Mise à jour des progressions et des chapitres lus
-                    const updatedReadChapters: { [key: string]: boolean } = {};
-                    const updatedChapterProgress: { [key: string]: number } = {};
-    
-                    progressResults.forEach(({ lessonId, progress }) => {
-                        updatedChapterProgress[lessonId] = progress;
-                        if (progress >= 100) {
-                            updatedReadChapters[lessonId] = true;
-                        }
-                    });
-    
-                    setChapterProgress(updatedChapterProgress); // Met à jour la progression
-                    setReadChapters(updatedReadChapters); // Marque les chapitres comme lus
-    
-                } catch (error) {
-                    console.error("Erreur lors de la récupération des progressions :", error);
-                }
-            };
-
-            fetchProgressForAllLessons();
-        }
-    }, [user, lessons]);
-
-    useEffect(() => {
-        if (lesson && readChapters[lesson.id]) {
-            setChapterProgress((prev) => ({
-                ...prev,
-                [lesson.id]: 100, // Initialiser la progression à 100% si le chapitre est lu
-            }));
-        }
-    }, [lesson, readChapters]);
-
-    // Fonction de debounce pour limiter la fréquence d'exécution d'une fonction
-    function debounce<F extends (...args: unknown[]) => void>(func: F, wait: number) {
-        let timeout: NodeJS.Timeout | undefined;
-
-        return function (...args: Parameters<F>) {
-            const later = () => {
-                if (timeout) {
-                    clearTimeout(timeout); // Nettoyage du timeout
-                }
-                func(...args); // Exécution de la fonction
-            };
-
-            if (timeout) {
-                clearTimeout(timeout); // Nettoyage du timeout précédent
-            }
-
-            timeout = setTimeout(later, wait); // Réglage du nouveau timeout
-        };
-    }
-
-    const updateProgress = async (lessonId: string, progress: number) => {
-        // Vérifiez si `lesson` n'est pas null avant de procéder
-        if (!lesson) {
-            console.log("La leçon n'est pas définie."); // Vous pouvez également gérer cela d'une autre manière, selon vos besoins
-            return; // Sortir de la fonction si la leçon est nulle
-        }
-
-        if(!user) {
-            console.log("L'utilisateur n'est pas défini."); // Vérifiez si l'utilisateur est connecté
-            return; // Sortir si l'utilisateur n'est pas connecté
-        }
-    
+    const fetchLesson = useCallback(async (lessonId: string) => {
         try {
-            const response = await fetch(`/api/lesson/${lessonId}/progress`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ lessonId, progress }), 
-            });
-    
-            if (!response.ok) {
-                throw new Error("Erreur lors de la mise à jour de la progression");
-            }
-    
-        } catch (error) {
-            console.error("Erreur lors de la mise à jour de la progression :", error);
-        }
-    };
+            const response = await fetch(`/api/lesson/${lessonId}`);
+            if (!response.ok) throw new Error("Leçon non trouvée");
+            const data = await response.json();
+            setLesson(data);
 
-    // Fonction pour mettre à jour la progression en fonction du scroll de la page
-    const handleScroll = debounce(() => {
-        if (lesson) {
-            const { scrollY, innerHeight } = window;
-            const totalHeight = document.documentElement.scrollHeight;
-            const progress = (scrollY / (totalHeight - innerHeight)) * 101; // Calcul de la progression de défilement
-    
-            const currentLessonId = lesson.id;
-    
-            if (currentLessonId) {
+            if (!lessons.length) {
+                await Promise.all([fetchLessons(data.courseId), fetchCourseProgress(data.courseId)]);
+            }
+        } catch (error) {
+            console.error("Erreur lors de la récupération de la leçon :", error);
+            router.push("/404");
+        }
+    }, [lessons.length, router]);
+
+    const fetchCourseProgress = useCallback(async (courseId: string) => {
+        try {
+            const response = await fetch(`/api/user/progress/course/${courseId}`);
+            if (!response.ok) throw new Error("Progression du cours non trouvée");
+            const data = await response.json();
+            setCourseProgress(data[0]?.progress || 0);
+        } catch (error) {
+            console.error("Erreur lors de la récupération de la progression du cours:", error);
+            router.push("/404");
+        }
+    }, [router]);
+
+    const fetchLessons = useCallback(async (courseId: string) => {
+        try {
+            setIsLoading(true);
+            const response = await fetch(`/api/course/${courseId}/lessonslist`);
+            if (response.ok) {
+                const lessonsData = await response.json();
+                setLessons(lessonsData);
+            } else {
+                console.error("Erreur lors de la récupération des leçons.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de la récupération des leçons :", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+
+    const fetchProgressForAllLessons = useCallback(async () => {
+        try {
+            const progressResults = await Promise.all(
+                lessons.map(async (lesson) => {
+                    const progressResponse = await fetch(`/api/user/progress/${lesson.id}`);
+                    if (progressResponse.ok) {
+                        const progressData = await progressResponse.json();
+                        return { lessonId: lesson.id, progress: progressData.progress || 0 };
+                    }
+                    return { lessonId: lesson.id, progress: 0 };
+                })
+            );
+
+            const updatedReadChapters: { [key: string]: boolean } = {};
+            const updatedChapterProgress: { [key: string]: number } = {};
+
+            progressResults.forEach(({ lessonId, progress }) => {
+                updatedChapterProgress[lessonId] = progress;
+                if (progress >= 100) updatedReadChapters[lessonId] = true;
+            });
+
+            setChapterProgress(updatedChapterProgress);
+            setReadChapters(updatedReadChapters);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des progressions :", error);
+        }
+    }, [lessons]);
+
+    const handleScroll = useCallback(
+        debounce(() => {
+            if (lesson) {
+                const { scrollY, innerHeight } = window;
+                const totalHeight = document.documentElement.scrollHeight;
+                const progress = (scrollY / (totalHeight - innerHeight)) * 101;
+
+                const currentLessonId = lesson.id;
+
                 setChapterProgress((prev) => {
-                    const previousProgress = prev[currentLessonId] || 0; // Récupérer la progression précédente
-                    const newProgress = Math.max(previousProgress, progress); // Mise à jour de la progression
-    
-                    // Marquer le chapitre comme lu seulement si le scroll atteint 100%
+                    const previousProgress = prev[currentLessonId] || 0;
+                    const newProgress = Math.max(previousProgress, progress);
+
                     if (newProgress >= 100 && !readChapters[currentLessonId]) {
                         setReadChapters((prev) => ({
                             ...prev,
-                            [currentLessonId]: true, // Marquer comme lu
+                            [currentLessonId]: true,
                         }));
                     }
 
-                    // Appeler la fonction pour mettre à jour la progression sur le serveur
                     updateProgress(currentLessonId, newProgress);
-    
+
                     return {
                         ...prev,
-                        [currentLessonId]: newProgress, // Mettre à jour la progression maximale
+                        [currentLessonId]: newProgress,
                     };
                 });
             }
+        }, 200),
+        [lesson, readChapters]
+    );
+
+    const updateProgress = useCallback(async (lessonId: string, progress: number) => {
+        if (!lesson || !user) return;
+
+        try {
+            const response = await fetch(`/api/lesson/${lessonId}/progress`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lessonId, progress }),
+            });
+
+            if (!response.ok) throw new Error("Erreur lors de la mise à jour de la progression");
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour de la progression :", error);
         }
-    }, 200);    
+    }, [lesson, user]);
 
-    // Effet pour attacher l'événement de scroll à la fenêtre
-    useEffect(() => {
-        window.addEventListener("scroll", handleScroll); // Écouteur d'événement pour le défilement
-        return () => {
-            window.removeEventListener("scroll", handleScroll); // Nettoyage de l'écouteur lors du démontage
-        };
-    }, [handleScroll]);
-
-    useEffect(() => {
-        if (lesson && readChapters[lesson.id]) {
-            setChapterProgress((prev) => ({
-                ...prev,
-                [lesson.id]: 100, // Initialiser la progression à 100% si le chapitre a été lu
-            }));
-        }
-    }, [lesson, readChapters]);
-
-    // Fonction pour gérer le clic sur une leçon
     const handleLessonClick = async (lessonId: string) => {
-
         if (!user) {
             Swal.fire({
                 title: 'Connectez-vous',
@@ -256,25 +168,19 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                 icon: 'warning',
                 confirmButtonText: 'OK'
             });
-            return; 
+            return;
         }
 
         try {
-            const response = await fetch(`/api/lesson/${lessonId}`); // Requête pour récupérer les détails de la leçon sélectionnée
+            const response = await fetch(`/api/lesson/${lessonId}`);
             if (response.ok) {
-                const data = await response.json(); // Conversion de la réponse en JSON
-                setLesson(data); // Mise à jour de l'état avec la leçon récupérée
-
-                window.scrollTo({
-                    top: 0, // Position tout en haut
-                    behavior: "smooth", // Optionnel : défilement en douceur
-                });
-
-                // Vérifier si le chapitre a déjà été lu et initialiser la progression
+                const data = await response.json();
+                setLesson(data);
+                window.scrollTo({ top: 0, behavior: "smooth" });
                 if (readChapters[lessonId]) {
                     setChapterProgress((prev) => ({
                         ...prev,
-                        [lessonId]: 100, // Initialiser la progression à 100%
+                        [lessonId]: 100,
                     }));
                 }
             } else {
@@ -284,6 +190,21 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
             console.error("Erreur lors du chargement de la nouvelle leçon :", error);
         }
     };
+
+    useEffect(() => {
+        fetchLesson(params.lessonId);
+    }, [fetchLesson, params.lessonId]);
+
+    useEffect(() => {
+        if (user && lessons.length) {
+            fetchProgressForAllLessons();
+        }
+    }, [user, lessons, fetchProgressForAllLessons]);
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [handleScroll]);
 
     // Affichage d'un message de chargement si la leçon n'est pas encore disponible
     if (!lesson) {
@@ -377,7 +298,7 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                             ></div>
                         </div>
                         <p className="text-right text-sm text-gray-600 dark:text-gray-400">
-                            {courseProgress.toFixed(0)}% {/* Pourcentage de progression du cours */}
+                            {Math.min(courseProgress, 100).toFixed(0)}% {/* Pourcentage de progression du cours */}
                         </p>
                     </div>
                 )}
