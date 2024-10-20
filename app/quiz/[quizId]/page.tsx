@@ -1,6 +1,6 @@
 "use client";
 
-import { Question, Quiz } from '@/types/types';
+import { Question, Quiz } from '@/types/interfaces';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 

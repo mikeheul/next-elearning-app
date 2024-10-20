@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { Question } from '@/types/types';
+import { Question } from '@/types/interfaces';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {

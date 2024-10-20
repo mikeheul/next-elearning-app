@@ -1,6 +1,6 @@
 "use client";
 
-import { Course } from "@/types/types";
+import { Course } from "@/types/interfaces";
 import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon, ClipboardListIcon } from "lucide-react";
 
 interface CourseCardProps {

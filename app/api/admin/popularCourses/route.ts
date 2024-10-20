@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'; 
 import { db } from "@/lib/db"; 
-import { CourseWithLessons } from '@/types/types'; 
+import { CourseWithLessons } from '@/types/interfaces'; 
 
 export async function GET() {
     try {

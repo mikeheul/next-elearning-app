@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
-import { LessonProgress } from "@/types/types";
+import { LessonProgress } from "@/types/interfaces";
 import { LibraryBigIcon, Eye } from "lucide-react";
 
 const UserProgressions = () => {

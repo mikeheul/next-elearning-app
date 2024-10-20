@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
-import { Lesson } from "@/types/types";
+import { Lesson } from "@/types/interfaces";
 import { PanelsTopLeftIcon, CheckIcon, Loader2Icon } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 

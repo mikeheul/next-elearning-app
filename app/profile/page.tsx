@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { LessonProgress, CourseProgress } from "@/types/types";
+import { LessonProgress, CourseProgress } from "@/types/interfaces";
 
 import { Medal, Star, Award, CheckCircle, BookOpen, Clipboard } from 'lucide-react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'

@@ -1,6 +1,6 @@
 "use client";
 
-import { Lesson } from '@/types/types';
+import { Lesson } from '@/types/interfaces';
 import { useUser } from '@clerk/nextjs';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';

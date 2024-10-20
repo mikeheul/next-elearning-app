@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Course } from '@/types/types';
+import { Course } from '@/types/interfaces';
 import {
     DndContext,
     closestCenter,

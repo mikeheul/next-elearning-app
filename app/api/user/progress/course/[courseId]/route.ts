@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { getAuth } from '@clerk/nextjs/server';
-import { CourseWithLessons } from '@/types/types';
+import { CourseWithLessons } from '@/types/interfaces';
 
 export async function GET(request: NextRequest, { params }: { params: { courseId: string } }) {
     const { userId } = getAuth(request);

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Course } from '@/types/types';
+import { Course } from '@/types/interfaces';
 import CourseCard from './_components/CourseCard';
 import Pagination from './[courseId]/_components/Pagination';
 import { useUser } from '@clerk/nextjs';
