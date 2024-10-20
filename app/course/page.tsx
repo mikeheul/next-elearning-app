@@ -13,7 +13,7 @@ export default function CourseList() {
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [coursesPerPage] = useState(6);
+    const [coursesPerPage] = useState(9);
     const [searchTerm, setSearchTerm] = useState('');
     const [courseProgressions, setCourseProgressions] = useState<{ id: string; progress: number }[]>([]);
     
