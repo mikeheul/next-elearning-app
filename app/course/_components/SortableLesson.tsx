@@ -6,6 +6,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { EditIcon, GripVerticalIcon, Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface SortableLessonProps {
     lesson: Lesson;
@@ -15,6 +16,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
 
     const router = useRouter();
     const { isSignedIn, user } = useUser();
+    const [isMobile, setIsMobile] = useState(false);
 
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
         id: lesson.id,
@@ -29,6 +31,16 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
     if (user) {
         isAdmin = user.publicMetadata?.role === 'admin'; // Optional chaining to prevent errors
     }
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768); // Considérer mobile si largeur < 768px
+        };
+
+        handleResize(); // Vérification initiale
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     return (
         <div
@@ -71,7 +83,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
                         </button>
                     </div>
 
-                    { isAdmin && (
+                    { isAdmin && !isMobile && (
                     <div className="cursor-grab">
                         <GripVerticalIcon className="text-gray-600 dark:text-gray-600" size={24} />
                     </div>
