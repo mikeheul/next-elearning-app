@@ -54,7 +54,7 @@ const CreateCourse: React.FC = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Description"
                             className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-                            rows={4} // Ajuste le nombre de lignes visibles pour le textarea
+                            rows={10} // Ajuste le nombre de lignes visibles pour le textarea
                         />
                     </div>
                     <button
