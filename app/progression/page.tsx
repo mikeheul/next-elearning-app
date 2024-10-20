@@ -137,10 +137,16 @@ const UserProgressions = () => {
                 <div className="mt-4 overflow-x-auto">
                     {Object.keys(progressionsByCourse).map((courseTitle) => (
                         <div key={courseTitle} className="mb-8 border dark:border-slate-600 p-6 rounded-lg">
-                            <Link className="flex gap-2 items-center" href={`/course/${progressionsByCourse[courseTitle].inProgress[0]?.lesson.course.id}`}>
-                                <LibraryBigIcon className="dark:text-white" size={20} />
-                                <span className="font-bold text-2xl dark:text-white">{courseTitle}</span>
-                            </Link>
+                            {(progressionsByCourse[courseTitle].inProgress.length > 0 || progressionsByCourse[courseTitle].completed.length > 0) && (
+                                <Link className="flex gap-2 items-center" 
+                                    href={`/course/${
+                                        progressionsByCourse[courseTitle].inProgress[0]?.lesson.course.id ||
+                                        progressionsByCourse[courseTitle].completed[0]?.lesson.course.id
+                                    }`}>
+                                    <LibraryBigIcon className="dark:text-white" size={20} />
+                                    <span className="font-bold text-2xl dark:text-white">{courseTitle}</span>
+                                </Link>
+                            )}
 
                             {/* Chapitres en cours pour chaque cours */}
                             {progressionsByCourse[courseTitle].inProgress.length > 0 && (
