@@ -50,8 +50,8 @@ export async function GET(request: NextRequest, { params }: { params: { courseId
         });
 
         const filteredCourseProgressions = courseProgressions.filter(course => course.progress >= 0);
-        console.log(filteredCourseProgressions)
         return NextResponse.json(filteredCourseProgressions);
+        
     } catch (error) {
         console.error('Erreur lors de la récupération des progressions :', error);
         return NextResponse.json({ message: 'Erreur lors de la récupération des progressions' }, { status: 500 });

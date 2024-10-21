@@ -6,9 +6,7 @@ export async function PUT(req: NextRequest, { params }: { params: { courseId: st
     const { courseId } = params;
 
     try {
-        const { userId, progress } = await req.json(); // Assurez-vous de récupérer userId aussi
-
-        console.log("infos ---------- : " + userId + " " + progress)
+        const { userId, progress } = await req.json();
 
         // Validation de la progression
         if (typeof progress !== 'number' || progress < 0 || progress > 100) {
@@ -18,18 +16,18 @@ export async function PUT(req: NextRequest, { params }: { params: { courseId: st
         // Upsert de la progression du cours
         const updatedCourseProgress = await db.courseProgress.upsert({
             where: {
-                userId_courseId: { // Utilisez la clé unique combinée
-                    userId: userId, // Assurez-vous que userId est présent dans la requête
+                userId_courseId: { 
+                    userId: userId, 
                     courseId: courseId,
                 },
             },
             update: {
-                progress, // Mettez à jour la progression existante
+                progress, 
             },
             create: {
-                userId, // Créez une nouvelle entrée si elle n'existe pas
-                courseId, // Assurez-vous que courseId est fourni
-                progress, // Enregistrez la progression
+                userId, 
+                courseId, 
+                progress, 
             },
         });
 
