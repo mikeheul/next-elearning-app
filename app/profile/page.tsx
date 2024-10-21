@@ -89,10 +89,10 @@ export default function ProfilePage() {
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Progression des cours</h2>
                         <TabGroup>
                             <TabList className="flex space-x-1 rounded-xl p-1 mb-5">
-                                <Tab className={({ selected }) => `${selected ? 'focus:outline-none bg-slate-200 text-slate-900 rounded-lg' : 'text-gray-500 hover:bg-slate-600 hover:text-slate-200 rounded-lg'} py-2 px-4`}>
+                                <Tab className={({ selected }) => `${selected ? 'focus:outline-none bg-slate-200 text-slate-900 rounded-lg' : 'text-gray-200 hover:bg-slate-600 hover:text-slate-200 rounded-lg'} py-2 px-4`}>
                                     Progression des Chapitres
                                 </Tab>
-                                <Tab className={({ selected }) => `${selected ? 'focus:outline-none bg-slate-200 text-slate-900 rounded-lg' : 'text-gray-500 hover:bg-slate-600 hover:text-slate-200 rounded-lg'} py-2 px-4`}>
+                                <Tab className={({ selected }) => `${selected ? 'focus:outline-none bg-slate-200 text-slate-900 rounded-lg' : 'text-gray-200 hover:bg-slate-600 hover:text-slate-200 rounded-lg'} py-2 px-4`}>
                                     Progression des Cours
                                 </Tab>
                             </TabList>
@@ -129,7 +129,7 @@ export default function ProfilePage() {
                                                                 style={{ width: `${Math.min(lessonProgress.progress, 100)}%` }}
                                                             />
                                                         </div>
-                                                        <p className="text-right text-xs mt-1 text-gray-500 dark:text-gray-400">
+                                                        <p className="text-right text-xs mt-1 text-gray-600 dark:text-gray-200">
                                                             {Math.min(lessonProgress.progress, 100).toFixed(0)}%
                                                         </p>
                                                     </div>
