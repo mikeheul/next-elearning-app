@@ -171,8 +171,8 @@ export default function AdminPage() {
                                         <Image 
                                             src={user.imageUrl} 
                                             alt={user.id} 
-                                            width={50} 
-                                            height={50} 
+                                            width={150} 
+                                            height={150} 
                                             className="w-[50px] h-[50px] rounded-full object-cover" 
                                         />
                                     </td>

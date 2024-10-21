@@ -62,13 +62,13 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
 
             {(isSignedIn && isAdmin) && (
                 <div className="flex items-center space-x-4">
-                    <div className='bg-slate-200 dark:bg-slate-900 flex gap-2 absolute top-0 right-0 p-3 rounded-bl-md rounded-tr-md'>
+                    <div className='bg-slate-200 dark:bg-slate-900 flex absolute top-0 right-0 rounded-bl-md rounded-tr-md'>
                         <button
                             onClick={() => {
                                 router.push(`/admin/lesson/delete/${lesson.id}`);
                             }}
                             // className="flex items-center bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg shadow-md"
-                            className="flex items-center text-red-500"
+                            className="flex items-center text-red-500 hover:bg-slate-700/80 p-2"
                         >
                             <Trash2Icon className="" size={18} />
                         </button>
@@ -77,7 +77,7 @@ const SortableLesson: React.FC<SortableLessonProps> = ({ lesson }) => {
                                 router.push(`/admin/lesson/edit/${lesson.id}`);
                             }}
                             // className="flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg shadow-md"
-                            className="flex items-center text-slate-900 dark:text-slate-200"
+                            className="flex items-center text-slate-900 dark:text-slate-200 hover:bg-slate-700/80 p-2"
                         >
                             <EditIcon className="" size={18} />
                         </button>
