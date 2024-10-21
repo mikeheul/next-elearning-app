@@ -11,6 +11,20 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import Image from "next/image";
+
+interface User {
+    id: string;
+    emailAddresses: { emailAddress: string }[];
+    firstName: string | null;
+    lastName: string | null;
+    imageUrl: string | '';
+}
+
+interface ApiResponse {
+    data: User[]; 
+    totalCount: number; 
+}
 
 // Import ChartJS modules
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -28,6 +42,31 @@ export default function AdminPage() {
     const [courseData, setCourseData] = useState<CoursePopularity[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const [users, setUsers] = useState<User[]>([]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            setLoading(true);
+            setError('');
+
+            try {
+                const response = await fetch('/api/users');
+                if (!response.ok) throw new Error('Failed to fetch users');
+                
+                const data: ApiResponse = await response.json();
+                console.log(data);
+                setUsers(data.data);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                setError('Failed to load users');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []);
 
     // Fetch the 5 most popular courses
     useEffect(() => {
@@ -101,6 +140,59 @@ export default function AdminPage() {
                         </div>
                     )}
                 </div>
+            </div>
+
+            <div className="px-4 overflow-x-auto"> 
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    Utilisateurs
+                </h2>
+                {users.length > 0 ? (
+                    <table className="my-8 min-w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+                        <thead className="bg-gray-200 dark:bg-gray-700">
+                            <tr>
+                                {/* Avatar column hidden on screens smaller than 'md' */}
+                                <th className="px-6 py-3 text-gray-600 dark:text-gray-300 font-semibold text-left text-sm uppercase hidden md:table-cell">
+                                    Avatar
+                                </th>
+                                <th className="px-6 py-3 text-gray-600 dark:text-gray-300 font-semibold text-left text-sm uppercase">
+                                    Email
+                                </th>
+                                {/* Name column hidden on screens smaller than 'md' */}
+                                <th className="px-6 py-3 text-gray-600 dark:text-gray-300 font-semibold text-left text-sm uppercase hidden md:table-cell">
+                                    Name
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users.map((user) => (
+                                <tr key={user.id} className="hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    {/* Avatar column hidden on smaller screens */}
+                                    <td className="border-b border-gray-200 dark:border-gray-600 px-4 py-4 hidden md:table-cell">
+                                        <Image 
+                                            src={user.imageUrl} 
+                                            alt={user.id} 
+                                            width={50} 
+                                            height={50} 
+                                            className="w-[50px] h-[50px] rounded-full object-cover" 
+                                        />
+                                    </td>
+                                    <td className="border-b border-gray-200 dark:border-gray-600 px-4 py-4">
+                                        {/* Truncate the email and use tooltip to show full email */}
+                                        <div className="line-clamp-1 truncate dark:text-white" title={user.emailAddresses[0]?.emailAddress || 'N/A'}>
+                                            {user.emailAddresses[0]?.emailAddress || 'N/A'}
+                                        </div>
+                                    </td>
+                                    {/* Name column hidden on smaller screens */}
+                                    <td className="border-b border-gray-200 dark:text-white dark:border-gray-600 px-4 py-4 hidden md:table-cell">
+                                        {user.firstName} {user.lastName}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                ) : (
+                    <p>No users found.</p>
+                )}
             </div>
         </div>
     );
