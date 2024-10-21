@@ -110,11 +110,11 @@ export default function ProfilePage() {
                                                 >
                                                     <div className="flex items-center space-x-4">
                                                         <div className="flex-shrink-0">
-                                                            <NotepadText strokeWidth={1} className="h-6 w-6 text-indigo-600 dark:text-white/60" />
+                                                            <NotepadText strokeWidth={1} className="h-6 w-6 text-indigo-600 dark:text-white/80" />
                                                         </div>
                                                         <div>
                                                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{lessonProgress.lesson.title}</h3>
-                                                            <p className="text-sm text-gray-500 dark:text-gray-400">{lessonProgress.lesson.course.title}</p>
+                                                            <p className="text-sm text-gray-500 dark:text-gray-200">{lessonProgress.lesson.course.title}</p>
                                                         </div>
                                                     </div>
                                                     <div className="w-full md:w-2/5">
@@ -240,7 +240,7 @@ export default function ProfilePage() {
                                             </div>
                                             <div>
                                                 <span className="text-gray-800 dark:text-gray-200 font-medium">{activity.lesson.title}</span>
-                                                <p className="text-gray-500 dark:text-gray-400 text-sm">Chapitre complété</p>
+                                                <p className="text-gray-500 dark:text-green-300 text-sm">Chapitre complété</p>
                                             </div>
                                         </div>
                                         <div className="text-right">
