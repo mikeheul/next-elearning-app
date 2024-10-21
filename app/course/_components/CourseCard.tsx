@@ -9,15 +9,7 @@ interface CourseCardProps {
     progress?: number;
 }
 
-const getBadgeColor = (count: number) => {
-    if (count === 0) return 'bg-gray-500';
-    if (count < 4) return 'bg-yellow-600';
-    if (count < 5) return 'bg-green-700';
-    return 'bg-blue-500';
-};
-
 const CourseCard = ({ course, progress }: CourseCardProps) => {
-    const badgeColor = getBadgeColor(course.lessons.length);
     
     const formattedDate = new Date(course.updatedAt).toLocaleDateString('fr-FR', {
         year: 'numeric',
@@ -40,7 +32,7 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                             <div className="flex items-center">
                                 {/* Affichage de l'icône d'achèvement si la progression est de 100% */}
                                 {/* <CheckCircleIcon className="h-5 w-5 text-green-500" aria-hidden="true" /> */}
-                                <span className="bg-green-300 text-green-600 text-xs font-semibold px-3 py-1 rounded-full">
+                                <span className="bg-green-300 text-green-800 font-bold text-xs px-3 py-1 rounded-full">
                                     Terminé
                                 </span>
                             </div>
@@ -62,7 +54,7 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                     </p>
                     
                     <div className="flex gap-4 my-5">
-                        <span className={`inline-flex gap-1 items-center justify-center px-3 py-1 text-sm font-medium text-white ${badgeColor} rounded-full`}>
+                        <span className={`inline-flex gap-1 items-center justify-center px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full`}>
                             <BookOpenIcon className="mr-1 relative top-[1px]" size={16} /> {/* Ajuste la position de l'icône */}
                             <span className="align-middle">
                                 {course.lessons.length} chapitre{course.lessons.length > 1 ? 's' : ''}
