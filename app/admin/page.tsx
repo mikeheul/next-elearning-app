@@ -191,7 +191,7 @@ export default function AdminPage() {
                         </tbody>
                     </table>
                 ) : (
-                    <p>No users found.</p>
+                    <p className="dark:text-white">Aucun utilisateur</p>
                 )}
             </div>
         </div>
