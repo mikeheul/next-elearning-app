@@ -19,6 +19,8 @@
     "@dnd-kit/sortable": "^8.0.0",
     "@headlessui/react": "^2.1.10",
     "@prisma/client": "^5.20.0",
+    "@sanity/image-url": "^1.0.2",
+    "@sanity/vision": "^3.61.0",
     "@tailwindcss/typography": "^0.5.15",
     "archiver": "^7.0.1",
     "chart.js": "^4.4.5",
@@ -29,6 +31,7 @@
     "marked": "^14.1.2",
     "next": "14.2.15",
     "next-cloudinary": "^6.15.0",
+    "next-sanity": "^9.5.5",
     "prismjs": "^1.29.0",
     "react": "^18",
     "react-beautiful-dnd": "^13.1.1",
@@ -42,6 +45,8 @@
     "rehype-raw": "^7.0.0",
     "rehype-react": "^8.0.0",
     "remark-gfm": "^4.0.0",
+    "sanity": "^3.61.0",
+    "styled-components": "^6.1.13",
     "sweetalert2": "^11.14.3"
   },
   "devDependencies": {
