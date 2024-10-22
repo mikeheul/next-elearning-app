@@ -32,7 +32,7 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                 <div>
                     <div className="flex absolute top-0 left-0">
                         {daysDifference < 4 && (
-                            <span className="bg-rose-600 text-white text-xs py-1 px-3 rounded-tl-lg">
+                            <span className="bg-red-400 text-white text-xs py-1 px-3 rounded-tl-lg">
                                 Nouveau
                             </span>
                         )}
