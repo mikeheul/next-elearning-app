@@ -14,6 +14,7 @@ export interface Course {
     description: string;
     lessons: Lesson[];
     quizzes: Quiz[];
+    createdAt: string;
     updatedAt: string;
     isPublic: boolean;
 }

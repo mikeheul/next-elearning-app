@@ -17,6 +17,10 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
         day: 'numeric',
     });
 
+    const creationDate = new Date(course.createdAt);
+    const currentDate = new Date();
+    const daysDifference = Math.floor((currentDate.getTime() - creationDate.getTime()) / (1000 * 3600 * 24));
+
     return (
         <Link
             href={`/course/${course.id}`} // Lien pour accéder au cours
@@ -26,7 +30,13 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                 className="relative flex flex-col h-full justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800 hover:dark:bg-slate-700"
             >
                 <div>
-                    <h2 className="flex gap-3 text-2xl font-semibold text-gray-800 dark:text-white">
+                    {daysDifference < 4 && (
+                        <span className="absolute top-0 left-0 bg-rose-600 text-white text-xs py-1 px-2 rounded-tl-lg">
+                            Nouveau
+                        </span>
+                    )}
+
+                    <h2 className="flex gap-3 text-2xl font-semibold text-gray-800 dark:text-white mt-5">
                         {/* Affichage de la progression uniquement si l'utilisateur est connecté */}
                         {progress !== undefined && progress >= 100 && (
                             <div className="flex items-center">
