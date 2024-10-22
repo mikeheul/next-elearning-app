@@ -64,7 +64,6 @@ export interface CourseWithLessons {
     title: string;
     description: string;
     updatedAt: Date;
-    category: Category;
     lessons: {
         id: string;
         title: string;
