@@ -114,20 +114,31 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
     const isAdmin = user?.publicMetadata?.role === 'admin';
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8">
+        <div className="min-h-screen bg-slate-200 from-slate-300 to-slate-200 dark:from-slate-800 dark:to-slate-900 dark:bg-gray-900 py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-8">{course.title}</h1>
 
-                <div className="flex flex-col gap-3 md:flex-row my-8">
-                    <button onClick={handleDownload} className="flex justify-center items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                        <DownloadIcon size={20} />
-                    </button>
-                    <button onClick={goToFirstLesson} className="bg-emerald-700 text-white px-4 py-2 rounded-lg hover:bg-emerald-800 transition-colors">
-                        Accéder au cours
-                    </button>
+                <div className="relative bg-gradient-to-r dark:text-white p-10 mb-5">
+                    <div className="container mx-auto">
+                        <h1 className="text-5xl font-extrabold leading-tight mb-4">{course.title}</h1>
+                        <p className="text-lg md:text-xl mb-8">{course.description}</p>
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <button
+                                onClick={handleDownload}
+                                className="flex justify-center items-center bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg"
+                            >
+                                <DownloadIcon size={20} className="mr-2" /> Télécharger
+                            </button>
+                            <button
+                                onClick={goToFirstLesson}
+                                className="bg-emerald-700 text-white px-6 py-3 rounded-lg hover:bg-emerald-800 transition-colors shadow-lg"
+                            >
+                                Commencer le cours
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <p className="text-gray-700 dark:text-gray-300 text-lg mb-8">{course.description}</p>
+                {/* <p className="text-gray-700 dark:text-gray-300 text-lg mb-8">{course.description}</p> */}
 
                 {isSignedIn && isAdmin && (
                     <div className="flex gap-2 mb-8">
