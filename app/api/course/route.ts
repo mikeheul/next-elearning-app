@@ -52,7 +52,8 @@ export async function GET() {
             },
             include: {
                 lessons: true,
-                quizzes: true
+                quizzes: true,
+                category: true,
             },
         });
 

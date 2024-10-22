@@ -1,7 +1,10 @@
 model Course {
     id                  String       @id @default(auto()) @map("_id") @db.ObjectId  
     title               String                               
-    description         String                               
+    description         String      
+
+    categoryId          String?       @db.ObjectId
+    category            Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
     lessons             Lesson[]
     quizzes             Quiz[]

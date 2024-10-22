@@ -30,11 +30,19 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                 className="relative flex flex-col h-full justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800 hover:dark:bg-slate-700"
             >
                 <div>
-                    {daysDifference < 4 && (
-                        <span className="absolute top-0 left-0 bg-rose-600 text-white text-xs py-1 px-2 rounded-tl-lg">
-                            Nouveau
-                        </span>
-                    )}
+                    <div className="flex absolute top-0 left-0">
+                        {daysDifference < 4 && (
+                            <span className="bg-rose-600 text-white text-xs py-1 px-2 rounded-tl-lg">
+                                Nouveau
+                            </span>
+                        )}
+
+                        <div className="flex items-center">
+                            <span className={`bg-blue-100 text-blue-800 font-semibold text-xs py-1 px-2 ${daysDifference < 4 ? 'rounded-none' : 'rounded-tl-lg'}`}>
+                                {course.category.name}
+                            </span>
+                        </div>
+                    </div>
 
                     <h2 className="flex gap-3 text-2xl font-semibold text-gray-800 dark:text-white mt-5">
                         {/* Affichage de la progression uniquement si l'utilisateur est connecté */}
@@ -50,11 +58,12 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                         {course.title}
                     </h2>
 
+
                     <div className="absolute right-4 top-4">
                         {course.isPublic ? (
-                            <UnlockIcon className="text-green-500" size={20} /> // Icône de cours public
+                            <UnlockIcon className="text-green-500" size={20} /> 
                         ) : (
-                            <LockIcon className="text-red-500" size={20} /> // Icône de cours privé
+                            <LockIcon className="text-red-500" size={20} />
                         )}
                     </div>
 

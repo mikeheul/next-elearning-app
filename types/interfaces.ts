@@ -8,10 +8,17 @@ export interface Lesson {
     lessonprogresses: LessonProgress[]
 }
 
+export interface Category {
+    id: string;       
+    name: string;
+    courses: Course[];
+}
+
 export interface Course {
     id: string;
     title: string;
     description: string;
+    category: Category;
     lessons: Lesson[];
     quizzes: Quiz[];
     createdAt: string;
@@ -57,6 +64,7 @@ export interface CourseWithLessons {
     title: string;
     description: string;
     updatedAt: Date;
+    category: Category;
     lessons: {
         id: string;
         title: string;
