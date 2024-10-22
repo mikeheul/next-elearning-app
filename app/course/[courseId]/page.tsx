@@ -117,7 +117,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
         <div className="min-h-screen bg-slate-200 from-slate-300 to-slate-200 dark:from-slate-800 dark:to-slate-900 dark:bg-gray-900 py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                <div className="relative bg-gradient-to-r dark:text-white p-10 mb-5">
+                <div className="relative bg-gradient-to-r dark:text-white p-10 mb-5 rounded-lg">
                     <div className="container mx-auto">
                         <h1 className="text-5xl font-extrabold leading-tight mb-4">{course.title}</h1>
                         <p className="text-lg md:text-xl mb-8">{course.description}</p>
