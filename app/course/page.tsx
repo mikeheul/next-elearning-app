@@ -8,6 +8,8 @@ import Pagination from './[courseId]/_components/Pagination';
 import { useUser } from '@clerk/nextjs';
 import { Tab } from '@headlessui/react';
 
+import { Clock, Play, CheckCircle } from 'lucide-react'; // Importez les icônes nécessaires
+
 export const dynamic = 'force-dynamic';
 
 export default function CourseList() {
@@ -177,18 +179,21 @@ export default function CourseList() {
                             `py-2 px-4 cursor-pointer focus:outline-none 
                             ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
                         }>
+                            <Clock className="inline-block mr-2" />
                             En cours
                         </Tab>
                         <Tab className={({ selected }) => 
                             `py-2 px-4 cursor-pointer focus:outline-none
                             ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
                         }>
+                            <Play className="inline-block mr-2" />
                             Pas commencés
                         </Tab>
                         <Tab className={({ selected }) => 
                             `py-2 px-4 cursor-pointer focus:outline-none
                             ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
                         }>
+                            <CheckCircle className="inline-block mr-2" />
                             Terminés
                         </Tab>
                     </Tab.List>
