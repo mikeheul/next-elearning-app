@@ -117,7 +117,7 @@ export default function AdminPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-4">
             <div className="py-8 px-4">
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
                     Tableau de bord
@@ -142,54 +142,47 @@ export default function AdminPage() {
                 </div>
             </div>
 
-            <div className="px-4 overflow-x-auto"> 
+            <div className="px-4">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                     Utilisateurs
                 </h2>
                 {users.length > 0 ? (
-                    <table className="my-8 min-w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
-                        <thead className="bg-gray-200 dark:bg-gray-700">
-                            <tr>
-                                {/* Avatar column hidden on screens smaller than 'md' */}
-                                <th className="px-6 py-3 text-gray-600 dark:text-gray-300 font-semibold text-left text-sm uppercase hidden md:table-cell">
-                                    Avatar
-                                </th>
-                                <th className="px-6 py-3 text-gray-600 dark:text-gray-300 font-semibold text-left text-sm uppercase">
-                                    Email
-                                </th>
-                                {/* Name column hidden on screens smaller than 'md' */}
-                                <th className="px-6 py-3 text-gray-600 dark:text-gray-300 font-semibold text-left text-sm uppercase hidden md:table-cell">
-                                    Name
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {users.map((user) => (
-                                <tr key={user.id} className="hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    {/* Avatar column hidden on smaller screens */}
-                                    <td className="border-b border-gray-200 dark:border-gray-600 px-4 py-4 hidden md:table-cell">
-                                        <Image 
-                                            src={user.imageUrl} 
-                                            alt={user.id} 
-                                            width={150} 
-                                            height={150} 
-                                            className="w-[50px] h-[50px] rounded-full object-cover" 
-                                        />
-                                    </td>
-                                    <td className="border-b border-gray-200 dark:border-gray-600 px-4 py-4">
-                                        {/* Truncate the email and use tooltip to show full email */}
-                                        <div className="line-clamp-1 truncate dark:text-white" title={user.emailAddresses[0]?.emailAddress || 'N/A'}>
-                                            {user.emailAddresses[0]?.emailAddress || 'N/A'}
-                                        </div>
-                                    </td>
-                                    {/* Name column hidden on smaller screens */}
-                                    <td className="border-b border-gray-200 dark:text-white dark:border-gray-600 px-4 py-4 hidden md:table-cell">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {users.map((user) => (
+                            <div
+                                key={user.id}
+                                className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300"
+                            >
+                                {/* Avatar */}
+                                <div className="flex justify-center mb-4">
+                                    <Image
+                                        src={user.imageUrl}
+                                        alt={user.id}
+                                        width={100}
+                                        height={100}
+                                        className="w-[100px] h-[100px] rounded-full object-cover"
+                                    />
+                                </div>
+
+                                {/* User Email */}
+                                <div className="text-center">
+                                    <p
+                                        className="text-gray-700 dark:text-white text-sm truncate"
+                                        title={user.emailAddresses[0]?.emailAddress || 'N/A'}
+                                    >
+                                        {user.emailAddresses[0]?.emailAddress || 'N/A'}
+                                    </p>
+                                </div>
+
+                                {/* User Name */}
+                                <div className="text-center mt-2">
+                                    <p className="text-gray-900 dark:text-white font-semibold">
                                         {user.firstName} {user.lastName}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 ) : (
                     <p className="dark:text-white">Aucun utilisateur</p>
                 )}
