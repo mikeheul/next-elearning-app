@@ -180,21 +180,21 @@ export default function CourseList() {
                             ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
                         }>
                             <Clock className="inline-block mr-2" />
-                            En cours
+                            En cours <span>({currentOngoingCourses.length})</span>
                         </Tab>
                         <Tab className={({ selected }) => 
                             `py-2 px-4 cursor-pointer focus:outline-none
                             ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
                         }>
                             <Play className="inline-block mr-2" />
-                            Pas commencés
+                            Pas commencés <span>({currentNotStartedCourses.length})</span>
                         </Tab>
                         <Tab className={({ selected }) => 
                             `py-2 px-4 cursor-pointer focus:outline-none
                             ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
                         }>
                             <CheckCircle className="inline-block mr-2" />
-                            Terminés
+                            Terminés <span>({currentCompletedCourses.length})</span>
                         </Tab>
                     </Tab.List>
                     <Tab.Panels>
