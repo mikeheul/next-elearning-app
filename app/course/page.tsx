@@ -152,21 +152,21 @@ export default function CourseList() {
                     <Tab.List className="mb-4 flex flex-col md:flex-row justify-end gap-2">
                         <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none 
-                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'dark:text-gray-400 hover:text-red-400'}`}
+                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'text-gray-400 hover:text-red-400'}`}
                         >
                             <Clock className="inline-block mr-2" />
                             <span className="text-sm">En cours</span>
                         </Tab>
                         <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none
-                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'dark:text-gray-400 hover:text-red-400'}`}
+                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'text-gray-400 hover:text-red-400'}`}
                         >
                             <Play className="inline-block mr-2" />
                             <span className="text-sm">Pas commencés</span>
                         </Tab>
                         <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none
-                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'dark:text-gray-400 hover:text-red-400'}`}
+                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'text-gray-400 hover:text-red-400'}`}
                         >
                             <CheckCircle className="inline-block mr-2" />
                             <span className="text-sm">Terminés</span>
