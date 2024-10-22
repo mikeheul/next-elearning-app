@@ -32,13 +32,13 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                 <div>
                     <div className="flex absolute top-0 left-0">
                         {daysDifference < 4 && (
-                            <span className="bg-rose-600 text-white text-xs py-1 px-2 rounded-tl-lg">
+                            <span className="bg-rose-600 text-white text-xs py-1 px-3 rounded-tl-lg">
                                 Nouveau
                             </span>
                         )}
 
                         <div className="flex items-center">
-                            <span className={`bg-blue-100 text-blue-800 font-semibold text-xs py-1 px-2 ${daysDifference < 4 ? 'rounded-none' : 'rounded-tl-lg'}`}>
+                            <span className={`bg-blue-100 text-blue-800 font-semibold text-xs py-1 px-3 ${daysDifference < 4 ? 'rounded-none' : 'rounded-tl-lg'}`}>
                                 {course.category.name}
                             </span>
                         </div>
