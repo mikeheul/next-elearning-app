@@ -174,7 +174,7 @@ export default function CourseList() {
 
                 {/* Onglets pour "En cours", "Pas commencés" et "Terminés" */}
                 <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
-                    <Tab.List className="mb-4 flex justify-end space-x-4">
+                    <Tab.List className="mb-4 flex flex-col md:flex-row justify-end gap-2">
                         <Tab className={({ selected }) => 
                             `py-2 px-4 cursor-pointer focus:outline-none 
                             ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
