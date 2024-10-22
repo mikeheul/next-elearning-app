@@ -7,8 +7,7 @@ import CourseCard from './_components/CourseCard';
 import Pagination from './[courseId]/_components/Pagination';
 import { useUser } from '@clerk/nextjs';
 import { Tab } from '@headlessui/react';
-
-import { Clock, Play, CheckCircle } from 'lucide-react'; // Importez les icônes nécessaires
+import { Clock, Play, CheckCircle } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,7 +18,7 @@ export default function CourseList() {
     const [coursesPerPage] = useState(9);
     const [searchTerm, setSearchTerm] = useState('');
     const [courseProgressions, setCourseProgressions] = useState<{ id: string; progress: number }[]>([]);
-    const [selectedTab, setSelectedTab] = useState(0); // Pour gérer l'onglet sélectionné
+    const [selectedTab, setSelectedTab] = useState(0); // Onglet sélectionné
 
     const router = useRouter();
     const { isSignedIn, user } = useUser();
@@ -46,17 +45,13 @@ export default function CourseList() {
             if (isSignedIn && user) {
                 try {
                     const responses = await Promise.all(
-                        courses.map(course => 
-                            fetch(`/api/user/progress/course/${course.id}`)
-                        )
+                        courses.map(course => fetch(`/api/user/progress/course/${course.id}`))
                     );
-
                     const progressions = await Promise.all(responses.map(res => res.json()));
                     const formattedProgressions = progressions.map((progress, index) => ({
                         id: courses[index].id,
-                        progress: progress.length > 0 ? progress[0].progress : 0
+                        progress: progress.length > 0 ? progress[0].progress : 0,
                     }));
-
                     setCourseProgressions(formattedProgressions);
                 } catch (error) {
                     console.error('Erreur lors de la récupération des progressions :', error);
@@ -67,75 +62,56 @@ export default function CourseList() {
         fetchProgressions();
     }, [isSignedIn, user, courses]);
 
-    // Filtrage des cours en fonction de l'onglet actif
-    const completedCourses = useMemo(() => 
-        courses.filter(course => {
+    // Filtrer tous les cours par terme de recherche
+    const filteredCourses = useMemo(() => {
+        return courses.filter(course =>
+            course.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [courses, searchTerm]);
+
+    // Filtrage des cours en fonction du statut
+    const completedCourses = useMemo(() => {
+        return filteredCourses.filter(course => {
             const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
             return progress >= 100;
-        }), 
-        [courses, courseProgressions]
-    );
+        });
+    }, [filteredCourses, courseProgressions]);
 
-    const ongoingCourses = useMemo(() => 
-        courses.filter(course => {
+    const ongoingCourses = useMemo(() => {
+        return filteredCourses.filter(course => {
             const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-            return progress > 0 && progress < 100; // En cours
-        }), 
-        [courses, courseProgressions]
-    );
+            return progress > 0 && progress < 100;
+        });
+    }, [filteredCourses, courseProgressions]);
 
-    const notStartedCourses = useMemo(() => 
-        courses.filter(course => {
+    const notStartedCourses = useMemo(() => {
+        return filteredCourses.filter(course => {
             const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-            return progress === 0; // Pas commencés
-        }), 
-        [courses, courseProgressions]
-    );
+            return progress === 0;
+        });
+    }, [filteredCourses, courseProgressions]);
 
-    // Filtrage basé sur le terme de recherche
-    const filteredCompletedCourses = useMemo(() => 
-        completedCourses.filter(course => 
-            course.title.toLowerCase().includes(searchTerm.toLowerCase())
-        ), 
-        [completedCourses, searchTerm]
-    );
+    // Pagination des cours par statut
+    const paginateCourses = (courseList: Course[], currentPage: number) => {
+        const indexOfLastCourse = currentPage * coursesPerPage;
+        const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+        return courseList.slice(indexOfFirstCourse, indexOfLastCourse);
+    };
 
-    const filteredOngoingCourses = useMemo(() => 
-        ongoingCourses.filter(course => 
-            course.title.toLowerCase().includes(searchTerm.toLowerCase())
-        ), 
-        [ongoingCourses, searchTerm]
-    );
+    // Pagination pour chaque type de cours
+    const currentCompletedCourses = paginateCourses(completedCourses, currentPage);
+    const currentOngoingCourses = paginateCourses(ongoingCourses, currentPage);
+    const currentNotStartedCourses = paginateCourses(notStartedCourses, currentPage);
 
-    const filteredNotStartedCourses = useMemo(() => 
-        notStartedCourses.filter(course => 
-            course.title.toLowerCase().includes(searchTerm.toLowerCase())
-        ), 
-        [notStartedCourses, searchTerm]
-    );
+    // Calculer le nombre total de pages pour chaque type de cours
+    const totalCompletedPages = Math.ceil(completedCourses.length / coursesPerPage);
+    const totalOngoingPages = Math.ceil(ongoingCourses.length / coursesPerPage);
+    const totalNotStartedPages = Math.ceil(notStartedCourses.length / coursesPerPage);
 
-    // Pagination pour les cours
-    const totalCompletedPages = Math.ceil(filteredCompletedCourses.length / coursesPerPage);
-    const totalOngoingPages = Math.ceil(filteredOngoingCourses.length / coursesPerPage);
-    const totalNotStartedPages = Math.ceil(filteredNotStartedCourses.length / coursesPerPage);
-
-    const indexOfLastCourse = currentPage * coursesPerPage;
-    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-
-    const currentCompletedCourses = useMemo(() => 
-        filteredCompletedCourses.slice(indexOfFirstCourse, indexOfLastCourse), 
-        [filteredCompletedCourses, indexOfFirstCourse, indexOfLastCourse]
-    );
-
-    const currentOngoingCourses = useMemo(() => 
-        filteredOngoingCourses.slice(indexOfFirstCourse, indexOfLastCourse), 
-        [filteredOngoingCourses, indexOfFirstCourse, indexOfLastCourse]
-    );
-
-    const currentNotStartedCourses = useMemo(() => 
-        filteredNotStartedCourses.slice(indexOfFirstCourse, indexOfLastCourse), 
-        [filteredNotStartedCourses, indexOfFirstCourse, indexOfLastCourse]
-    );
+    // Réinitialiser la page courante lorsque l'onglet change ou que le terme de recherche change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedTab, searchTerm]);
 
     if (loading) {
         return <p className="text-center text-gray-500 mt-5">Chargement...</p>;
@@ -154,13 +130,12 @@ export default function CourseList() {
                         className="border rounded-lg px-4 py-2 w-full border-gray-300 bg-white text-gray-900 dark:border-gray-600 dark:bg-slate-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                         value={searchTerm}
                         onChange={(e) => {
-                            setCurrentPage(1); // Réinitialiser à la première page lors du changement de terme de recherche
                             setSearchTerm(e.target.value);
                         }}
                     />
                 </div>
 
-                {/* Bouton d'ajout de cours visible uniquement pour les admins */}
+                {/* Bouton d'ajout de cours pour les admins */}
                 {isSignedIn && isAdmin && (
                     <div className="mb-8">
                         <button
@@ -173,39 +148,38 @@ export default function CourseList() {
                 )}
 
                 {/* Onglets pour "En cours", "Pas commencés" et "Terminés" */}
-                <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
+                <Tab.Group selectedIndex={selectedTab} onChange={(index) => setSelectedTab(index)}>
                     <Tab.List className="mb-4 flex flex-col md:flex-row justify-end gap-2">
-                        <Tab className={({ selected }) => 
+                        <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none 
-                            ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
-                        }>
+                            ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`}
+                        >
                             <Clock className="inline-block mr-2" />
                             <span className="text-sm">En cours</span>
                         </Tab>
-                        <Tab className={({ selected }) => 
+                        <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none
-                            ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
-                        }>
+                            ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`}
+                        >
                             <Play className="inline-block mr-2" />
                             <span className="text-sm">Pas commencés</span>
                         </Tab>
-                        <Tab className={({ selected }) => 
+                        <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none
-                            ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`
-                        }>
+                            ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'dark:text-gray-400 hover:text-blue-600'}`}
+                        >
                             <CheckCircle className="inline-block mr-2" />
                             <span className="text-sm">Terminés</span>
                         </Tab>
                     </Tab.List>
+
                     <Tab.Panels>
+                        {/* Onglet "En cours" */}
                         <Tab.Panel>
                             <Pagination
                                 currentPage={currentPage}
                                 totalPages={totalOngoingPages}
-                                paginate={paginate => {
-                                    setCurrentPage(paginate);
-                                    setSelectedTab(0); // Reset à l'onglet "En cours" quand on change de page
-                                }}
+                                paginate={paginate => setCurrentPage(paginate)}
                             />
                             <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                                 {currentOngoingCourses.length === 0 ? (
@@ -213,23 +187,20 @@ export default function CourseList() {
                                         Aucun cours disponible.
                                     </p>
                                 ) : (
-                                    currentOngoingCourses.map((course) => {
+                                    currentOngoingCourses.map(course => {
                                         const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                        return (
-                                            <CourseCard key={course.id} course={course} progress={progress} />
-                                        );
+                                        return <CourseCard key={course.id} course={course} progress={progress} />;
                                     })
                                 )}
                             </div>
                         </Tab.Panel>
+
+                        {/* Onglet "Pas commencés" */}
                         <Tab.Panel>
                             <Pagination
                                 currentPage={currentPage}
                                 totalPages={totalNotStartedPages}
-                                paginate={paginate => {
-                                    setCurrentPage(paginate);
-                                    setSelectedTab(1); // Reset à l'onglet "Pas commencés" quand on change de page
-                                }}
+                                paginate={paginate => setCurrentPage(paginate)}
                             />
                             <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                                 {currentNotStartedCourses.length === 0 ? (
@@ -237,23 +208,20 @@ export default function CourseList() {
                                         Aucun cours disponible.
                                     </p>
                                 ) : (
-                                    currentNotStartedCourses.map((course) => {
+                                    currentNotStartedCourses.map(course => {
                                         const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                        return (
-                                            <CourseCard key={course.id} course={course} progress={progress} />
-                                        );
+                                        return <CourseCard key={course.id} course={course} progress={progress} />;
                                     })
                                 )}
                             </div>
                         </Tab.Panel>
+
+                        {/* Onglet "Terminés" */}
                         <Tab.Panel>
                             <Pagination
                                 currentPage={currentPage}
                                 totalPages={totalCompletedPages}
-                                paginate={paginate => {
-                                    setCurrentPage(paginate);
-                                    setSelectedTab(2); // Reset à l'onglet "Terminés" quand on change de page
-                                }}
+                                paginate={paginate => setCurrentPage(paginate)}
                             />
                             <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                                 {currentCompletedCourses.length === 0 ? (
@@ -261,11 +229,9 @@ export default function CourseList() {
                                         Aucun cours disponible.
                                     </p>
                                 ) : (
-                                    currentCompletedCourses.map((course) => {
+                                    currentCompletedCourses.map(course => {
                                         const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                        return (
-                                            <CourseCard key={course.id} course={course} progress={progress} />
-                                        );
+                                        return <CourseCard key={course.id} course={course} progress={progress} />;
                                     })
                                 )}
                             </div>
