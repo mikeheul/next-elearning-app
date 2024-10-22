@@ -39,7 +39,7 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
 
                         <div className="flex items-center">
                             <span className={`bg-blue-100 text-blue-800 font-semibold text-xs py-1 px-3 ${daysDifference < 4 ? 'rounded-none' : 'rounded-tl-lg'}`}>
-                                {course.category.name}
+                                {course.category?.name}
                             </span>
                         </div>
                     </div>

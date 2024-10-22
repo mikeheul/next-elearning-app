@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 const CreateCourse: React.FC = () => {
     const [title, setTitle] = useState<string>(''); // Déclaration du type pour le titre
     const [description, setDescription] = useState<string>(''); // Déclaration du type pour la description
+    const [isPublic, setIsPublic] = useState<boolean>(false); // État pour indiquer si le cours est public
     const router = useRouter(); // Utilisation de useRouter depuis next/navigation
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -14,7 +15,7 @@ const CreateCourse: React.FC = () => {
         const response = await fetch('/api/course', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, description }), // Envoi des données au serveur
+            body: JSON.stringify({ title, description, isPublic }), // Envoi des données au serveur
         });
 
         if (response.ok) {
@@ -56,6 +57,19 @@ const CreateCourse: React.FC = () => {
                             className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                             rows={10} // Ajuste le nombre de lignes visibles pour le textarea
                         />
+                    </div>
+                    <div className="mb-6">
+                        <label className="flex items-center">
+                            <input
+                                type="checkbox"
+                                checked={isPublic}
+                                onChange={(e) => setIsPublic(e.target.checked)} // Met à jour l'état isPublic
+                                className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600"
+                            />
+                            <span className="text-sm text-gray-700 dark:text-gray-300">
+                                Rendre le cours public
+                            </span>
+                        </label>
                     </div>
                     <button
                         type="submit"
