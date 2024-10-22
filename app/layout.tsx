@@ -32,10 +32,10 @@ export default function RootLayout({
     <ClerkProvider localization={frFR}>
       <html lang="en" className="dark">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-700`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-700 flex flex-col min-h-screen`}
         >
           <Navbar />
-          <main>
+          <main className="flex-grow">
             {children}
           </main>
           <Footer />
