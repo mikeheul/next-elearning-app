@@ -6,6 +6,7 @@ import { Course } from '@/types/interfaces';
 import CourseCard from './_components/CourseCard';
 import Pagination from './[courseId]/_components/Pagination';
 import { useUser } from '@clerk/nextjs';
+import { Tab } from '@headlessui/react';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,10 +17,10 @@ export default function CourseList() {
     const [coursesPerPage] = useState(9);
     const [searchTerm, setSearchTerm] = useState('');
     const [courseProgressions, setCourseProgressions] = useState<{ id: string; progress: number }[]>([]);
-    
+    const [selectedTab, setSelectedTab] = useState(0); // Pour gérer l'onglet sélectionné
+
     const router = useRouter();
     const { isSignedIn, user } = useUser();
-
     const isAdmin = user?.publicMetadata?.role === 'admin';
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export default function CourseList() {
                     const progressions = await Promise.all(responses.map(res => res.json()));
                     const formattedProgressions = progressions.map((progress, index) => ({
                         id: courses[index].id,
-                        progress: progress.length > 0 ? progress[0].progress : 0 // On suppose qu'il n'y a qu'une seule progression par utilisateur pour un cours
+                        progress: progress.length > 0 ? progress[0].progress : 0
                     }));
 
                     setCourseProgressions(formattedProgressions);
@@ -64,26 +65,54 @@ export default function CourseList() {
         fetchProgressions();
     }, [isSignedIn, user, courses]);
 
-    // Utilisation de useMemo pour le filtrage des cours
-    const filteredCourses = useMemo(() => 
-        courses.filter(course =>
-            course.title.toLowerCase().includes(searchTerm.toLowerCase())
-        ), [courses, searchTerm]
+    // Filtrage des cours en fonction de l'onglet actif
+    const completedCourses = useMemo(() => 
+        courses.filter(course => {
+            const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+            return progress >= 100;
+        }), 
+        [courses, courseProgressions]
     );
 
-    // Calcul des cours à afficher pour la page actuelle
+    const ongoingCourses = useMemo(() => 
+        courses.filter(course => {
+            const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+            return progress < 100;
+        }), 
+        [courses, courseProgressions]
+    );
+
+    // Filtrage basé sur le terme de recherche
+    const filteredCompletedCourses = useMemo(() => 
+        completedCourses.filter(course => 
+            course.title.toLowerCase().includes(searchTerm.toLowerCase())
+        ), 
+        [completedCourses, searchTerm]
+    );
+
+    const filteredOngoingCourses = useMemo(() => 
+        ongoingCourses.filter(course => 
+            course.title.toLowerCase().includes(searchTerm.toLowerCase())
+        ), 
+        [ongoingCourses, searchTerm]
+    );
+
+    // Pagination pour les cours terminés
+    const totalCompletedPages = Math.ceil(filteredCompletedCourses.length / coursesPerPage);
+    const totalOngoingPages = Math.ceil(filteredOngoingCourses.length / coursesPerPage);
+
     const indexOfLastCourse = currentPage * coursesPerPage;
     const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-    const currentCourses = useMemo(() => 
-        filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse), 
-        [filteredCourses, indexOfFirstCourse, indexOfLastCourse]
+
+    const currentCompletedCourses = useMemo(() => 
+        filteredCompletedCourses.slice(indexOfFirstCourse, indexOfLastCourse), 
+        [filteredCompletedCourses, indexOfFirstCourse, indexOfLastCourse]
     );
 
-    // Calcul du nombre total de pages
-    const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
-
-    // Fonction pour changer de page
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    const currentOngoingCourses = useMemo(() => 
+        filteredOngoingCourses.slice(indexOfFirstCourse, indexOfLastCourse), 
+        [filteredOngoingCourses, indexOfFirstCourse, indexOfLastCourse]
+    );
 
     if (loading) {
         return <p className="text-center text-gray-500 mt-5">Chargement...</p>;
@@ -102,7 +131,7 @@ export default function CourseList() {
                         className="border rounded-lg px-4 py-2 w-full border-gray-300 bg-white text-gray-900 dark:border-gray-600 dark:bg-slate-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                         value={searchTerm}
                         onChange={(e) => {
-                            setCurrentPage(1); // Reset to the first page when the search term changes
+                            setCurrentPage(1); // Réinitialiser à la première page lors du changement de terme de recherche
                             setSearchTerm(e.target.value);
                         }}
                     />
@@ -120,26 +149,73 @@ export default function CourseList() {
                     </div>
                 )}
 
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    paginate={paginate}
-                />
-
-                <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                    {currentCourses.length === 0 ? (
-                        <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
-                            Aucun cours disponible.
-                        </p>
-                    ) : (
-                        currentCourses.map((course) => {
-                            const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                            return (
-                                <CourseCard key={course.id} course={course} progress={progress} />
-                            );
-                        })
-                    )}
-                </div>
+                {/* Onglets pour "Terminés" et "En cours" */}
+                <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
+                <Tab.List className="mb-4 flex justify-end space-x-4">
+                    <Tab className={({ selected }) => 
+                        `py-2 px-4 cursor-pointer 
+                        ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-600'}`
+                    }>
+                        En cours
+                    </Tab>
+                    <Tab className={({ selected }) => 
+                        `py-2 px-4 cursor-pointer 
+                        ${selected ? 'text-blue-600 font-bold border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-600'}`
+                    }>
+                        Terminés
+                    </Tab>
+                </Tab.List>
+                    <Tab.Panels>
+                        <Tab.Panel>
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalOngoingPages}
+                                paginate={paginate => {
+                                    setCurrentPage(paginate);
+                                    setSelectedTab(1); // Reset à l'onglet "En cours" quand on change de page
+                                }}
+                            />
+                            <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                                {currentOngoingCourses.length === 0 ? (
+                                    <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
+                                        Aucun cours disponible.
+                                    </p>
+                                ) : (
+                                    currentOngoingCourses.map((course) => {
+                                        const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+                                        return (
+                                            <CourseCard key={course.id} course={course} progress={progress} />
+                                        );
+                                    })
+                                )}
+                            </div>
+                        </Tab.Panel>
+                        <Tab.Panel>
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalCompletedPages}
+                                paginate={paginate => {
+                                    setCurrentPage(paginate);
+                                    setSelectedTab(0); // Reset à l'onglet "Terminés" quand on change de page
+                                }}
+                            />
+                            <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                                {currentCompletedCourses.length === 0 ? (
+                                    <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
+                                        Aucun cours disponible.
+                                    </p>
+                                ) : (
+                                    currentCompletedCourses.map((course) => {
+                                        const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+                                        return (
+                                            <CourseCard key={course.id} course={course} progress={progress} />
+                                        );
+                                    })
+                                )}
+                            </div>
+                        </Tab.Panel>
+                    </Tab.Panels>
+                </Tab.Group>
             </div>
         </div>
     );
