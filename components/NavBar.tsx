@@ -53,15 +53,15 @@ export default function Navbar() {
                                     Admin
                                 </Link>
                                 )}
-                                <Link href="/progression" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
-                                    Progressions
-                                </Link>
                             </div>
+                            <Link href="/course" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
+                                Cours
+                            </Link>
+                            <Link href="/progression" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
+                                Progressions
+                            </Link>
                         </SignedIn>
 
-                        <Link href="/course" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
-                            Cours
-                        </Link>
                         <ThemeSwitcher />
                     </div>
 
@@ -93,6 +93,9 @@ export default function Navbar() {
                                     Admin
                                 </Link>
                                 )}
+                                <Link href="/course" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium transition duration-300">
+                                    Cours
+                                </Link>
                                 <Link href="/progression" onClick={handleLinkClick} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
                                     Progressions
                                 </Link>
@@ -110,9 +113,6 @@ export default function Navbar() {
                             </Link>
                         </SignedOut>
 
-                        <Link href="/course" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium transition duration-300">
-                            Cours
-                        </Link>
                         <ThemeSwitcher />
                         <div className="p-3">
                             <UserButton afterSignOutUrl="/" />
