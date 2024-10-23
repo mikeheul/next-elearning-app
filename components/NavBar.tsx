@@ -16,8 +16,8 @@ export default function Navbar() {
     const isAdmin = user?.publicMetadata?.role === 'admin';
 
     return (
-        <nav className="bg-slate-200 dark:bg-gray-800 shadow-md w-full z-10 py-5">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+        <nav className="bg-slate-200 dark:bg-gray-800 shadow-md z-10 py-5">
+            <div className="px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <Link href="/" onClick={handleLinkClick} className="text-2xl font-bold text-gray-900 dark:text-white">

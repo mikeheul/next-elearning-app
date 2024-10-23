@@ -116,7 +116,7 @@ export default function CourseList() {
 
     return (
         <div className="min-h-screen py-8 bg-gray-100 dark:bg-gray-900">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className=" px-4 sm:px-6 lg:px-8">
                 <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-8">Cours</h1>
 
                 {/* Barre de recherche */}
