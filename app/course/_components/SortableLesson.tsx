@@ -50,7 +50,7 @@ const SortableLesson = ({ lesson }: SortableLessonProps) => {
         expert: { color: "bg-red-500", percent: 100, label: "Expert", icon: "🌟" }
     };
 
-    const level: DifficultyLevel = lesson.level?.name.toLowerCase() as DifficultyLevel || "Débutant";
+    const level: DifficultyLevel = lesson.level?.name.toLowerCase() as DifficultyLevel || "débutant";
 
     return (
         <div

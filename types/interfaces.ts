@@ -86,14 +86,14 @@ export interface CourseWithLessons {
             completed: boolean;
             lessonId: string;
         }[];
-        courseId: string; // Ajoutez cette propriété
+        courseId: string;
     }[];
 }
 
 export interface CourseProgress {
     id: string;
     title: string;
-    progress: number;  // Pourcentage de progression
+    progress: number; 
     description: string;
-    updatedAt: string;  // ou Date
+    updatedAt: string;  
 }

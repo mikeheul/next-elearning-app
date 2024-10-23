@@ -16,7 +16,7 @@ import { db } from '@/lib/db';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { title, content, courseId } = body;
+        const { title, content, courseId, levelId } = body;
 
         if (!title || !content || !courseId) {
             return NextResponse.json({ message: 'Titre et contenu requis.' }, { status: 400 });
@@ -34,6 +34,7 @@ export async function POST(req: Request) {
                 title,
                 content, 
                 courseId, 
+                levelId,
                 order: lessonCount + 1,
             },
         });

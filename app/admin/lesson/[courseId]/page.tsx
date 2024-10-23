@@ -4,16 +4,35 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import MarkdownEditor from '@/components/MarkdownEditor';
 import { CloudinaryUploadWidgetResults, CldUploadWidget } from 'next-cloudinary';
+import { Level } from '@/types/interfaces';
 
 export default function AddLesson() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
-    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [levelId, setLevelId] = useState('');
+    const [levelOptions, setLevelOptions] = useState<Level[]>([]);
 
+    const videoRef = useRef<HTMLVideoElement | null>(null);
     const router = useRouter();
+
     const { courseId } = useParams(); 
+
+    useEffect(() => {
+        async function fetchLevels() {
+            try {
+                const response = await fetch('/api/level');
+                const data = await response.json();
+                setLevelOptions(data);
+                if (data.length > 0) {
+                    setLevelId(data[0].id);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des niveaux de difficulté', error);
+            }
+        }
+        fetchLevels();
+    }, []);
 
     const handleSuccess = useCallback((result: CloudinaryUploadWidgetResults) => {
         const info = result.info;
@@ -54,12 +73,11 @@ export default function AddLesson() {
                 { 
                     title, 
                     content,
-                    courseId 
+                    courseId,
+                    levelId
                 }
             ),
         });
-
-        console.log("courseId:", courseId);
 
         if (response.ok) {
             router.push(`/course/${courseId}`);
@@ -96,6 +114,25 @@ export default function AddLesson() {
                             Contenu du chapitre
                         </label>
                         <MarkdownEditor content={content} setContent={setContent} />
+                    </div>
+
+                    {/* Difficulty Level Selector */}
+                    <div className="mb-6">
+                        <label htmlFor="level" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Niveau de difficulté
+                        </label>
+                        <select
+                            id="level"
+                            value={levelId}
+                            onChange={(e) => setLevelId(e.target.value)}
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                        >
+                            {levelOptions.map((option) => (
+                                <option key={option.id} value={option.id}>
+                                    {option.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="mb-6">

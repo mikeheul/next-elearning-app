@@ -26,10 +26,11 @@ export default function ProfilePage() {
                 }
                 const data: LessonProgress[] = await response.json();
                 setProgresses(data);
+                console.log(data)
 
                 // Filtrer les progressions complétées et les trier par date
                 const completedLessons = data
-                    .filter(progress => progress.progress === 100)  // Filtrer les progressions complétées à 100%
+                    .filter(progress => progress.progress >= 100)  // Filtrer les progressions complétées à 100%
                     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()) // Trier par date de mise à jour (ordre décroissant)
                     .slice(0, 5); // Limiter aux 5 dernières activités
 

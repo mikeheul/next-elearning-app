@@ -17,7 +17,8 @@ export async function GET(request: NextRequest) {
             include: {
                 lesson: {
                     include: {
-                        course: true
+                        course: true,
+                        level: true
                     }
                 }
             },
