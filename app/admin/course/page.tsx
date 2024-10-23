@@ -52,6 +52,7 @@ const CreateCourse: React.FC = () => {
                 setErrors({ general: result.message || "Erreur lors de la création du cours." });
             }
         } catch (error) {
+            console.log(error)
             setErrors({ general: "Erreur serveur. Veuillez réessayer plus tard." });
         } finally {
             setIsSubmitting(false); // Désactive l'état de soumission
