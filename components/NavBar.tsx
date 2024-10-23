@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LogIn, MenuIcon, UserPlus, XIcon } from "lucide-react";
+import { LogIn, MenuIcon, User, UserPlus, XIcon } from "lucide-react";
 import Link from 'next/link';
 import ThemeSwitcher from "./ThemeSwitcher";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
@@ -44,9 +44,14 @@ export default function Navbar() {
                                     {user?.firstName || user?.username}
                                 </Link>
                                 {isAdmin && (
-                                    <Link href="/admin" className="bg-red-800 hover:bg-red-700 text-white rounded-lg px-3 py-1 transition duration-300">
-                                        Admin
-                                    </Link>
+                                <Link
+                                    href="/admin"
+                                    className="bg-gradient-to-r from-red-800 to-red-600 hover:from-red-700 hover:to-red-500 text-white rounded-full px-4 py-1 transition duration-300 shadow-lg flex items-center gap-2"
+                                    aria-label="Accéder à l'espace Admin"
+                                >
+                                    <User className="w-5 h-5" />
+                                    Admin
+                                </Link>
                                 )}
                                 <Link href="/progression" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
                                     Progressions
@@ -79,7 +84,14 @@ export default function Navbar() {
                                     {user?.firstName || user?.username}
                                 </Link>
                                 {isAdmin && (
-                                    <Link href='/admin' onClick={handleLinkClick} className="rounded-lg bg-red-800 hover:bg-red-700 px-3 py-1 text-white transition duration-300">Admin</Link>
+                                <Link
+                                    href="/admin"
+                                    className="bg-gradient-to-r from-red-800 to-red-600 hover:from-red-700 hover:to-red-500 text-white rounded-full px-4 py-1 transition duration-300 shadow-lg flex items-center gap-2"
+                                    aria-label="Accéder à l'espace Admin"
+                                >
+                                    <User className="w-5 h-5" />
+                                    Admin
+                                </Link>
                                 )}
                                 <Link href="/progression" onClick={handleLinkClick} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
                                     Progressions
