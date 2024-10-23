@@ -29,7 +29,7 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
         expert: { color: "bg-red-500", percent: 100, label: "Expert", icon: "🌟" }
     };
 
-    const level: DifficultyLevel = course.level?.name.toLowerCase() as DifficultyLevel || "Débutant"; // Utilise une valeur par défaut si aucun niveau n'est défini
+    const level: DifficultyLevel = course.level?.name.toLowerCase() as DifficultyLevel || "Débutant";
 
     return (
         <Link

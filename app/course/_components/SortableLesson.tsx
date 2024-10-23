@@ -12,7 +12,7 @@ interface SortableLessonProps {
     lesson: Lesson;
 }
 
-type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
+// type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
 
 const SortableLesson = ({ lesson }: SortableLessonProps) => {
 
@@ -44,13 +44,13 @@ const SortableLesson = ({ lesson }: SortableLessonProps) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const levelInfo: Record<DifficultyLevel, { color: string; percent: number, label: string; icon: string }> = {
-        débutant: { color: "bg-green-500", percent: 100,  label: "Débutant", icon: "🌱" },
-        intermédiaire: { color: "bg-orange-500", percent: 100, label: "Intermédiaire", icon: "🌼" },
-        expert: { color: "bg-red-500", percent: 100, label: "Expert", icon: "🌟" }
-    };
+    // const levelInfo: Record<DifficultyLevel, { color: string; percent: number, label: string; icon: string }> = {
+    //     débutant: { color: "bg-green-500", percent: 100,  label: "Débutant", icon: "🌱" },
+    //     intermédiaire: { color: "bg-orange-500", percent: 100, label: "Intermédiaire", icon: "🌼" },
+    //     expert: { color: "bg-red-500", percent: 100, label: "Expert", icon: "🌟" }
+    // };
 
-    const level: DifficultyLevel = lesson.level?.name.toLowerCase() as DifficultyLevel || "Débutant";
+    // const level: DifficultyLevel = lesson.level?.name.toLowerCase() as DifficultyLevel || "Débutant";
 
     return (
         <div
