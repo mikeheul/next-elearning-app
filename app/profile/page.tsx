@@ -26,8 +26,7 @@ export default function ProfilePage() {
                 }
                 const data: LessonProgress[] = await response.json();
                 setProgresses(data);
-                console.log(data)
-
+                
                 // Filtrer les progressions complétées et les trier par date
                 const completedLessons = data
                     .filter(progress => progress.progress >= 100)  // Filtrer les progressions complétées à 100%
