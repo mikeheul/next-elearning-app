@@ -75,6 +75,7 @@ export interface CourseWithLessons {
         id: string;
         title: string;
         content: string;
+        level?: Level | null;
         order: number | null;
         lessonprogresses: {
             id: string;

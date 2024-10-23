@@ -20,6 +20,7 @@ export async function GET(request: NextRequest, { params }: { params: { courseId
             include: {
                 lessons: {
                     include: {
+                        level: true,
                         lessonprogresses: {
                             where: {
                                 userId: userId,

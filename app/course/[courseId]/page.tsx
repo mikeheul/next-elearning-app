@@ -60,6 +60,7 @@ export default function CourseDetail({ params }: { params: { courseId: string } 
                 const response = await fetch(`/api/course/${courseId}`);
                 if (!response.ok) throw new Error('Erreur lors de la récupération du cours.');
                 const data = await response.json();
+
                 setCourse(data);
             } catch (error) {
                 setError(error instanceof Error ? error.message : 'Une erreur inconnue est survenue.');
