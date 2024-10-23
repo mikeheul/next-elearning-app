@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { clerkClient } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
 
 // Define a GET function that handles incoming requests
