@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { LogIn, MenuIcon, UserPlus, XIcon } from "lucide-react"; // ou lucide-react pour les icônes
+import { LogIn, MenuIcon, UserPlus, XIcon } from "lucide-react";
 import Link from 'next/link';
 import ThemeSwitcher from "./ThemeSwitcher";
-
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 
 export default function Navbar() {
@@ -14,69 +13,50 @@ export default function Navbar() {
     const toggleMenu = () => setIsOpen(!isOpen);
     const handleLinkClick = () => setIsOpen(false);
 
-    let isAdmin = false;
-    if (user) {
-        isAdmin = user.publicMetadata?.role === 'admin'; // Optional chaining to prevent errors
-    }
+    const isAdmin = user?.publicMetadata?.role === 'admin';
 
     return (
-        <nav className={`bg-slate-200 dark:bg-gray-800 shadow-md w-full z-10 py-5`}>
-            <div className="px-4 sm:px-6 lg:px-20">
+        <nav className="bg-slate-200 dark:bg-gray-800 shadow-md w-full z-10 py-5">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-20">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
-                    <div className="flex items-center">
-                        <Link href="/" onClick={handleLinkClick} className="text-2xl font-bold text-gray-900 dark:text-white">
-                            Learnify
-                        </Link>
-                    </div>
+                    <Link href="/" onClick={handleLinkClick} className="text-2xl font-bold text-gray-900 dark:text-white">
+                        Learnify
+                    </Link>
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-4">
-
                         <SignedOut>
-                            <Link
-                                href="/sign-in"
-                                className="block md:inline-block dark:text-white transition duration-300"
-                            >
+                            <Link href="/sign-in" className="flex items-center dark:text-white transition duration-300">
                                 <LogIn size={20} strokeWidth={1} />
+                                <span className="ml-2">Sign In</span>
                             </Link>
-                            <Link
-                                href="/sign-up"
-                                className="block md:inline-block dark:text-white transition duration-300"
-                                >
+                            <Link href="/sign-up" className="flex items-center dark:text-white transition duration-300">
                                 <UserPlus size={20} strokeWidth={1} />
+                                <span className="ml-2">Sign Up</span>
                             </Link>
                         </SignedOut>
 
                         <SignedIn>
-                            <div className="flex items-center justify-center gap-3 rounded-full p-1">
-                                <div className="flex items-center space-x-2">
-                                    {/* Icône utilisateur */}
-                                    <Link href="/profile" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
-                                        {user?.firstName || user?.username}
-                                    </Link>
-                                </div>
+                            <div className="flex items-center space-x-3">
                                 <UserButton afterSignOutUrl="/" />
-
+                                <Link href="/profile" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    {user?.firstName || user?.username}
+                                </Link>
                                 {isAdmin && (
-                                    <Link href='/admin' className="rounded-lg bg-red-800 hover:bg-red-700 px-3 py-1 text-white">Admin</Link>
+                                    <Link href="/admin" className="bg-red-800 hover:bg-red-700 text-white rounded-lg px-3 py-1 transition duration-300">
+                                        Admin
+                                    </Link>
                                 )}
-
-                                <Link href="/progression" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                                <Link href="/progression" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
                                     Progressions
-                                </Link>    
+                                </Link>
                             </div>
                         </SignedIn>
 
-                        <Link href="/course" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                        <Link href="/course" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
                             Cours
                         </Link>
-                        {/* <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-                            À propos
-                        </Link>
-                        <Link href="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-                            Contact
-                        </Link> */}
                         <ThemeSwitcher />
                     </div>
 
@@ -94,32 +74,25 @@ export default function Navbar() {
                 <div className="md:hidden">
                     <div className="flex flex-col items-center px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
                         <SignedIn>
-                            <div className="flex flex-col justify-center gap-3 rounded-full p-1 px-3">
-                                <div className="flex items-center justify-center space-x-2 py-2">
-                                    {/* Icône utilisateur */}
-                                    <Link href="/profile" onClick={handleLinkClick} className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
-                                        {user?.firstName || user?.username}
-                                    </Link>
-                                </div>
-
+                            <div className="flex flex-col items-center justify-center gap-3 rounded-full p-1 px-3">
+                                <Link href="/profile" onClick={handleLinkClick} className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    {user?.firstName || user?.username}
+                                </Link>
                                 {isAdmin && (
-                                    <Link href='/admin' onClick={handleLinkClick} className="rounded-lg bg-red-800 hover:bg-red-700 px-3 py-1 text-white">Admin</Link>
+                                    <Link href='/admin' onClick={handleLinkClick} className="rounded-lg bg-red-800 hover:bg-red-700 px-3 py-1 text-white transition duration-300">Admin</Link>
                                 )}
-
-                                <Link href="/progression" onClick={handleLinkClick} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                                <Link href="/progression" onClick={handleLinkClick} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300">
                                     Progressions
-                                </Link>    
+                                </Link>
                             </div>
                         </SignedIn>
 
-                        <Link href="/course" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium">
+                        <Link href="/course" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium transition duration-300">
                             Cours
                         </Link>
-                        
                         <ThemeSwitcher />
-
                         <div className="p-3">
-                            <UserButton afterSignOutUrl="/" /> 
+                            <UserButton afterSignOutUrl="/" />
                         </div>
                     </div>
                 </div>
