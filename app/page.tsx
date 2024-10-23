@@ -1,7 +1,29 @@
+"use client";
+
+import CategoryCard from "@/components/CategoryCard";
 import FeatureCard from "@/components/FeatureCard";
+import { Category } from "@/types/interfaces";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+
+  const [categories, setCategories] = useState<Category[]>([])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+        try {
+            const response = await fetch('/api/category');
+            if (!response.ok) throw new Error('Erreur lors de la récupération des catégories.');
+            const data = await response.json();
+            setCategories(data);
+        } catch (error) {
+            console.error('Erreur lors de la récupération des catégories :', error);
+        }
+    };
+    fetchCategories();
+  }, []);
+
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 sm:p-20 bg-gray-50 dark:bg-gray-900 font-sans">
       {/* Section d'accueil */}
@@ -39,6 +61,27 @@ export default function Home() {
           />
         </div>
       </main>
+
+      <section className="flex flex-col mt-8 items-center justify-center">
+        <h2 className="text-3xl sm:text-4xl text-center font-semibold text-gray-800 dark:text-gray-100 mb-8">
+          Explorez nos catégories
+        </h2>
+        <div className="flex flex-col sm:flex-row gap-5 w-full">
+          {categories.length > 0 ? (
+            categories.map((category) => (
+              <CategoryCard
+                key={category.id}
+                id={category.id}
+                name={category.name}
+              />
+            ))
+          ) : (
+            <p className="text-center text-gray-600 dark:text-gray-400">
+              Chargement des catégories...
+            </p>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
