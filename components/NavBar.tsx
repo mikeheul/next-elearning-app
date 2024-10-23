@@ -33,7 +33,7 @@ export default function Navbar() {
                             </Link>
                             <Link href="/sign-up" className="flex items-center dark:text-white transition duration-300">
                                 <UserPlus size={20} strokeWidth={1} />
-                                <span className="ml-2">S'inscrire</span>
+                                <span className="ml-2">S&apos;inscrire</span>
                             </Link>
                         </SignedOut>
 
