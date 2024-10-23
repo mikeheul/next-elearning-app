@@ -37,11 +37,13 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                             </span>
                         )}
 
-                        <div className="flex items-center">
-                            <span className={`bg-blue-100 text-blue-800 font-semibold text-xs py-1 px-3 ${daysDifference < 4 ? 'rounded-none' : 'rounded-tl-lg'}`}>
-                                {course.category?.name}
-                            </span>
-                        </div>
+                        {course.category?.name && (
+                            <div className="flex items-center">
+                                <span className={`bg-blue-100 text-blue-800 font-semibold text-xs py-1 px-3 ${daysDifference < 4 ? 'rounded-none' : 'rounded-tl-lg'}`}>
+                                    {course.category.name}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     <h2 className="flex gap-3 text-2xl font-semibold text-gray-800 dark:text-white mt-5">
