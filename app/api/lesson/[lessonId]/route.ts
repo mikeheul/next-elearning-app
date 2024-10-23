@@ -10,7 +10,8 @@ export async function GET(req: Request, { params }: { params: { lessonId: string
                 id: lessonId,
             },
             include: {
-                course: true
+                course: true,
+                level: true,
             }
         });
 

@@ -33,11 +33,11 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
 
     return (
         <Link
-            href={`/course/${course.id}`} // Lien pour accéder au cours
+            href={`/course/${course.id}`}
         >
             <div
                 key={course.id}
-                className="relative flex flex-col h-full justify-between bg-white p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800 hover:dark:bg-slate-700"
+                className="relative overflow-hidden flex flex-col h-full justify-between bg-white p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800 hover:dark:bg-slate-700"
             >
                 {/* Jauge de difficulté */}
                 <div className="absolute top-0 right-0 h-full w-1 bg-gray-200">

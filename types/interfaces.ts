@@ -2,6 +2,7 @@ export interface Lesson {
     id: string;
     title: string;
     content: string;
+    level: Level;
     order: number; 
     courseId: string;
     course: Course;

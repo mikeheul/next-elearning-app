@@ -5,11 +5,10 @@ import { clerkClient } from '@clerk/nextjs/server';
 export async function GET() {
     try {
         // Fetch users from Clerk
-        const users = await clerkClient().users.getUserList();
+        const users = await clerkClient().users.getUserList({
+            orderBy: '-last_sign_in_at'
+        });
 
-        console.log(users)
-
-        // Return JSON response with the sorted list of tools
         return NextResponse.json(users);
 
     } catch (error) {
