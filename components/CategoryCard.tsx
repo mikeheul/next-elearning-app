@@ -8,7 +8,7 @@ interface CategoryCardProps {
 
 const CategoryCard = ({ id, name }: CategoryCardProps) => {
     return (
-        <Link href={`/category/${id}`} className="">
+        <Link href={`/category/${id}`} className="w-full">
         <div className="px-8 py-6 bg-white dark:bg-gray-800 dark:hover:bg-gray-700 transition duration-300 shadow-md rounded-lg flex flex-col items-center text-center">
             <h3 className="text-xl text-gray-800 dark:text-gray-100">
                 {name}
