@@ -8,6 +8,7 @@ import Pagination from './[courseId]/_components/Pagination';
 import { useUser } from '@clerk/nextjs';
 import { Tab } from '@headlessui/react';
 import { Clock, Play, CheckCircle } from 'lucide-react';
+import Placeholder from '@/components/Placeholder';
 
 export const dynamic = 'force-dynamic';
 
@@ -113,9 +114,9 @@ export default function CourseList() {
         setCurrentPage(1);
     }, [selectedTab, searchTerm]);
 
-    if (loading) {
-        return <p className="text-center text-gray-500 mt-5">Chargement...</p>;
-    }
+    // if (loading) {
+    //     return <p className="text-center text-gray-500 mt-5">Chargement...</p>;
+    // }
 
     return (
         <div className="min-h-screen py-8 bg-gray-100 dark:bg-gray-900">
@@ -182,15 +183,22 @@ export default function CourseList() {
                                 paginate={paginate => setCurrentPage(paginate)}
                             />
                             <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                                {currentOngoingCourses.length === 0 ? (
-                                    <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
-                                        Aucun cours disponible.
-                                    </p>
+                                {loading ? (
+                                    // Render placeholders if loading
+                                    Array.from({ length: 9 }).map((_, index) => (
+                                        <Placeholder key={index} />
+                                    ))
                                 ) : (
-                                    currentOngoingCourses.map(course => {
-                                        const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                        return <CourseCard key={course.id} course={course} progress={progress} />;
-                                    })
+                                    currentOngoingCourses.length === 0 ? (
+                                        <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
+                                            Aucun cours disponible.
+                                        </p>
+                                    ) : (
+                                        currentOngoingCourses.map(course => {
+                                            const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+                                            return <CourseCard key={course.id} course={course} progress={progress} />;
+                                        })
+                                    )
                                 )}
                             </div>
                         </Tab.Panel>
@@ -203,15 +211,21 @@ export default function CourseList() {
                                 paginate={paginate => setCurrentPage(paginate)}
                             />
                             <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                                {currentNotStartedCourses.length === 0 ? (
-                                    <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
-                                        Aucun cours disponible.
-                                    </p>
+                                {loading ? (
+                                    Array.from({ length: 9 }).map((_, index) => (
+                                        <Placeholder key={index} />
+                                    ))
                                 ) : (
-                                    currentNotStartedCourses.map(course => {
-                                        const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                        return <CourseCard key={course.id} course={course} progress={progress} />;
-                                    })
+                                    currentNotStartedCourses.length === 0 ? (
+                                        <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
+                                            Aucun cours disponible.
+                                        </p>
+                                    ) : (
+                                        currentNotStartedCourses.map(course => {
+                                            const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+                                            return <CourseCard key={course.id} course={course} progress={progress} />;
+                                        })
+                                    )
                                 )}
                             </div>
                         </Tab.Panel>
@@ -224,15 +238,21 @@ export default function CourseList() {
                                 paginate={paginate => setCurrentPage(paginate)}
                             />
                             <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                                {currentCompletedCourses.length === 0 ? (
-                                    <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
-                                        Aucun cours disponible.
-                                    </p>
+                            {loading ? (
+                                    Array.from({ length: 9 }).map((_, index) => (
+                                        <Placeholder key={index} />
+                                    ))
                                 ) : (
-                                    currentCompletedCourses.map(course => {
-                                        const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                        return <CourseCard key={course.id} course={course} progress={progress} />;
-                                    })
+                                    currentCompletedCourses.length === 0 ? (
+                                        <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
+                                            Aucun cours disponible.
+                                        </p>
+                                    ) : (
+                                        currentCompletedCourses.map(course => {
+                                            const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+                                            return <CourseCard key={course.id} course={course} progress={progress} />;
+                                        })
+                                    )
                                 )}
                             </div>
                         </Tab.Panel>
