@@ -11,6 +11,9 @@ export async function GET(req: Request, { params }: { params: { courseId: string
             },
             orderBy: {
                 order: 'asc'
+            },
+            include: {
+                level: true
             }
         });
 

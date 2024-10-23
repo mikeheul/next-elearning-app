@@ -10,6 +10,8 @@ import { useUser } from "@clerk/nextjs";
 import Swal from 'sweetalert2';
 import Link from "next/link";
 
+type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
+
 const getProgressBarColor = (progress: number) => {
     if (progress >= 100) return 'bg-green-500';
     if (progress >= 75) return 'bg-yellow-500';
@@ -215,6 +217,12 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
     const lessonContent = marked(lesson.content);
     // const lessonContent = lesson.content instanceof Promise ? await lesson.content : lesson.content;
 
+    const levelInfo: Record<DifficultyLevel, { color: string; percent: number, label: string; icon: string }> = {
+        débutant: { color: "bg-green-500", percent: 100,  label: "Débutant", icon: "🌱" },
+        intermédiaire: { color: "bg-orange-500", percent: 100, label: "Intermédiaire", icon: "🌼" },
+        expert: { color: "bg-red-500", percent: 100, label: "Expert", icon: "🌟" }
+    };
+
     return (
         <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 dark:bg-gray-900 p-4 md:p-8 relative">
             {/* Overlay dégradé pour cacher le contenu */}
@@ -259,12 +267,23 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                     </div>
                 ) : (
                     <ul className="space-y-2">
-                        {lessons.map((l) => (
+                        {lessons.map((l) => {
+
+                        const level: DifficultyLevel = l.level?.name.toLowerCase() as DifficultyLevel || "Débutant";
+
+                        return (
                             <li key={l.id} className="relative">
+                                <div className="absolute top-0 left-0 h-full w-1 bg-gray-200">
+                                    <div 
+                                        style={{ height: `${levelInfo[level].percent}%` }}
+                                        className={`${levelInfo[level].color}`}
+                                    />
+                                </div>
+
                                 <button
                                     onClick={() => {
-                                        handleLessonClick(l.id); // Charger la leçon sélectionnée
-                                        setIsSidebarOpen(false); // Fermer la barre latérale après sélection
+                                        handleLessonClick(l.id);
+                                        setIsSidebarOpen(false);
                                     }}
                                     className={`block w-full text-left px-4 py-2 rounded-lg ${
                                         l.id === lesson.id // Vérification si la leçon est actuellement sélectionnée
@@ -272,8 +291,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                                             : 'text-gray-900 bg-slate-100 dark:bg-[#2e3a4a] dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-700'
                                         }`}
                                 >
-                                    {l.title} {/* Titre de la leçon */}
-                                    {user && ( // Vérifiez si l'utilisateur est connecté
+                                    {l.title}
+                                    {user && (
                                         <>
                                             {readChapters[l.id] && (
                                                 <CheckIcon className="absolute w-2 h-2 p-1 top-2 right-2 bg-green-400 text-black rounded-full flex items-center justify-center ml-2" size={16} />
@@ -282,7 +301,8 @@ export default function LessonPage({ params }: { params: { lessonId: string } })
                                     )}
                                 </button>
                             </li>
-                        ))}
+                            )
+                        })}
                     </ul>
                 )}
 
