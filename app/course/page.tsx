@@ -50,14 +50,13 @@ export default function CourseList() {
             } catch (error) {
                 console.error('Erreur lors de la récupération des cours et progressions :', error);
             } finally {
-                setLoading(false); // Set loading to false only after everything is done
+                setLoading(false); 
 
-                // Délai avant de vérifier si aucun cours est disponible
                 setTimeout(() => {
-                    if (ongoingCourses.length === 0) {
+                    if (ongoingCourses.length === 0 || notStartedCourses.length === 0 || completedCourses.length === 0) {
                         setShowNoCoursesMessage(true);
                     }
-                }, 1500); // Délai de 500 ms (ajustez selon vos besoins)
+                }, 1500);
             }
         };
     
