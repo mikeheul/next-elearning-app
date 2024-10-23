@@ -19,11 +19,17 @@ export interface Course {
     title: string;
     description: string;
     category: Category;
+    level: Level;
     lessons: Lesson[];
     quizzes: Quiz[];
     createdAt: string;
     updatedAt: string;
     isPublic: boolean;
+}
+
+export interface Level {
+    id: string;
+    name: string;
 }
 
 export interface Quiz {
@@ -64,6 +70,7 @@ export interface CourseWithLessons {
     title: string;
     description: string;
     updatedAt: Date;
+    level: Level;
     lessons: {
         id: string;
         title: string;

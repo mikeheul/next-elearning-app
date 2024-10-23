@@ -55,6 +55,7 @@ export async function GET() {
                 lessons: true,
                 quizzes: true,
                 category: true,
+                level: true
             },
         });
 

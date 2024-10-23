@@ -1,6 +1,6 @@
 "use client";
 
-import { Course } from "@/types/interfaces";
+import { Course, Level } from "@/types/interfaces";
 import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon, ClipboardListIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -8,6 +8,8 @@ interface CourseCardProps {
     course: Course;
     progress?: number;
 }
+
+type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
 
 const CourseCard = ({ course, progress }: CourseCardProps) => {
     
@@ -21,14 +23,30 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
     const currentDate = new Date();
     const daysDifference = Math.floor((currentDate.getTime() - creationDate.getTime()) / (1000 * 3600 * 24));
 
+    const levelInfo: Record<DifficultyLevel, { color: string; percent: number, label: string; icon: string }> = {
+        débutant: { color: "bg-green-500", percent: 100,  label: "Débutant", icon: "🌱" },
+        intermédiaire: { color: "bg-orange-500", percent: 100, label: "Intermédiaire", icon: "🌼" },
+        expert: { color: "bg-red-500", percent: 100, label: "Expert", icon: "🌟" }
+    };
+
+    const level: DifficultyLevel = course.level?.name.toLowerCase() as DifficultyLevel || "Débutant"; // Utilise une valeur par défaut si aucun niveau n'est défini
+
     return (
         <Link
             href={`/course/${course.id}`} // Lien pour accéder au cours
         >
             <div
                 key={course.id}
-                className="relative flex flex-col h-full justify-between bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800 hover:dark:bg-slate-700"
+                className="relative flex flex-col h-full justify-between bg-white p-6 hover:shadow-xl transition-shadow duration-300 dark:bg-gray-800 hover:dark:bg-slate-700"
             >
+                {/* Jauge de difficulté */}
+                <div className="absolute top-0 right-0 h-full w-1 bg-gray-200">
+                    <div 
+                        style={{ height: `${levelInfo[level].percent}%` }}
+                        className={`${levelInfo[level].color}`}
+                    />
+                </div>
+
                 <div>
                     <div className="flex absolute top-0 left-0">
                         {daysDifference < 4 && (
@@ -59,7 +77,6 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                         )}
                         {course.title}
                     </h2>
-
 
                     <div className="absolute right-4 top-4">
                         {course.isPublic ? (

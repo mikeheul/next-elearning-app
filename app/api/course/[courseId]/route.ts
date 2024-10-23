@@ -15,7 +15,8 @@ export async function GET(req: Request, { params }: { params: { courseId: string
                         order: 'asc'
                     }
                 },
-                quizzes: true
+                quizzes: true,
+                level: true
             },
         });
 
