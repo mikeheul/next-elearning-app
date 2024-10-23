@@ -6,6 +6,9 @@ model Lesson {
     courseId            String   @db.ObjectId
     course              Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+    levelId             String?   @db.ObjectId
+    level               Level?    @relation(fields: [levelId], references: [id], onDelete: SetNull)
+
     order               Int?
 
     lessonprogresses    LessonProgress[]

@@ -6,6 +6,9 @@ model Course {
     categoryId          String?       @db.ObjectId
     category            Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
+    levelId             String?      @db.ObjectId
+    level               Level?       @relation(fields: [levelId], references: [id], onDelete: SetNull)
+
     lessons             Lesson[]
     quizzes             Quiz[]
 

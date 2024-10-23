@@ -1,0 +1,6 @@
+model Level {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    name      String   // "Débutant", "Intermédiaire", "Expert"
+    courses   Course[] // Relation avec les cours
+    lessons   Lesson[] // Relation avec les leçons
+}
