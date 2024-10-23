@@ -19,7 +19,7 @@ export default function CourseList() {
     const [coursesPerPage] = useState(9);
     const [searchTerm, setSearchTerm] = useState('');
     const [courseProgressions, setCourseProgressions] = useState<{ id: string; progress: number }[]>([]);
-    const [selectedTab, setSelectedTab] = useState(0); // Onglet sélectionné
+    const [selectedTab, setSelectedTab] = useState(0);
     const [showNoCoursesMessage, setShowNoCoursesMessage] = useState(false);
 
     const router = useRouter();
@@ -28,7 +28,7 @@ export default function CourseList() {
 
     useEffect(() => {
         const fetchCoursesAndProgressions = async () => {
-            setLoading(true); // Set loading to true at the start
+            setLoading(true);
             setShowNoCoursesMessage(false);
             try {
                 const courseResponse = await fetch('/api/course');
