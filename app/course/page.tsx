@@ -168,7 +168,7 @@ export default function CourseList() {
                             <CheckCircle className="inline-block mr-2" />
                             <span className="text-sm">Terminés</span>
                         </Tab>
-                    </TaList>
+                    </TabList>
 
                     <TabPanels>
                         {/* Onglet "En cours" */}
