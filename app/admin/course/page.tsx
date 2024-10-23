@@ -13,7 +13,7 @@ const CreateCourse: React.FC = () => {
     const router = useRouter(); // Utilisation de useRouter depuis next/navigation
 
     const validateForm = (): boolean => {
-        let formErrors: { title?: string; description?: string } = {};
+        const formErrors: { title?: string; description?: string } = {};
 
         if (title.trim().length < 5) {
             formErrors.title = 'Le titre doit contenir au moins 5 caractères.';
