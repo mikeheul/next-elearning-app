@@ -16,8 +16,6 @@ type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
 
 const SortableLesson = ({ lesson }: SortableLessonProps) => {
 
-    console.log(lesson)
-
     const router = useRouter();
     const { isSignedIn, user } = useUser();
     const [isMobile, setIsMobile] = useState(false);
