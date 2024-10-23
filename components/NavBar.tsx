@@ -29,11 +29,11 @@ export default function Navbar() {
                         <SignedOut>
                             <Link href="/sign-in" className="flex items-center dark:text-white transition duration-300">
                                 <LogIn size={20} strokeWidth={1} />
-                                <span className="ml-2">Sign In</span>
+                                <span className="ml-2">Se connecter</span>
                             </Link>
                             <Link href="/sign-up" className="flex items-center dark:text-white transition duration-300">
                                 <UserPlus size={20} strokeWidth={1} />
-                                <span className="ml-2">Sign Up</span>
+                                <span className="ml-2">S'inscrire</span>
                             </Link>
                         </SignedOut>
 
@@ -98,6 +98,17 @@ export default function Navbar() {
                                 </Link>
                             </div>
                         </SignedIn>
+
+                        <SignedOut>
+                            <Link href="/sign-in" className="flex items-center dark:text-white transition duration-300">
+                                <LogIn size={20} strokeWidth={1} />
+                                <span className="ml-2">Se connecter</span>
+                            </Link>
+                            <Link href="/sign-up" className="flex items-center dark:text-white transition duration-300">
+                                <UserPlus size={20} strokeWidth={1} />
+                                <span className="ml-2">S'inscrire</span>
+                            </Link>
+                        </SignedOut>
 
                         <Link href="/course" onClick={handleLinkClick} className="block text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md px-3 py-2 text-base font-medium transition duration-300">
                             Cours
