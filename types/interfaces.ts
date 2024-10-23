@@ -71,7 +71,6 @@ export interface CourseWithLessons {
     title: string;
     description: string;
     updatedAt: Date;
-    level: Level;
     lessons: {
         id: string;
         title: string;

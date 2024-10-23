@@ -188,7 +188,7 @@ export default function AdminPage() {
                                         </p>
                                     </div>
 
-                                    <p className="text-white text-xs text-center">{formattedLastSignIn}</p>
+                                    <p className="dark:text-white text-xs text-center">{formattedLastSignIn}</p>
 
                                     {/* User Name */}
                                     <div className="text-center mt-2">
