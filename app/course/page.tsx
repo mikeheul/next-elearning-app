@@ -20,6 +20,7 @@ export default function CourseList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [courseProgressions, setCourseProgressions] = useState<{ id: string; progress: number }[]>([]);
     const [selectedTab, setSelectedTab] = useState(0); // Onglet sélectionné
+    const [showNoCoursesMessage, setShowNoCoursesMessage] = useState(false);
 
     const router = useRouter();
     const { isSignedIn, user } = useUser();
@@ -28,6 +29,7 @@ export default function CourseList() {
     useEffect(() => {
         const fetchCoursesAndProgressions = async () => {
             setLoading(true); // Set loading to true at the start
+            setShowNoCoursesMessage(false);
             try {
                 const courseResponse = await fetch('/api/course');
                 if (!courseResponse.ok) throw new Error('Erreur lors de la récupération des cours.');
@@ -49,6 +51,13 @@ export default function CourseList() {
                 console.error('Erreur lors de la récupération des cours et progressions :', error);
             } finally {
                 setLoading(false); // Set loading to false only after everything is done
+
+                // Délai avant de vérifier si aucun cours est disponible
+                setTimeout(() => {
+                    if (ongoingCourses.length === 0) {
+                        setShowNoCoursesMessage(true);
+                    }
+                }, 1500); // Délai de 500 ms (ajustez selon vos besoins)
             }
         };
     
@@ -105,10 +114,6 @@ export default function CourseList() {
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedTab, searchTerm]);
-
-    // if (loading) {
-    //     return <p className="text-center text-gray-500 mt-5">Chargement...</p>;
-    // }
 
     return (
         <div className="min-h-screen py-8 bg-gray-100 dark:bg-gray-900">
@@ -180,17 +185,15 @@ export default function CourseList() {
                                     Array.from({ length: 9 }).map((_, index) => (
                                         <Placeholder key={index} />
                                     ))
+                                ) : currentOngoingCourses.length === 0 && showNoCoursesMessage ? (
+                                    <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
+                                        Aucun cours disponible.
+                                    </p>
                                 ) : (
-                                    currentOngoingCourses.length === 0 ? (
-                                        <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
-                                            Aucun cours disponible.
-                                        </p>
-                                    ) : (
-                                        currentOngoingCourses.map(course => {
-                                            const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                            return <CourseCard key={course.id} course={course} progress={progress} />;
-                                        })
-                                    )
+                                    currentOngoingCourses.map((course) => {
+                                        const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
+                                        return <CourseCard key={course.id} course={course} progress={progress} />;
+                                    })
                                 )}
                             </div>
                         </Tab.Panel>
@@ -208,7 +211,7 @@ export default function CourseList() {
                                         <Placeholder key={index} />
                                     ))
                                 ) : (
-                                    currentNotStartedCourses.length === 0 ? (
+                                    currentNotStartedCourses.length === 0 && showNoCoursesMessage ? (
                                         <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
                                             Aucun cours disponible.
                                         </p>
@@ -235,7 +238,7 @@ export default function CourseList() {
                                         <Placeholder key={index} />
                                     ))
                                 ) : (
-                                    currentCompletedCourses.length === 0 ? (
+                                    currentCompletedCourses.length === 0 && showNoCoursesMessage ? (
                                         <p className="text-center text-gray-500 dark:text-gray-400 text-lg col-span-full">
                                             Aucun cours disponible.
                                         </p>
