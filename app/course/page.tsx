@@ -26,43 +26,35 @@ export default function CourseList() {
     const isAdmin = user?.publicMetadata?.role === 'admin';
 
     useEffect(() => {
-        const fetchCourses = async () => {
+        const fetchCoursesAndProgressions = async () => {
+            setLoading(true); // Set loading to true at the start
             try {
-                const response = await fetch('/api/course');
-                if (!response.ok) throw new Error('Erreur lors de la récupération des cours.');
-                const data = await response.json();
-                setCourses(data);
-            } catch (error) {
-                console.error('Erreur lors de la récupération des cours :', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchCourses();
-    }, []);
-
-    useEffect(() => {
-        const fetchProgressions = async () => {
-            if (isSignedIn && user) {
-                try {
+                const courseResponse = await fetch('/api/course');
+                if (!courseResponse.ok) throw new Error('Erreur lors de la récupération des cours.');
+                const courseData = await courseResponse.json();
+                setCourses(courseData);
+    
+                if (isSignedIn && user) {
                     const responses = await Promise.all(
-                        courses.map(course => fetch(`/api/user/progress/course/${course.id}`))
+                        courseData.map((course: Course) => fetch(`/api/user/progress/course/${course.id}`))
                     );
                     const progressions = await Promise.all(responses.map(res => res.json()));
                     const formattedProgressions = progressions.map((progress, index) => ({
-                        id: courses[index].id,
+                        id: courseData[index].id,
                         progress: progress.length > 0 ? progress[0].progress : 0,
                     }));
                     setCourseProgressions(formattedProgressions);
-                } catch (error) {
-                    console.error('Erreur lors de la récupération des progressions :', error);
                 }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des cours et progressions :', error);
+            } finally {
+                setLoading(false); // Set loading to false only after everything is done
             }
         };
-
-        fetchProgressions();
-    }, [isSignedIn, user, courses]);
-
+    
+        fetchCoursesAndProgressions();
+    }, [isSignedIn, user]);
+    
     // Filtrer tous les cours par terme de recherche
     const filteredCourses = useMemo(() => {
         return courses.filter(course =>
