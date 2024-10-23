@@ -12,9 +12,11 @@ interface SortableLessonProps {
     lesson: Lesson;
 }
 
-// type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
+type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
 
 const SortableLesson = ({ lesson }: SortableLessonProps) => {
+
+    console.log(lesson)
 
     const router = useRouter();
     const { isSignedIn, user } = useUser();
@@ -44,13 +46,13 @@ const SortableLesson = ({ lesson }: SortableLessonProps) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // const levelInfo: Record<DifficultyLevel, { color: string; percent: number, label: string; icon: string }> = {
-    //     débutant: { color: "bg-green-500", percent: 100,  label: "Débutant", icon: "🌱" },
-    //     intermédiaire: { color: "bg-orange-500", percent: 100, label: "Intermédiaire", icon: "🌼" },
-    //     expert: { color: "bg-red-500", percent: 100, label: "Expert", icon: "🌟" }
-    // };
+    const levelInfo: Record<DifficultyLevel, { color: string; percent: number, label: string; icon: string }> = {
+        débutant: { color: "bg-green-500", percent: 100,  label: "Débutant", icon: "🌱" },
+        intermédiaire: { color: "bg-orange-500", percent: 100, label: "Intermédiaire", icon: "🌼" },
+        expert: { color: "bg-red-500", percent: 100, label: "Expert", icon: "🌟" }
+    };
 
-    // const level: DifficultyLevel = lesson.level?.name.toLowerCase() as DifficultyLevel || "Débutant";
+    const level: DifficultyLevel = lesson.level?.name.toLowerCase() as DifficultyLevel || "Débutant";
 
     return (
         <div
@@ -70,11 +72,10 @@ const SortableLesson = ({ lesson }: SortableLessonProps) => {
                 </a>
             </div>
 
-            {/* Jauge de difficulté */}
             <div className="absolute top-0 right-0 h-full w-1 bg-gray-200">
                 <div 
-                    style={{ height: `100%` }}
-                    className={`bg-red-500`}
+                    style={{ height: `${levelInfo[level].percent}%` }}
+                    className={`${levelInfo[level].color}`}
                 />
             </div>
 

@@ -13,6 +13,9 @@ export async function GET(req: Request, { params }: { params: { courseId: string
                 lessons: {
                     orderBy: {
                         order: 'asc'
+                    },
+                    include: {
+                        level: true
                     }
                 },
                 quizzes: true,
