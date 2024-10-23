@@ -1,6 +1,6 @@
 "use client";
 
-import { Course, Level } from "@/types/interfaces";
+import { Course } from "@/types/interfaces";
 import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon, ClipboardListIcon } from "lucide-react";
 import Link from "next/link";
 
