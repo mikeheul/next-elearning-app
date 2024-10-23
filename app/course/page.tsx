@@ -6,7 +6,7 @@ import { Course } from '@/types/interfaces';
 import CourseCard from './_components/CourseCard';
 import Pagination from './[courseId]/_components/Pagination';
 import { useUser } from '@clerk/nextjs';
-import { Tab } from '@headlessui/react';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { Clock, Play, CheckCircle } from 'lucide-react';
 import Placeholder from '@/components/Placeholder';
 
@@ -145,8 +145,8 @@ export default function CourseList() {
                 )}
 
                 {/* Onglets pour "En cours", "Pas commencés" et "Terminés" */}
-                <Tab.Group selectedIndex={selectedTab} onChange={(index) => setSelectedTab(index)}>
-                    <Tab.List className="mb-4 flex flex-col md:flex-row justify-end gap-2">
+                <TabGroup selectedIndex={selectedTab} onChange={(index) => setSelectedTab(index)}>
+                    <TabList className="mb-4 flex flex-col md:flex-row justify-end gap-2">
                         <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none 
                             ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'text-gray-400 hover:text-red-400'}`}
@@ -168,11 +168,11 @@ export default function CourseList() {
                             <CheckCircle className="inline-block mr-2" />
                             <span className="text-sm">Terminés</span>
                         </Tab>
-                    </Tab.List>
+                    </TaList>
 
-                    <Tab.Panels>
+                    <TabPanels>
                         {/* Onglet "En cours" */}
-                        <Tab.Panel>
+                        <TabPanel>
                             <Pagination
                                 currentPage={currentPage}
                                 totalPages={totalOngoingPages}
@@ -195,10 +195,10 @@ export default function CourseList() {
                                     })
                                 )}
                             </div>
-                        </Tab.Panel>
+                        </TabPanel>
 
                         {/* Onglet "Pas commencés" */}
-                        <Tab.Panel>
+                        <TabPanel>
                             <Pagination
                                 currentPage={currentPage}
                                 totalPages={totalNotStartedPages}
@@ -222,10 +222,10 @@ export default function CourseList() {
                                     )
                                 )}
                             </div>
-                        </Tab.Panel>
+                        </TabPanel>
 
                         {/* Onglet "Terminés" */}
-                        <Tab.Panel>
+                        <TabPanel>
                             <Pagination
                                 currentPage={currentPage}
                                 totalPages={totalCompletedPages}
@@ -249,9 +249,9 @@ export default function CourseList() {
                                     )
                                 )}
                             </div>
-                        </Tab.Panel>
-                    </Tab.Panels>
-                </Tab.Group>
+                        </TabPanel>
+                    </TabPanels>
+                </TabGroup>
             </div>
         </div>
     );
