@@ -26,6 +26,11 @@ export default function CourseList() {
     const { isSignedIn, user } = useUser();
     const isAdmin = user?.publicMetadata?.role === 'admin';
 
+    const handleCourseDelete = (deletedCourseId: string) => {
+        setCourses(prevCourses => prevCourses.filter(course => course.id !== deletedCourseId));
+        setSelectedTab(0);
+    };
+
     useEffect(() => {
         const fetchCoursesAndProgressions = async () => {
             setLoading(true);
@@ -208,7 +213,7 @@ export default function CourseList() {
                                 ) : (
                                     currentOngoingCourses.map((course) => {
                                         const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                        return <CourseCard key={course.id} course={course} progress={progress} />;
+                                        return <CourseCard key={course.id} course={course} progress={progress} onDelete={handleCourseDelete} />;
                                     })
                                 )}
                             </div>
@@ -234,7 +239,7 @@ export default function CourseList() {
                                     ) : (
                                         currentNotStartedCourses.map(course => {
                                             const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                            return <CourseCard key={course.id} course={course} progress={progress} />;
+                                            return <CourseCard key={course.id} course={course} progress={progress} onDelete={handleCourseDelete} />;
                                         })
                                     )
                                 )}
@@ -261,7 +266,7 @@ export default function CourseList() {
                                     ) : (
                                         currentCompletedCourses.map(course => {
                                             const progress = courseProgressions.find(p => p.id === course.id)?.progress || 0;
-                                            return <CourseCard key={course.id} course={course} progress={progress} />;
+                                            return <CourseCard key={course.id} course={course} progress={progress} onDelete={handleCourseDelete} />;
                                         })
                                     )
                                 )}

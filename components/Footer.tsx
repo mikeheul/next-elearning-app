@@ -56,8 +56,8 @@ export default function Footer() {
                 </div>
 
                 {/* Copyright */}
-                <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                    © {new Date().getFullYear()} Learnify. Tous droits réservés.
+                <div className="flex justify-center mt-6 text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-center">© {new Date().getFullYear()} Learnify. Tous droits réservés.</p>
                 </div>
             </div>
         </footer>

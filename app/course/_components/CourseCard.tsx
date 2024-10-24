@@ -1,5 +1,6 @@
 "use client";
 
+import DeleteButton from "@/components/DeleteButton";
 import { Course } from "@/types/interfaces";
 import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon, ClipboardListIcon } from "lucide-react";
 import Link from "next/link";
@@ -7,11 +8,33 @@ import Link from "next/link";
 interface CourseCardProps {
     course: Course;
     progress?: number;
+    onDelete: (id: string) => void;
 }
 
 type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
 
-const CourseCard = ({ course, progress }: CourseCardProps) => {
+const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
+
+    const handleDelete = async (id: string) => {
+
+        try {
+            const response = await fetch(`/api/course/${course.id}/delete`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                onDelete(id);
+            }
+        } catch (error) {
+            console.error('Error deleting course : ', error);
+        }
+    }; 
+
+    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+        event.preventDefault();
+        event.stopPropagation(); // Arrête la propagation de l'événement
+        handleDelete(id); 
+    };
     
     const formattedDate = new Date(course.updatedAt).toLocaleDateString('fr-FR', {
         year: 'numeric',
@@ -45,6 +68,10 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                         style={{ height: `${levelInfo[level].percent}%` }}
                         className={`${levelInfo[level].color}`}
                     />
+                </div>
+
+                <div className="absolute bottom-0 left-0">
+                    <DeleteButton id={course.id} handleDelete={handleDeleteClick} />
                 </div>
 
                 <div>
