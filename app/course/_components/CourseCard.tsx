@@ -78,7 +78,7 @@ const CourseCard = ({ course, progress }: CourseCardProps) => {
                         {course.title}
                     </h2>
 
-                    <div className="absolute right-4 top-4">
+                    <div className="absolute right-6 top-4">
                         {course.isPublic ? (
                             <UnlockIcon className="text-green-500" size={20} /> 
                         ) : (
