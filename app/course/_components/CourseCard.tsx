@@ -43,7 +43,7 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
 
     const handleEditClick = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
         event.preventDefault();
-        console.log("Edit")
+        console.log(`Edit ${id}`)
     };
     
     const formattedDate = new Date(course.updatedAt).toLocaleDateString('fr-FR', {
