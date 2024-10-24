@@ -30,9 +30,9 @@ const DeleteButton = ({ id, handleDelete }: DeleteButtonProps) => {
     return (
         <button 
             onClick={onClick}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold p-2 transition duration-300 ease-in-out"
+            className="text-white font-bold transition duration-300 ease-in-out"
         >
-            <TrashIcon size={12} />
+            <TrashIcon className="text-red-500 hover:text-red-600" size={14} />
         </button>
     )
 }

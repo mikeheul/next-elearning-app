@@ -16,9 +16,9 @@ const EditButton = ({ id, handleEdit }: EditButtonProps) => {
     return (
         <button 
             onClick={onClick}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold p-2 transition duration-300 ease-in-out focus:outline-none"
+            className="text-white font-bold transition duration-300 ease-in-out focus:outline-none"
         >
-            <PencilIcon size={12} />
+            <PencilIcon className="text-orange-500 hover:text-orange-600" size={14} />
         </button>
     )
 }

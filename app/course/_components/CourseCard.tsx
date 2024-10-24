@@ -81,7 +81,7 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
                 </div>
 
                 {isAdmin && isSignedIn && (
-                    <div className="absolute bottom-0 left-0 flex">
+                    <div className="absolute bottom-0 py-2 px-3 gap-3 left-0 flex">
                         <div className="">
                             <DeleteButton id={course.id} handleDelete={handleDeleteClick} />
                         </div>
