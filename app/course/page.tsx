@@ -171,7 +171,7 @@ export default function CourseList() {
                             `py-2 px-4 cursor-pointer focus:outline-none inline-block
                             ${selected ? 'text-red-400 border-b-2 border-red-400' : 'text-gray-400 font-normal border-b-2 border-transparent hover:text-red-400'}`
                         }>
-                            <Clock className="inline-block mr-2" />
+                            <Clock className="inline-block sm:mr-2" />
                             <span className="hidden sm:inline-block text-sm">En cours</span>
                         </Tab>
                         
@@ -179,7 +179,7 @@ export default function CourseList() {
                             `py-2 px-4 cursor-pointer focus:outline-none inline-block
                             ${selected ? 'text-red-400 border-b-2 border-red-400' : 'text-gray-400 font-normal border-b-2 border-transparent hover:text-red-400'}`
                         }>
-                            <Play className="inline-block mr-2" />
+                            <Play className="inline-block sm:mr-2" />
                             <span className="hidden sm:inline-block text-sm">Pas commencés</span>
                         </Tab>
                         
@@ -187,7 +187,7 @@ export default function CourseList() {
                             `py-2 px-4 cursor-pointer focus:outline-none inline-block
                             ${selected ? 'text-red-400 border-b-2 border-red-400' : 'text-gray-400 font-normal border-b-2 border-transparent hover:text-red-400'}`
                         }>
-                            <CheckCircle className="inline-block mr-2" />
+                            <CheckCircle className="inline-block sm:mr-2" />
                             <span className="hidden sm:inline-block text-sm">Terminés</span>
                         </Tab>
                     </TabList>
