@@ -164,22 +164,24 @@ export default function CourseList() {
                     <TabList className="mb-4 flex md:flex-row justify-between sm:justify-end gap-2">
                         <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none inline-block
-                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'text-gray-400 hover:text-red-400'}`}
-                        >
+                            ${selected ? 'text-red-400 border-b-2 border-red-400' : 'text-gray-400 font-normal border-b-2 border-transparent hover:text-red-400'}`
+                        }>
                             <Clock className="inline-block mr-2" />
                             <span className="hidden sm:inline-block text-sm">En cours</span>
                         </Tab>
+                        
                         <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none inline-block
-                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'text-gray-400 hover:text-red-400'}`}
-                        >
+                            ${selected ? 'text-red-400 border-b-2 border-red-400' : 'text-gray-400 font-normal border-b-2 border-transparent hover:text-red-400'}`
+                        }>
                             <Play className="inline-block mr-2" />
                             <span className="hidden sm:inline-block text-sm">Pas commencés</span>
                         </Tab>
+                        
                         <Tab className={({ selected }) =>
                             `py-2 px-4 cursor-pointer focus:outline-none inline-block
-                            ${selected ? 'text-red-400 font-bold border-b-2 border-red-400' : 'text-gray-400 hover:text-red-400'}`}
-                        >
+                            ${selected ? 'text-red-400 border-b-2 border-red-400' : 'text-gray-400 font-normal border-b-2 border-transparent hover:text-red-400'}`
+                        }>
                             <CheckCircle className="inline-block mr-2" />
                             <span className="hidden sm:inline-block text-sm">Terminés</span>
                         </Tab>
