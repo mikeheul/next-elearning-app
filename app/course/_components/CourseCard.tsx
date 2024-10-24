@@ -36,7 +36,7 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
 
     const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
         event.preventDefault();
-        event.stopPropagation(); // Arrête la propagation de l'événement
+        event.stopPropagation(); 
         handleDelete(id); 
     };
     
@@ -74,7 +74,7 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
                     />
                 </div>
 
-                {isAdmin && (
+                {isAdmin && isSignedIn && (
                     <div className="absolute bottom-0 left-0">
                         <DeleteButton id={course.id} handleDelete={handleDeleteClick} />
                     </div>
