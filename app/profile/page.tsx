@@ -89,10 +89,10 @@ export default function ProfilePage() {
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Progression des cours</h2>
                         <TabGroup>
                             <TabList className="flex flex-col sm:flex-row gap-2 rounded-xl mb-5">
-                                <Tab className={({ selected }) => `${selected ? 'focus:outline-none bg-slate-200 text-slate-900 rounded-lg' : 'text-gray-200 hover:bg-slate-600 hover:text-slate-200 rounded-lg'} py-2 px-4`}>
+                                <Tab className={({ selected }) => `${selected ? 'focus:outline-none bg-slate-600 text-white dark:bg-slate-200 dark:text-slate-900 rounded-lg' : 'dark:text-gray-200 hover:bg-slate-200 dark:hover:bg-slate-600 dark:hover:text-slate-200 rounded-lg'} py-2 px-4`}>
                                     Progression des Chapitres
                                 </Tab>
-                                <Tab className={({ selected }) => `${selected ? 'focus:outline-none bg-slate-200 text-slate-900 rounded-lg' : 'text-gray-200 hover:bg-slate-600 hover:text-slate-200 rounded-lg'} py-2 px-4`}>
+                                <Tab className={({ selected }) => `${selected ? 'focus:outline-none bg-slate-600 text-white dark:bg-slate-200 dark:text-slate-900 rounded-lg' : 'dark:text-gray-200 hover:bg-slate-200 dark:hover:bg-slate-600 dark:hover:text-slate-200 rounded-lg'} py-2 px-4`}>
                                     Progression des Cours
                                 </Tab>
                             </TabList>
