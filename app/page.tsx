@@ -28,7 +28,7 @@ export default function Home() {
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-4 sm:p-8 bg-gray-50 dark:bg-gray-900 font-sans">
       {/* Section d'accueil */}
       <header className="flex flex-col gap-4 sm:gap-8 row-start-1 items-center text-center max-w-[250px] sm:max-w-full">
-        <h1 className="text-3xl sm:text-4xl font-bold text-blue-600 dark:text-blue-400">
+        <h1 className="text-2xl sm:text-5xl font-bold text-blue-600 dark:text-blue-400 break-words">
           Bienvenue sur <span className="text-blue-500">Learnify</span>
         </h1>
         <p className="text-base sm:text-xl text-gray-700 dark:text-gray-300">
