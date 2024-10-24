@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Level } from '@/types/interfaces';
 
 const CreateCourse: React.FC = () => {
     const [title, setTitle] = useState<string>(''); // Déclaration du type pour le titre
@@ -9,8 +10,26 @@ const CreateCourse: React.FC = () => {
     const [isPublic, setIsPublic] = useState<boolean>(false); // État pour indiquer si le cours est public
     const [errors, setErrors] = useState<{ title?: string; description?: string; general?: string }>({}); // État pour les erreurs
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // Indique si la requête est en cours
-    
+    const [levelId, setLevelId] = useState('');
+    const [levelOptions, setLevelOptions] = useState<Level[]>([]);
+
     const router = useRouter(); // Utilisation de useRouter depuis next/navigation
+
+    useEffect(() => {
+        async function fetchLevels() {
+            try {
+                const response = await fetch('/api/level');
+                const data = await response.json();
+                setLevelOptions(data);
+                if (data.length > 0) {
+                    setLevelId(data[0].id);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des niveaux de difficulté', error);
+            }
+        }
+        fetchLevels();
+    }, []);
 
     const validateForm = (): boolean => {
         const formErrors: { title?: string; description?: string } = {};
@@ -41,7 +60,14 @@ const CreateCourse: React.FC = () => {
             const response = await fetch("/api/course", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title, description, isPublic }), // Envoi des données au serveur
+                body: JSON.stringify(
+                    { 
+                        title, 
+                        description, 
+                        isPublic,
+                        levelId
+                    }
+                ), // Envoi des données au serveur
             });
 
             if (response.ok) {
@@ -92,6 +118,26 @@ const CreateCourse: React.FC = () => {
                         />
                         {errors.description && <p className="text-red-500 text-sm mt-2">{errors.description}</p>}
                     </div>
+
+                    {/* Difficulty Level Selector */}
+                    <div className="mb-6">
+                        <label htmlFor="level" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Niveau de difficulté
+                        </label>
+                        <select
+                            id="level"
+                            value={levelId}
+                            onChange={(e) => setLevelId(e.target.value)}
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                        >
+                            {levelOptions.map((option) => (
+                                <option key={option.id} value={option.id}>
+                                    {option.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
                     <div className="mb-6">
                         <label className="flex items-center">
                             <input

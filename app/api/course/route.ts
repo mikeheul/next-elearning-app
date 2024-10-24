@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
     try {
         // Extraction des données du corps de la requête
-        const { title, description, isPublic } = await req.json(); // req.json() est asynchrone dans cette nouvelle API
+        const { title, description, isPublic, levelId } = await req.json(); // req.json() est asynchrone dans cette nouvelle API
         const userId = 'user123'
 
         // Vérification que les données requises sont présentes
@@ -22,7 +22,8 @@ export async function POST(req: Request) {
                 title,
                 description,
                 userId,
-                isPublic
+                isPublic,
+                levelId
             },
         });
 
