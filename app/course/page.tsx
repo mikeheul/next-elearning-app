@@ -63,12 +63,27 @@ export default function CourseList() {
         fetchCoursesAndProgressions();
     }, [isSignedIn, user]);
     
+    const sortedCourses = useMemo(() => {
+        return [...courses].sort((a, b) => {
+            // Calculer la différence en jours pour savoir si un cours est "Nouveau"
+            const isANew = (new Date().getTime() - new Date(a.createdAt).getTime()) / (1000 * 3600 * 24) < 4;
+            const isBNew = (new Date().getTime() - new Date(b.createdAt).getTime()) / (1000 * 3600 * 24) < 4;
+    
+            // Si un cours est "Nouveau", il doit apparaître en premier
+            if (isANew && !isBNew) return -1;
+            if (!isANew && isBNew) return 1;
+    
+            // Si aucun des deux cours n'est nouveau, trier par date de mise à jour (les plus récents en premier)
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        });
+    }, [courses]);
+
     // Filtrer tous les cours par terme de recherche
     const filteredCourses = useMemo(() => {
-        return courses.filter(course =>
+        return sortedCourses.filter(course =>
             course.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
-    }, [courses, searchTerm]);
+    }, [sortedCourses, searchTerm]);
 
     // Filtrage des cours en fonction du statut
     const completedCourses = useMemo(() => {
