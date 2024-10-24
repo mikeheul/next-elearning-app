@@ -193,7 +193,7 @@ export default function CourseList() {
                                 totalPages={totalOngoingPages}
                                 paginate={paginate => setCurrentPage(paginate)}
                             />
-                            <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                                 {loading ? (
                                     // Render placeholders if loading
                                     Array.from({ length: 9 }).map((_, index) => (
@@ -219,7 +219,7 @@ export default function CourseList() {
                                 totalPages={totalNotStartedPages}
                                 paginate={paginate => setCurrentPage(paginate)}
                             />
-                            <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                                 {loading ? (
                                     Array.from({ length: 9 }).map((_, index) => (
                                         <Placeholder key={index} />
@@ -246,7 +246,7 @@ export default function CourseList() {
                                 totalPages={totalCompletedPages}
                                 paginate={paginate => setCurrentPage(paginate)}
                             />
-                            <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                             {loading ? (
                                     Array.from({ length: 9 }).map((_, index) => (
                                         <Placeholder key={index} />
