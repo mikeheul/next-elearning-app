@@ -81,7 +81,7 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
                 </div>
 
                 {isAdmin && isSignedIn && (
-                    <div className="absolute bottom-1 left-2 py-2 px-3 gap-3  flex">
+                    <div className="absolute bottom-1 left-5 py-2 px-3 gap-3  flex">
                         <div className="">
                             <DeleteButton id={course.id} handleDelete={handleDeleteClick} />
                         </div>
@@ -108,7 +108,7 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
                         )}
                     </div>
 
-                    <h2 className="flex gap-3 text-2xl font-semibold text-gray-800 dark:text-white mt-5">
+                    <h2 className="flex gap-3 text-2xl font-semibold text-gray-800 dark:text-white mt-2">
                         {/* Affichage de la progression uniquement si l'utilisateur est connecté */}
                         {progress !== undefined && progress >= 100 && (
                             <div className="flex items-center">
