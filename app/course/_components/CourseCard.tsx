@@ -2,6 +2,7 @@
 
 import DeleteButton from "@/components/DeleteButton";
 import { Course } from "@/types/interfaces";
+import { useUser } from '@clerk/nextjs';
 import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon, ClipboardListIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -14,6 +15,9 @@ interface CourseCardProps {
 type DifficultyLevel = 'débutant' | 'intermédiaire' | 'expert';
 
 const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
+
+    const { isSignedIn, user } = useUser();
+    const isAdmin = user?.publicMetadata?.role === 'admin';
 
     const handleDelete = async (id: string) => {
 
@@ -70,9 +74,11 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
                     />
                 </div>
 
-                <div className="absolute bottom-0 left-0">
-                    <DeleteButton id={course.id} handleDelete={handleDeleteClick} />
-                </div>
+                {isAdmin && (
+                    <div className="absolute bottom-0 left-0">
+                        <DeleteButton id={course.id} handleDelete={handleDeleteClick} />
+                    </div>
+                )}
 
                 <div>
                     <div className="flex absolute top-0 left-0">

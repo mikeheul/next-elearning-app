@@ -1,5 +1,6 @@
 import React from 'react'
 import { TrashIcon } from "lucide-react";
+import Swal from 'sweetalert2';
 
 interface DeleteButtonProps {
     id: string;
@@ -9,7 +10,21 @@ interface DeleteButtonProps {
 const DeleteButton = ({ id, handleDelete }: DeleteButtonProps) => {
 
     const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        handleDelete(event, id);
+        event.preventDefault();
+        Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: "Cette action ne peut pas être annulée !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, supprimer !',
+            cancelButtonText: 'Annuler'
+        }).then((result: { isConfirmed: boolean }) => {
+            if (result.isConfirmed) {
+                handleDelete(event, id);
+            }
+        });
     };
 
     return (
