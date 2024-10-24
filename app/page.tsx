@@ -64,7 +64,7 @@ export default function Home() {
 
       {/* Section des catégories */}
       <section className="flex flex-col items-center justify-center w-full sm:max-w-full mt-4 sm:mt-8">
-        <h2 className="text-xl sm:text-3xl text-center font-semibold text-gray-800 dark:text-gray-100 mb-4 sm:mb-8">
+        <h2 className="text-xl sm:text-3xl text-center font-semibold text-gray-800 dark:text-gray-100 my-8">
           Explorez nos catégories
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center items-center gap-4 sm:gap-5 w-full">

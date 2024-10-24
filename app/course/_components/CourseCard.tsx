@@ -1,6 +1,7 @@
 "use client";
 
 import DeleteButton from "@/components/DeleteButton";
+import EditButton from "@/components/EditButton";
 import { Course } from "@/types/interfaces";
 import { useUser } from '@clerk/nextjs';
 import { BookOpenIcon, Clock10Icon, LockIcon, UnlockIcon, ClipboardListIcon } from "lucide-react";
@@ -39,6 +40,11 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
         event.stopPropagation(); 
         handleDelete(id); 
     };
+
+    const handleEditClick = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+        event.preventDefault();
+        console.log("Edit")
+    };
     
     const formattedDate = new Date(course.updatedAt).toLocaleDateString('fr-FR', {
         year: 'numeric',
@@ -75,8 +81,13 @@ const CourseCard = ({ course, progress, onDelete }: CourseCardProps) => {
                 </div>
 
                 {isAdmin && isSignedIn && (
-                    <div className="absolute bottom-0 left-0">
-                        <DeleteButton id={course.id} handleDelete={handleDeleteClick} />
+                    <div className="absolute bottom-0 left-0 flex">
+                        <div className="">
+                            <DeleteButton id={course.id} handleDelete={handleDeleteClick} />
+                        </div>
+                        <div className="">
+                            <EditButton id={course.id} handleEdit={handleEditClick} />
+                        </div>
                     </div>
                 )}
 
