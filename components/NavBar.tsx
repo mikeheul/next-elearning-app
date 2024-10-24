@@ -18,7 +18,7 @@ export default function Navbar() {
     return (
         <nav className="bg-slate-200 dark:bg-gray-800 shadow-md z-10 py-5">
             <div className="px-8">
-                <div className="flex items-center justify-between h-16">
+                <div className="flex flex-col sm:flex-row items-center justify-between h-16">
                     {/* Logo */}
                     <Link href="/" onClick={handleLinkClick} className="text-2xl font-bold text-gray-900 dark:text-white">
                         Learnify
